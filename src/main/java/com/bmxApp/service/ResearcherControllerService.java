@@ -52,7 +52,8 @@ public class ResearcherControllerService {
 			shopResearcher.setHTML(html);
 			shopResearcher.setShopName(shopName);
 			shopResearcher.setConnection();
-			shopResearcher.searchPage(category);
+			shopResearcher.setCategory(category);
+			shopResearcher.searchPage();
 
 			shopResearcher.setInitialized(true);
 			if (!mainControllerService.partPreviousSearched(shopName, category)) {

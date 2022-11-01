@@ -2,6 +2,8 @@ package com.bmxApp.researcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +18,6 @@ import com.bmxApp.model.Product;
 import com.bmxApp.model.ShopProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.service.DatabaseService;
-
 
 @Component
 @Scope("prototype")
@@ -44,10 +45,10 @@ public class ShopResearcher {
 	@Autowired
 	DatabaseService databaseService;
 
-	/*public ShopResearcher(String html, String shopName) {
-		this.html = html;
-		this.shopName = shopName;
-	}*/
+	/*
+	 * public ShopResearcher(String html, String shopName) { this.html = html;
+	 * this.shopName = shopName; }
+	 */
 
 	public String getShopName() {
 		return this.shopName;
@@ -80,14 +81,15 @@ public class ShopResearcher {
 		return -1;
 	}
 
-	public void searchPage(String partName) {
+	public void searchPage() {
 		Elements partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearch"));// doc.select("div.category-miniature.no-image
 																								// > p > a[href]");
 		System.out.println("JESTEM TU KURWWY: " + partPage);
 
 		for (Element e : partPage) {
-			if (e.absUrl("href").contains(partName)) {
-				setHTML(e.absUrl("href"));
+			if (e.absUrl("href").contains(this.getCategory())) {
+				this.setHTML(e.absUrl("href"));
+				this.setConnection();
 				System.out.println("ZNALEZIONO " + e.absUrl("href"));
 				return;
 			}
@@ -138,6 +140,10 @@ public class ShopResearcher {
 		}
 	}
 
+	public String getHTML() {
+		return this.html;
+	}
+
 	public void searchNewProducts() {
 
 		numberOfPages = 1;
@@ -148,10 +154,13 @@ public class ShopResearcher {
 
 		pagesArray.clear();
 
-		this.setPagesArray();
-
+		// TYLKO DLA TESTÓW - ROZWIĄZAĆ TO PÓŹNIEJ ---
+		// this.setPagesArray();
+		numberOfPages = 1;
+		//
 		if (initialized) {
-
+			System.out.println("WCIĄŻ SZUKAM");
+			System.out.println("AAA: " + this.getHTML());
 			// System.out.println("ILOSC STRON PRZED WYSZ " + numberOfPages);
 
 			for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
@@ -166,28 +175,48 @@ public class ShopResearcher {
 					setConnection();
 				}
 
+				System.out.println("PROPERTY: " + doc.location());
+
 				div = doc.select(PropertyReader.getInstance().getProperty("div"));
 				productName = div.select(PropertyReader.getInstance().getProperty("productNameElement"));
 				productPrice = div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
 				productURL = div.select(PropertyReader.getInstance().getProperty("productURLElement"));
-				imageURL = doc.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+				imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+
+				System.out.println("ILOSC PRODUKTOW: " + productName.size());
 
 				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
-
-					products.add(new ShopProduct(productName.get(productIndex).text(), this.getShopName(),
-							this.getCategory(), productURL.get(productIndex).text(), imageURL.get(productIndex).text(),
-							Double.parseDouble(productPrice.get(productIndex).text())));
-
+					try {
+						products.add(new ShopProduct(productName.get(productIndex).text(), this.getShopName(),
+								this.getCategory(),
+								productURL.get(productIndex)
+										.attr(PropertyReader.getInstance().getProperty("urlAtrribute")),
+								imageURL.get(productIndex)
+										.attr(PropertyReader.getInstance().getProperty("imageAttribute")),
+								Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""))));
+					} catch (NumberFormatException ex) {
+						products.add(new ShopProduct(productName.get(productIndex).text(), this.getShopName(),
+								this.getCategory(),
+								productURL.get(productIndex)
+										.attr(PropertyReader.getInstance().getProperty("urlAtrribute")),
+								imageURL.get(productIndex)
+										.attr(PropertyReader.getInstance().getProperty("imageAttribute")),
+								Double.parseDouble(productPrice.get(productIndex)
+										.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement"))
+										.text().replaceAll("[^\\d.]", ""))));
+					}
 					products.get(productIndex)
 							.setProductName(products.get(productIndex).getProductName().replace("'", ""));
+
+					System.out.println(products.get(productIndex).toString());
 				}
 				databaseService.insertAllProducts(products);
 			}
 		}
 	}
-	
+
 	public void searchPreviousProducts(String shopName, String category) {
-		
+
 	}
 
 	public String getDescription(String className) throws NullPointerException {
