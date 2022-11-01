@@ -30,8 +30,8 @@ public class MainController {
 	@RequestMapping(value = "/search")
 	@PostMapping
 	public ModelAndView searchProducts() {
-		researcherControllerService.setResearcher("kierownice", "bmxlife", 1, true);//this.mainControllerService.getPartSearched());
-		ModelAndView model = new ModelAndView("main");
+		researcherControllerService.setResearcher("ramy", "bmxlife", 1, true);//this.mainControllerService.getPartSearched());
+		ModelAndView model = new ModelAndView("products");
 		return model;
 	}
 

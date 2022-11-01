@@ -184,29 +184,21 @@ public class ShopResearcher {
 				imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
 
 				System.out.println("ILOSC PRODUKTOW: " + productName.size());
-
+				double price = 0;
 				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 					try {
-						products.add(new ShopProduct(productName.get(productIndex).text(), this.getShopName(),
-								this.getCategory(),
-								productURL.get(productIndex)
-										.attr(PropertyReader.getInstance().getProperty("urlAtrribute")),
-								imageURL.get(productIndex)
-										.attr(PropertyReader.getInstance().getProperty("imageAttribute")),
-								Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""))));
+						price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
 					} catch (NumberFormatException ex) {
-						products.add(new ShopProduct(productName.get(productIndex).text(), this.getShopName(),
-								this.getCategory(),
-								productURL.get(productIndex)
-										.attr(PropertyReader.getInstance().getProperty("urlAtrribute")),
-								imageURL.get(productIndex)
-										.attr(PropertyReader.getInstance().getProperty("imageAttribute")),
-								Double.parseDouble(productPrice.get(productIndex)
-										.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement"))
-										.text().replaceAll("[^\\d.]", ""))));
+						price = Double.parseDouble(productPrice.get(productIndex)
+								.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
+								.replaceAll("[^\\d.]", ""));
 					}
-					products.get(productIndex)
-							.setProductName(products.get(productIndex).getProductName().replace("'", ""));
+
+					products.add(new ShopProduct(productName.get(productIndex).text().replace("'", ""),
+							this.getShopName(), this.getCategory(),
+							productURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("urlAtrribute")),
+							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
+							price));
 
 					System.out.println(products.get(productIndex).toString());
 				}
