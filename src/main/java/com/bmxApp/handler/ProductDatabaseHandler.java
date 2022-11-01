@@ -16,4 +16,5 @@ public interface ProductDatabaseHandler extends CrudRepository<Product, Integer>
 	List<Product> findByShopNameAndCategory(String shopName, String category); 
 	List<Product> findByShopName(String shopName);
 	Product findByProductNameAndShopName(String productName, String shopName);
+	List<Product> findByCategoryAndShopName(String category, String shopName);
 }

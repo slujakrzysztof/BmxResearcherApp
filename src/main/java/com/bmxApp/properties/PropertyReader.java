@@ -28,6 +28,9 @@ public class PropertyReader {
 	    this.propertyFilename = name;
 	}
 
+	public String getFilename() {
+		return this.propertyFilename;
+	}
 	// 
 	public void saveProperty(String key, String newValue){
 	    FileOutputStream output;

@@ -40,15 +40,20 @@
 				<div id="counter">
 					<img id="background" src="/images/bmxIcon2.png"
 						class="img-responsive" /> <a href="link1"> <img
-						id="squaremoreleft" src="https://bmxlife.pl/zdjecia/duze/corebasic.jpg"
+						id="squaremoreleft"
+						src="https://bmxlife.pl/zdjecia/duze/corebasic.jpg"
 						class="img-responsive" />
-					</a> <a href="link2">
-                <img id="
-						squareright" src="/images/gb.png"
-						class="img-responsive" /> </a>
+					</a> <a href="link2"> <img id="
+						squareright"
+						src="/images/gb.png" class="img-responsive" />
+					</a>
 				</div>
 			</div>
 		</div>
+		<form th:action="@{/search}" th:object="${kierownice}"
+			method="post">
+			<button type="submit">KIEROWNICE</button>
+		</form>
 	</div>
 </body>
 </html>

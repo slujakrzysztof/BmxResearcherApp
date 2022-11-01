@@ -55,10 +55,14 @@ public class ResearcherControllerService {
 			shopResearcher.searchPage(category);
 
 			shopResearcher.setInitialized(true);
-			if (!mainControllerService.partPreviousSearched(shopName, category))
+			if (!mainControllerService.partPreviousSearched(shopName, category)) {
+				System.out.println("ZACZYNAM SZUKAĆ");
 				shopResearcher.searchNewProducts();
-			else shopResearcher.searchPreviousProducts(shopName, category);
-			
+
+			}
+			else
+				shopResearcher.searchPreviousProducts(shopName, category);
+
 			shopResearcher.setSpecificInformations(category);
 			// shopResearcher.initializePartPanel(true);
 			// } else {

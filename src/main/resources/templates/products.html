@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Name</th>
+				<th scope="col">Price</th>
+				<th scope="col">Image</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="product : ${product}">
+				<td width="20px" th:text="${products.id}"></td>
+				<td th:text="${products.name}"></td>
+				<td th:text="${products.price}"></td>
+				<td class="w-25"><img src="${products.imageUrl"
+					class="img-fluid img-thumbnail"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

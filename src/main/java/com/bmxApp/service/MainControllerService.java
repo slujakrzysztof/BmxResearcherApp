@@ -31,6 +31,7 @@ public class MainControllerService {
 	public void setPropertyReader(String filename) {
 		// this.resource = ResourceBundle.getBundle("properties/" + getLanguage());
 		PropertyReader.getInstance().setPropertyFilename("com/bmxApp/properties/" + filename + ".properties");
+		System.out.println("Jestem tu: " + PropertyReader.getInstance().getFilename());
 		PropertyReader.getInstance().setConnection();
 	}
 

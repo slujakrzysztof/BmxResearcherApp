@@ -18,7 +18,7 @@ import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.service.DatabaseService;
 
 
-//@Component
+@Component
 @Scope("prototype")
 public class ShopResearcher {
 
@@ -44,10 +44,10 @@ public class ShopResearcher {
 	@Autowired
 	DatabaseService databaseService;
 
-	public ShopResearcher(String html, String shopName) {
+	/*public ShopResearcher(String html, String shopName) {
 		this.html = html;
 		this.shopName = shopName;
-	}
+	}*/
 
 	public String getShopName() {
 		return this.shopName;
@@ -80,14 +80,15 @@ public class ShopResearcher {
 		return -1;
 	}
 
-	public void searchPage(String nameOfPart) {
+	public void searchPage(String partName) {
 		Elements partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearch"));// doc.select("div.category-miniature.no-image
 																								// > p > a[href]");
 		System.out.println("JESTEM TU KURWWY: " + partPage);
 
 		for (Element e : partPage) {
-			if (e.absUrl("href").contains(nameOfPart)) {
+			if (e.absUrl("href").contains(partName)) {
 				setHTML(e.absUrl("href"));
+				System.out.println("ZNALEZIONO " + e.absUrl("href"));
 				return;
 			}
 		}

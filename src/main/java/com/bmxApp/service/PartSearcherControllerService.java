@@ -1,6 +1,7 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class PartSearcherControllerService {
 	@Autowired
 	DatabaseService databaseService;
 
-	@Autowired(required=false)
+	@Autowired(required = false)
 	ShopResearcher shopResearcher;
 
 	@Autowired
@@ -36,14 +37,11 @@ public class PartSearcherControllerService {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-/*
-	public String getProductName() {
-		return part;
-	}
-
-	public void setPart() {
-		this.part = part;
-	}*/
+	/*
+	 * public String getProductName() { return part; }
+	 * 
+	 * public void setPart() { this.part = part; }
+	 */
 
 	public double getPrice() {
 		return price;
@@ -69,6 +67,10 @@ public class PartSearcherControllerService {
 				((ShopProduct) databaseService.getProductByName(productName, shopResearcher.getShopName()))
 						.getImageUrl());
 		return imageHandler.getImageName();
+	}
+
+	public List<Product> getProductsByCategoryAndShopName(String category, String shopName) {
+		return databaseService.getProductsByCategoryAndShopName(category, shopName);
 	}
 
 	/*

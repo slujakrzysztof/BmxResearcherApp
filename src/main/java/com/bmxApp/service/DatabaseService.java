@@ -30,6 +30,11 @@ public class DatabaseService {
 	public void insertOrUpdateProduct(Product product) {
 		productDatabaseHandler.save(product);
 	}
+	
+	@Transactional
+	public List<Product> getProductsByCategoryAndShopName(String category, String shopName){
+		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
+	}
 
 	@Transactional
 	public void insertAllProducts(Iterable<Product> products) {
