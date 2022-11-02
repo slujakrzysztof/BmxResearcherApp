@@ -3,6 +3,7 @@ package com.bmxApp.service;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.properties.PropertyReader;
@@ -20,9 +21,16 @@ public class MainControllerService {
 	private boolean partSearched = false;
 
 	private String category, partName, shopName;
+	
+	@Value("polish")
+	private String language;
 
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
+	
+	public String getLanguage() {
+		return this.language;
+	}
 	
 	public boolean getPartSearched() {
 		return this.partSearched;

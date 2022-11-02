@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.ShopProduct;
 import com.bmxApp.service.MainControllerService;
@@ -37,12 +38,26 @@ public class MainController {
 		model.addAttribute("products", researcherControllerService.getProducts("ramy", "bmxlife"));
 		return "products";
 	}
+	
 
-	@RequestMapping(value = "/products")
-	public ModelAndView hello1() {
-		ModelAndView model = new ModelAndView("main");
-		researcherControllerService.insertProduct();
-		return model;
+
+	@RequestMapping(value = "/main")
+	//@ResponseBody
+	@GetMapping
+	public String hello1(Model model, Shop shopp) {
+		//ModelAndView model = new ModelAndView("main");
+
+		//researcherControllerService.insertProduct();
+		return "main";
+	}
+	
+	@RequestMapping(value = "/main")
+	@ResponseBody
+	@PostMapping
+	public String hello2(Model model, Shop shopp) {
+		System.out.println("NAZWA SKLEPU: " + shopp.name());
+        model.addAttribute("shopp", shopp);
+        return "products";
 	}
 
 	/*
@@ -50,19 +65,15 @@ public class MainController {
 	 * "Sieeeeeema: " + productDatabaseHandler.findByCategory("aaa").toString(); }
 	 */
 
-	@RequestMapping(value = "/main")
+	/*@RequestMapping(value = "/main")
 	@ResponseBody
 	public ModelAndView hello2() {
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("main.html");
+
 		return modelAndView;
 //+ productDatabaseHandler.findByCategory("aaa").toString();
-	}
+	}*/
 
-	@RequestMapping(value = "/getName")
-	@ResponseBody
-	public String hello1(@RequestParam String a) {
-		return "Nie wiem " + a;
-	}
 }
