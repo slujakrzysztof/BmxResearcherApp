@@ -15,12 +15,13 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="product : ${product}">
-				<td width="20px" th:text="${products.id}"></td>
-				<td th:text="${products.name}"></td>
-				<td th:text="${products.price}"></td>
-				<td class="w-25"><img src="${products.imageUrl"
-					class="img-fluid img-thumbnail"></td>
+			<tr th:each="product : ${products}">
+				<td width="20px" th:text="${product.id}"></td>
+				<td th:text="${product.productName}"></td>
+				<td th:text="${product.price}"></td>
+				 <td class="w-25"><img th:src="${product.imageUrl}" 
+					alt="${product.imageUrl}" class="img-responsive" /></td>
+				<!-- <td th:text="${product.imageUrl}"/> -->
 			</tr>
 		</tbody>
 	</table>

@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "ProductTable")
@@ -31,6 +32,11 @@ public class Product {
 		this.shopName = shopName;
 		this.category = category;
 		this.price = price;
+	}
+	
+	@Transient
+	public String getImage() {
+		return "/images/image";
 	}
 	
 	public Product() {

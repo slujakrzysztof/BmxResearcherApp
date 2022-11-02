@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bmxApp.handler.ImageHandler;
 import com.bmxApp.service.PartSearcherControllerService;
 
 @RestController
@@ -15,9 +16,12 @@ public class PartSearcherController {
 
 	@Autowired
 	PartSearcherControllerService partSearcherControllerService;
+	@Autowired
+	ImageHandler imageHandler;
 
 	@GetMapping
 	public ModelAndView getSearchedProducts(@RequestParam String shopName, @RequestParam String category) {
+		//imageHandler.getImage();
 		ModelAndView model = new ModelAndView("products.html");
 		model.addObject("products", partSearcherControllerService.getProductsByCategoryAndShopName(category, shopName));
 		return model;

@@ -146,8 +146,6 @@ public class ShopResearcher {
 
 	public void searchNewProducts() {
 
-		numberOfPages = 1;
-
 		productIndex = 0;
 		productIndexURL = 0;
 		productImageIndex = 0;

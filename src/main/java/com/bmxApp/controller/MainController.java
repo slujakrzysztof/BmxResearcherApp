@@ -2,6 +2,7 @@ package com.bmxApp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.bmxApp.model.ShopProduct;
 import com.bmxApp.service.MainControllerService;
 import com.bmxApp.service.ResearcherControllerService;
 
+
 @Controller
 //@RequestMapping("/main")
 public class MainController {
@@ -28,11 +30,12 @@ public class MainController {
 	ResearcherControllerService researcherControllerService;
 
 	@RequestMapping(value = "/search")
-	@PostMapping
-	public ModelAndView searchProducts() {
+	//@PostMapping
+	public String searchProducts(Model model) {
 		researcherControllerService.setResearcher("ramy", "bmxlife", 1, true);//this.mainControllerService.getPartSearched());
-		ModelAndView model = new ModelAndView("products");
-		return model;
+		//model = new ModelAndView("products");
+		model.addAttribute("products", researcherControllerService.getProducts("ramy", "bmxlife"));
+		return "products";
 	}
 
 	@RequestMapping(value = "/products")

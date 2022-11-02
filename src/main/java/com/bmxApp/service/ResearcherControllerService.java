@@ -1,11 +1,14 @@
 package com.bmxApp.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
+import com.bmxApp.model.Product;
 import com.bmxApp.model.ShopProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcher;
@@ -27,6 +30,7 @@ public class ResearcherControllerService {
 	ShopResearcher shopResearcher;
 
 	public void setResearcher(String category, String shopName, int shopNumber, boolean partSelection) {
+		
 
 		try {
 			mainControllerService.setPropertyReader(shopName);
@@ -60,8 +64,7 @@ public class ResearcherControllerService {
 				System.out.println("ZACZYNAM SZUKAĆ");
 				shopResearcher.searchNewProducts();
 
-			}
-			else
+			} else
 				shopResearcher.searchPreviousProducts(shopName, category);
 
 			shopResearcher.setSpecificInformations(category);
@@ -81,6 +84,11 @@ public class ResearcherControllerService {
 			System.out.println("SIEMANO JESTEM TU");
 			ex.printStackTrace();
 		}
+	}
+
+	@Transactional
+	public List<Product> getProducts(String category, String shopName) {
+		return databaseService.getProductsByCategoryAndShopName(category, shopName);
 	}
 
 	@Transactional

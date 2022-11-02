@@ -21,6 +21,8 @@ public class DatabaseService {
 	@Autowired
 	BasketProductDatabaseHandler basketProductDatabaseHandler;
 
+
+	
 	@Transactional
 	public List<Product> getAllProducts() {
 		return IterableUtils.toList(productDatabaseHandler.findAll());
