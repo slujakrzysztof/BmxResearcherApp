@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.ShopProduct;
 import com.bmxApp.service.MainControllerService;
 import com.bmxApp.service.ResearcherControllerService;
+
 
 
 @Controller
@@ -46,19 +48,20 @@ public class MainController {
 	@GetMapping
 	public String hello1(Model model, Shop shopp) {
 		//ModelAndView model = new ModelAndView("main");
-
+		System.out.println(Part.BARS.getValue());
+		model.addAttribute("shops", Shop.class);
 		//researcherControllerService.insertProduct();
 		return "main";
 	}
 	
-	@RequestMapping(value = "/main")
+	/*@RequestMapping(value = "/main")
 	@ResponseBody
 	@PostMapping
 	public String hello2(Model model, Shop shopp) {
 		System.out.println("NAZWA SKLEPU: " + shopp.name());
         model.addAttribute("shopp", shopp);
         return "products";
-	}
+	}*/
 
 	/*
 	 * @RequestMapping(value = "/getNumber") public String hello() { return

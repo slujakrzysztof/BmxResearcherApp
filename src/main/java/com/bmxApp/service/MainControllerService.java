@@ -22,8 +22,8 @@ public class MainControllerService {
 
 	private String category, partName, shopName;
 	
-	@Value("polish")
-	private String language;
+	
+	private String language = "polish";
 
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
