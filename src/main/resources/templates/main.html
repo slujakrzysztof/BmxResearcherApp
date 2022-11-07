@@ -35,30 +35,17 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row-fluid">
-			<div class="span12">
-				<div id="counter">
-					<img id="background" src="/images/bmxIcon2.png"
-						class="img-responsive" /> <a href="link1"> <img
-						id="squaremoreleft"
-						src="https://bmxlife.pl/zdjecia/sklep/fiendgreen.jpg"
-						class="img-responsive" />
-					</a> <a href="link2"> <img id="
-						squareright"
-						src="/images/gb.png" class="img-responsive" />
-					</a>
-				</div>
-			</div>
-		</div>
+		
 		<form th:action="@{/search}" th:object="${kierownice}" method="post">
 			<button type="submit">KIEROWNICE</button>
 		</form>
 	</div>
-	<form action="@{/prod}" th:object={${shop}} method="post">
-	<select name="color">
-		<option th:each="shops : ${T(com.bmxApp.enums.Shop).values()}"
-			th:value="${shops}" th:text="${shops}"></option>
-	</select>
+	<!--<form th:action="@{/prod}" th:object="${test}" method="post">-->
+	<form th:action="@{/main1}" th:object="${test}" method="POST">
+		<select name="shopList">
+			<option th:each="shop : ${shopList}"
+				th:value="${shop}" th:text="${shop}"></option>
+		</select> <input type="submit" value="Save" />
 	</form>
 	<!--<div class="form-check">
 		<input type="radio" class="form-check-input" id="shop1Button"
