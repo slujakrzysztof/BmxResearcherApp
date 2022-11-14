@@ -21,13 +21,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.ProductDatabaseHandler;
+import com.bmxApp.model.ShopModel;
 import com.bmxApp.model.ShopProduct;
-import com.bmxApp.model.Test;
+
 import com.bmxApp.service.MainControllerService;
 import com.bmxApp.service.ResearcherControllerService;
 
 @Controller
-//@RequestMapping("/main")
+@RequestMapping({"/","/main"})
 public class MainController {
 
 	@Autowired
@@ -35,9 +36,6 @@ public class MainController {
 
 	@Autowired
 	ResearcherControllerService researcherControllerService;
-
-	@Autowired
-	Test test;
 
 	static List<String> shopList = null;
 
@@ -47,33 +45,40 @@ public class MainController {
 		shopList.add("avebmx");
 	}
 
-	@RequestMapping(value = "/search")
-	// @PostMapping("/search")
-	public String searchProducts(Model model, @ModelAttribute("shop") Shop shop) {
-		researcherControllerService.setResearcher("ramy", "bmxlife", 1, true);// this.mainControllerService.getPartSearched());
+	//@RequestMapping(value = "/search")
+	@PostMapping(value="/search")
+	public String searchProducts(Model model, @ModelAttribute("shop") ShopModel shopModel) {
+		researcherControllerService.setResearcher("ramy", shopModel.getShop().name().toLowerCase(), 1, true);// this.mainControllerService.getPartSearched());
 		// model = new ModelAndView("products");
 		// model.addAttribute("products",
 		// researcherControllerService.getProducts("ramy", "bmxlife"));
 
 		return "products";
 	}
+	
+	@PostMapping("/main1")
+	public String hello2(Model model, ShopModel shopModel) {
+		model.addAttribute("shopModel", shopModel);
+		System.out.println("222" + shopModel.getShop());
+		return "nic2";
+	}
 
 	// @RequestMapping(value = "/main")
-	@PostMapping(path = "/main1")
-	public String submitTest(@ModelAttribute("test") Test test, Model model, BindingResult result) {
-		//model.addAttribute("test", test.toString());
-		System.out.println("SHOPPP: " + test.toString());
+	@PostMapping
+	public String submitTest(Model model, ShopModel shopModel) {
+		model.addAttribute("shopModel", shopModel);
+		System.out.println(shopModel.getShop());
 
-		return "redirect:/main1";
+		return "nic";
 	}
 
 	// @RequestMapping(value = "/main")
 	// @ResponseBody
-	@GetMapping(path = "/main1")
+	@GetMapping
 	public String hello1(Model model) {
 		// ModelAndView model = new ModelAndView("main");
 		System.out.println(Part.BARS.getValue());
-		model.addAttribute("shopList", shopList);
+		model.addAttribute("shopModel", new ShopModel());
 		// researcherControllerService.insertProduct();
 		return "main";
 	}

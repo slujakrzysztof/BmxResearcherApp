@@ -4,7 +4,4 @@ public enum Shop {
 
 	BMXLIFE, AVEBMX, MANYFESTBMX, ALLDAY;
 
-	Shop() {
-
-	}
 }
