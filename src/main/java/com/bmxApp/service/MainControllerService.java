@@ -14,28 +14,83 @@ public class MainControllerService {
 
 	@Autowired
 	DatabaseService databaseService;
-	
+
 	ArrayList<ShopResearcher> usedResearcherArray = new ArrayList<ShopResearcher>();
 
 	private boolean firstInitialized = true;
 	private boolean partSearched = false;
 
 	private String category, partName, shopName;
-	
-	
+
 	private String language = "polish";
 
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
-	
+
+	public void setResearcher(String category, String shopName, int shopNumber, boolean partSelection) {
+
+		try {
+			this.setPropertyReader(shopName);
+
+			String html = "";
+			if (partSelection)
+				html = PropertyReader.getInstance().getProperty("url");
+			else
+				html = PropertyReader.getInstance().getProperty("safetyURL");
+
+			System.out.println("htmmml: " + html);
+
+			// {
+			/*
+			 * if (!mainControllerService.wasShopUsed(shopName)) { shopResearcher = new
+			 * ShopResearcher(html, shopName);
+			 * mainControllerService.getResearcherArray().add(shopResearcher); } else {
+			 * shopResearcher = mainControllerService.getResearcher(shopName);
+			 * shopResearcher.clearProductsArray(); shopResearcher.setHTML(html); }
+			 */
+			// shopResearcher.setFrame(this.frame);
+
+			shopResearcher.setHTML(html);
+			shopResearcher.setShopName(shopName);
+			shopResearcher.setConnection();
+			shopResearcher.setCategory(category);
+			shopResearcher.searchPage();
+
+			shopResearcher.setInitialized(true);
+			if (!this.partPreviousSearched(shopName, category)) {
+				System.out.println("ZACZYNAM SZUKAĆ");
+				shopResearcher.searchNewProducts();
+
+			} else
+				shopResearcher.searchPreviousProducts(shopName, category);
+
+			shopResearcher.setSpecificInformations(category);
+			// shopResearcher.initializePartPanel(true);
+			// } else {
+			// mainControllerService.getResearcher(shopName).clearProductsArray();
+			// mainControllerService.getResearcher(shopName).setSpecificInformations(category);
+			// getResearcher(shopName).initializePartPanel(false);
+			// }
+			// mainControllerService.setFirstInitialized(false);
+			this.setPartSearched(true);
+
+		} catch (NullPointerException ex) {
+
+			// frame.setActivePanel(frame.getMainLabel());
+			this.removeResearcher(this.getResearcher(shopName));
+			System.out.println("SIEMANO JESTEM TU");
+			ex.printStackTrace();
+		}
+	}
+
 	public String getLanguage() {
 		return this.language;
 	}
-	
+
 	public boolean getPartSearched() {
 		return this.partSearched;
 	}
-	
+
 	public void setPropertyReader(String filename) {
 		// this.resource = ResourceBundle.getBundle("properties/" + getLanguage());
 		PropertyReader.getInstance().setPropertyFilename("com/bmxApp/properties/" + filename + ".properties");

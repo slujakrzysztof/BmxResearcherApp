@@ -25,17 +25,13 @@ import com.bmxApp.model.ShopModel;
 import com.bmxApp.model.ShopProduct;
 
 import com.bmxApp.service.MainControllerService;
-import com.bmxApp.service.ResearcherControllerService;
 
 @Controller
-@RequestMapping({"/","/main"})
+@RequestMapping({ "/", "/main" })
 public class MainController {
 
 	@Autowired
 	MainControllerService mainControllerService;
-
-	@Autowired
-	ResearcherControllerService researcherControllerService;
 
 	static List<String> shopList = null;
 
@@ -45,10 +41,13 @@ public class MainController {
 		shopList.add("avebmx");
 	}
 
-	//@RequestMapping(value = "/search")
-	@PostMapping(value="/search")
+	// @RequestMapping(value = "/search")
+	@PostMapping(value = "/search")
 	public String searchProducts(Model model, @ModelAttribute("shop") ShopModel shopModel) {
-		researcherControllerService.setResearcher("ramy", shopModel.getShop().name().toLowerCase(), 1, true);// this.mainControllerService.getPartSearched());
+		model.addAttribute("shopModel", shopModel);
+		System.out.println("222: " + shopModel.getShop());
+		System.out.println("333: " + shopModel.getPartName());
+		mainControllerService.setResearcher(shopModel.getPartName().toLowerCase(), shopModel.getShop().name().toLowerCase(), 1, true);// this.mainControllerService.getPartSearched());
 		// model = new ModelAndView("products");
 		// model.addAttribute("products",
 		// researcherControllerService.getProducts("ramy", "bmxlife"));
@@ -56,10 +55,17 @@ public class MainController {
 		return "products";
 	}
 	
+	@GetMapping("/products")
+	public String showProducts() {
+
+		return "products";
+	}
+
 	@PostMapping("/main1")
 	public String hello2(Model model, ShopModel shopModel) {
 		model.addAttribute("shopModel", shopModel);
-		System.out.println("222" + shopModel.getShop());
+		System.out.println("222: " + shopModel.getShop());
+		System.out.println("333: " + shopModel.getPartName());
 		return "nic2";
 	}
 
@@ -74,7 +80,7 @@ public class MainController {
 
 	// @RequestMapping(value = "/main")
 	// @ResponseBody
-	@GetMapping
+	@GetMapping("/main")
 	public String hello1(Model model) {
 		// ModelAndView model = new ModelAndView("main");
 		System.out.println(Part.BARS.getValue());
