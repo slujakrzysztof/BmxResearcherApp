@@ -47,16 +47,10 @@ public class MainController {
 		model.addAttribute("shopModel", shopModel);
 		System.out.println("222: " + shopModel.getShop());
 		System.out.println("333: " + shopModel.getPartName());
-		mainControllerService.setResearcher(shopModel.getPartName().toLowerCase(), shopModel.getShop().name().toLowerCase(), 1, true);// this.mainControllerService.getPartSearched());
-		// model = new ModelAndView("products");
-		// model.addAttribute("products",
-		// researcherControllerService.getProducts("ramy", "bmxlife"));
-
-		return "products";
-	}
-	
-	@GetMapping("/products")
-	public String showProducts() {
+		mainControllerService.setResearcher(shopModel.getPartName().toLowerCase(),
+				shopModel.getShop().name().toLowerCase(), 1, true);// this.mainControllerService.getPartSearched());
+		model.addAttribute("products",
+				mainControllerService.getDatabaseService().getProductsByCategoryAndShopName("ramy", "bmxlife"));
 
 		return "products";
 	}

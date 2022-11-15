@@ -26,6 +26,10 @@ public class MainControllerService {
 
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
+	
+	public DatabaseService getDatabaseService() {
+		return this.databaseService;
+	}
 
 	public void setResearcher(String category, String shopName, int shopNumber, boolean partSelection) {
 

@@ -41,7 +41,7 @@
 		</form>
 	</div>
 	<!--<form th:action="@{/prod}" th:object="${test}" method="post">-->
-	<form th:object="${shopModel}" th:action="@{/search}" method="post">
+	<form th:object="${shopModel}" th:action="@{/search(id=${partName})}" method="post">
 		<div class="form-group">
 			<label>Shop</label>
 			<div th:each="model : ${T(com.bmxApp.enums.Shop).values()}">
