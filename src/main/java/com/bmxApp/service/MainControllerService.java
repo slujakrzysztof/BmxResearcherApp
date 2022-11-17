@@ -26,7 +26,7 @@ public class MainControllerService {
 
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
-	
+
 	public DatabaseService getDatabaseService() {
 		return this.databaseService;
 	}
@@ -44,16 +44,6 @@ public class MainControllerService {
 
 			System.out.println("htmmml: " + html);
 
-			// {
-			/*
-			 * if (!mainControllerService.wasShopUsed(shopName)) { shopResearcher = new
-			 * ShopResearcher(html, shopName);
-			 * mainControllerService.getResearcherArray().add(shopResearcher); } else {
-			 * shopResearcher = mainControllerService.getResearcher(shopName);
-			 * shopResearcher.clearProductsArray(); shopResearcher.setHTML(html); }
-			 */
-			// shopResearcher.setFrame(this.frame);
-
 			shopResearcher.setHTML(html);
 			shopResearcher.setShopName(shopName);
 			shopResearcher.setConnection();
@@ -69,18 +59,9 @@ public class MainControllerService {
 				shopResearcher.searchPreviousProducts(shopName, category);
 
 			shopResearcher.setSpecificInformations(category);
-			// shopResearcher.initializePartPanel(true);
-			// } else {
-			// mainControllerService.getResearcher(shopName).clearProductsArray();
-			// mainControllerService.getResearcher(shopName).setSpecificInformations(category);
-			// getResearcher(shopName).initializePartPanel(false);
-			// }
-			// mainControllerService.setFirstInitialized(false);
 			this.setPartSearched(true);
 
 		} catch (NullPointerException ex) {
-
-			// frame.setActivePanel(frame.getMainLabel());
 			this.removeResearcher(this.getResearcher(shopName));
 			System.out.println("SIEMANO JESTEM TU");
 			ex.printStackTrace();

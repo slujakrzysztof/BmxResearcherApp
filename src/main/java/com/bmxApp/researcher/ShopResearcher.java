@@ -118,26 +118,32 @@ public class ShopResearcher {
 	// --- Get url to pages with products ---
 	public void setPagesArray() {
 		pages = doc.select(PropertyReader.getInstance().getProperty("pageSearchElementMain"));
-		// System.out.println("SIEEEEEEEEEEMA CO TAM KUREWKI: " +
-		// pages.select(this.frame.getPropertyReader().getProperty("pageSearchElementSub")));
-		numberOfPages = 0;
-		for (int i = 0; i < pages.first().select(PropertyReader.getInstance().getProperty("pageSearchElementSub"))
-				.text().replaceAll("\\s+", "").length(); i++) {
-			if (Character.isDigit(pages.first().select(PropertyReader.getInstance().getProperty("pageSearchElementSub"))
-					.text().replaceAll("\\s+", "").charAt(i)))
-				numberOfPages += 1;
-		}
-		System.out.println("ILOSC STRON: " + numberOfPages);
-		pagesArray.add(pages.first().select(PropertyReader.getInstance().getProperty("pageSearchElementSub")).get(1)
-				.absUrl(PropertyReader.getInstance().getProperty("pageSearchAttribute")).substring(0,
-						pages.first().select(PropertyReader.getInstance().getProperty("pageSearchElementSub")).get(1)
-								.absUrl(PropertyReader.getInstance().getProperty("pageSearchAttribute")).length() - 1)
-				+ "1");
-		for (int index = 1; index < numberOfPages; index++) {
-			pagesArray.add(pages.first().select(PropertyReader.getInstance().getProperty("pageSearchElementSub"))
-					.get(index).absUrl(PropertyReader.getInstance().getProperty("pageSearchAttribute")));
-			System.out.println("IND: " + index + " NR STRON ALLDAY 1: " + pagesArray.get(index));
-		}
+		System.out.println("STRONY: " + pages);
+		/*
+		 * pages =
+		 * doc.select(PropertyReader.getInstance().getProperty("pageSearchElementMain"))
+		 * ; // System.out.println("SIEEEEEEEEEEMA CO TAM KUREWKI: " + //
+		 * pages.select(this.frame.getPropertyReader().getProperty(
+		 * "pageSearchElementSub"))); numberOfPages = 0; for (int i = 0; i <
+		 * pages.first().select(PropertyReader.getInstance().getProperty(
+		 * "pageSearchElementSub")) .text().replaceAll("\\s+", "").length(); i++) { if
+		 * (Character.isDigit(pages.first().select(PropertyReader.getInstance().
+		 * getProperty("pageSearchElementSub")) .text().replaceAll("\\s+",
+		 * "").charAt(i))) numberOfPages += 1; } System.out.println("ILOSC STRON: " +
+		 * numberOfPages);
+		 * pagesArray.add(pages.first().select(PropertyReader.getInstance().getProperty(
+		 * "pageSearchElementSub")).get(1)
+		 * .absUrl(PropertyReader.getInstance().getProperty("pageSearchAttribute")).
+		 * substring(0, pages.first().select(PropertyReader.getInstance().getProperty(
+		 * "pageSearchElementSub")).get(1)
+		 * .absUrl(PropertyReader.getInstance().getProperty("pageSearchAttribute")).
+		 * length() - 1) + "1"); for (int index = 1; index < numberOfPages; index++) {
+		 * pagesArray.add(pages.first().select(PropertyReader.getInstance().getProperty(
+		 * "pageSearchElementSub"))
+		 * .get(index).absUrl(PropertyReader.getInstance().getProperty(
+		 * "pageSearchAttribute"))); System.out.println("IND: " + index +
+		 * " NR STRON ALLDAY 1: " + pagesArray.get(index)); }
+		 */
 	}
 
 	public String getHTML() {
@@ -153,7 +159,7 @@ public class ShopResearcher {
 		pagesArray.clear();
 
 		// TYLKO DLA TESTÓW - ROZWIĄZAĆ TO PÓŹNIEJ ---
-		// this.setPagesArray();
+		this.setPagesArray();
 		numberOfPages = 1;
 		//
 		if (initialized) {

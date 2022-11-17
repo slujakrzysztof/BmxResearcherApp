@@ -50,7 +50,7 @@ public class MainController {
 		mainControllerService.setResearcher(shopModel.getPartName().toLowerCase(),
 				shopModel.getShop().name().toLowerCase(), 1, true);// this.mainControllerService.getPartSearched());
 		model.addAttribute("products",
-				mainControllerService.getDatabaseService().getProductsByCategoryAndShopName("ramy", "bmxlife"));
+				mainControllerService.getDatabaseService().getProductsByCategoryAndShopName("pegi", "bmxlife"));
 
 		return "products";
 	}

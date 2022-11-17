@@ -12,6 +12,7 @@
 				<th scope="col">Name</th>
 				<th scope="col">Price</th>
 				<th scope="col">Image</th>
+				<th scope="col" />
 			</tr>
 		</thead>
 		<tbody>
@@ -19,9 +20,13 @@
 				<td width="20px" th:text="${product.id}"></td>
 				<td th:text="${product.productName}"></td>
 				<td th:text="${product.price}"></td>
-				 <td class="w-25"><img th:src="${product.imageUrl}" 
+				<td class="w-25"><img th:src="${product.imageUrl}"
 					alt="${product.imageUrl}" class="img-responsive" /></td>
 				<!-- <td th:text="${product.imageUrl}"/> -->
+				<td>
+					<button class="btn btn-primary" type="submit" name="partName"
+						value="pegi">ADD TO BASKET</button>
+				</td>
 			</tr>
 		</tbody>
 	</table>
