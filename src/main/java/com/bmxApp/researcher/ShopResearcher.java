@@ -2,10 +2,13 @@ package com.bmxApp.researcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
+import org.jsoup.helper.ValidationException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
@@ -39,7 +42,7 @@ public class ShopResearcher {
 
 	ArrayList<com.bmxApp.model.Product> products = new ArrayList<>();
 	ArrayList<Product> specificProducts = new ArrayList<>();
-	ArrayList<String> pagesArray = new ArrayList<>();
+	List<String> pagesArray = new ArrayList<>();
 	ArrayList<String> pagesArrayAve = new ArrayList<>();
 
 	@Autowired
@@ -117,33 +120,23 @@ public class ShopResearcher {
 
 	// --- Get url to pages with products ---
 	public void setPagesArray() {
-		pages = doc.select(PropertyReader.getInstance().getProperty("pageSearchElementMain"));
-		System.out.println("STRONY: " + pages);
-		/*
-		 * pages =
-		 * doc.select(PropertyReader.getInstance().getProperty("pageSearchElementMain"))
-		 * ; // System.out.println("SIEEEEEEEEEEMA CO TAM KUREWKI: " + //
-		 * pages.select(this.frame.getPropertyReader().getProperty(
-		 * "pageSearchElementSub"))); numberOfPages = 0; for (int i = 0; i <
-		 * pages.first().select(PropertyReader.getInstance().getProperty(
-		 * "pageSearchElementSub")) .text().replaceAll("\\s+", "").length(); i++) { if
-		 * (Character.isDigit(pages.first().select(PropertyReader.getInstance().
-		 * getProperty("pageSearchElementSub")) .text().replaceAll("\\s+",
-		 * "").charAt(i))) numberOfPages += 1; } System.out.println("ILOSC STRON: " +
-		 * numberOfPages);
-		 * pagesArray.add(pages.first().select(PropertyReader.getInstance().getProperty(
-		 * "pageSearchElementSub")).get(1)
-		 * .absUrl(PropertyReader.getInstance().getProperty("pageSearchAttribute")).
-		 * substring(0, pages.first().select(PropertyReader.getInstance().getProperty(
-		 * "pageSearchElementSub")).get(1)
-		 * .absUrl(PropertyReader.getInstance().getProperty("pageSearchAttribute")).
-		 * length() - 1) + "1"); for (int index = 1; index < numberOfPages; index++) {
-		 * pagesArray.add(pages.first().select(PropertyReader.getInstance().getProperty(
-		 * "pageSearchElementSub"))
-		 * .get(index).absUrl(PropertyReader.getInstance().getProperty(
-		 * "pageSearchAttribute"))); System.out.println("IND: " + index +
-		 * " NR STRON ALLDAY 1: " + pagesArray.get(index)); }
-		 */
+		try {
+			pages = doc.select(PropertyReader.getInstance().getProperty("pageSearchElementMain"));
+			int pageNumber = 0;
+			for (Element page : pages) {
+				System.out.println("STRONY: " + pages.attr("href"));
+				try {
+					pageNumber = Integer.parseInt(page.text());
+				} catch (NumberFormatException ex) {
+					continue;
+				}
+				pagesArray.add(pages.attr("href").substring(0, pages.attr("href").length() - 1) + pageNumber);
+			}
+			pagesArray = pagesArray.stream().distinct().collect(Collectors.toList());
+
+		} catch (ValidationException validationException) {
+			pagesArray.add(this.html);
+		}
 	}
 
 	public String getHTML() {
@@ -158,9 +151,8 @@ public class ShopResearcher {
 
 		pagesArray.clear();
 
-		// TYLKO DLA TESTÓW - ROZWIĄZAĆ TO PÓŹNIEJ ---
 		this.setPagesArray();
-		numberOfPages = 1;
+		numberOfPages = pagesArray.size();
 		//
 		if (initialized) {
 			System.out.println("WCIĄŻ SZUKAM");
