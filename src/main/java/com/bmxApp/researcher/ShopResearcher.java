@@ -121,7 +121,7 @@ public class ShopResearcher {
 	// --- Get url to pages with products ---
 	public void setPagesArray() {
 		try {
-			pages = doc.select(PropertyReader.getInstance().getProperty("pageSearchElementMain"));
+			pages = doc.select(PropertyReader.getInstance().getProperty("numberOfPages"));
 			int pageNumber = 0;
 			for (Element page : pages) {
 				System.out.println("STRONY: " + pages.attr("href"));
@@ -181,6 +181,7 @@ public class ShopResearcher {
 
 				System.out.println("ILOSC PRODUKTOW: " + productName.size());
 				double price = 0;
+				String productURLComplete;
 				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 					try {
 						price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
@@ -190,9 +191,16 @@ public class ShopResearcher {
 								.replaceAll("[^\\d.]", ""));
 					}
 
+					if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
+						productURLComplete = "https://avebmx.pl" + productURL.get(productIndex)
+								.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+					} else {
+						productURLComplete = productURL.get(productIndex)
+								.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+					}
+
 					products.add(new ShopProduct(productName.get(productIndex).text().replace("'", ""),
-							this.getShopName(), this.getCategory(),
-							productURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("urlAtrribute")),
+							this.getShopName(), this.getCategory(), productURLComplete,
 							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 							price));
 
