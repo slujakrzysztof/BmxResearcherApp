@@ -8,10 +8,10 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th scope="col">Id</th>
-				<th scope="col">Name</th>
-				<th scope="col">Price</th>
-				<th scope="col">Image</th>
+				<th scope="col" th:text="#{id}" />
+				<th scope="col" th:text="#{name}">
+				<th scope="col" th:text="#{price}">
+				<th scope="col" th:text="#{image}">
 				<th scope="col" />
 			</tr>
 		</thead>
@@ -24,8 +24,12 @@
 					alt="${product.imageUrl}" class="img-responsive" /></td>
 				<!-- <td th:text="${product.imageUrl}"/> -->
 				<td>
-					<button class="btn btn-primary" type="submit" name="partName"
-						value="pegi">ADD TO BASKET</button>
+					<!--<button class="btn btn-primary" type="submit" name="partName"
+						th:text="#{addBasket}" value="pegi"
+						onclick="window.location.href='http://localhost:8080/?localeData=en'" />-->
+					<a th:href="@{/owners/edit(id=${product.id}, name=${product.productName})}">
+						<button type="button" th:text="#{addBasket}" />
+				</a>
 				</td>
 			</tr>
 		</tbody>
