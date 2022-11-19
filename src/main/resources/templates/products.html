@@ -8,28 +8,26 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th scope="col" th:text="#{id}" />
-				<th scope="col" th:text="#{name}">
-				<th scope="col" th:text="#{price}">
-				<th scope="col" th:text="#{image}">
+				<th scope="col" th:text="#{name}" />
+				<th scope="col" th:text="#{price}" />
+				<th scope="col" th:text="#{image}" />
 				<th scope="col" />
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="product : ${products}">
-				<td width="20px" th:text="${product.id}"></td>
-				<td th:text="${product.productName}"></td>
-				<td th:text="${product.price}"></td>
+				<td th:text="${product.productName}" />
+				<td th:text="${product.price}" />
 				<td class="w-25"><img th:src="${product.imageUrl}"
 					alt="${product.imageUrl}" class="img-responsive" /></td>
 				<!-- <td th:text="${product.imageUrl}"/> -->
 				<td>
-					<!--<button class="btn btn-primary" type="submit" name="partName"
+					<button type="button" th:text="#{addBasket}" /> <!--<button class="btn btn-primary" type="submit" name="partName"
 						th:text="#{addBasket}" value="pegi"
-						onclick="window.location.href='http://localhost:8080/?localeData=en'" />-->
-					<a th:href="@{/owners/edit(id=${product.id}, name=${product.productName})}">
-						<button type="button" th:text="#{addBasket}" />
-				</a>
+						onclick="window.location.href='http://localhost:8080/?localeData=en'" />
+					<a th:href="@{/search(category=${model.shopName})}">
+						
+				</a>-->
 				</td>
 			</tr>
 		</tbody>

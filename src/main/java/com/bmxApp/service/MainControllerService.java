@@ -2,6 +2,8 @@ package com.bmxApp.service;
 
 import java.util.ArrayList;
 
+import javax.sound.midi.Soundbank;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,8 @@ public class MainControllerService {
 
 			System.out.println("htmmml: " + html);
 
+			System.out.println("CZESC: " + category);
+			
 			shopResearcher.setHTML(html);
 			shopResearcher.setShopName(shopName);
 			shopResearcher.setConnection();

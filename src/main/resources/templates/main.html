@@ -62,7 +62,8 @@ button {
 	</span>-->
 	<div class="container">
 		<!--<form th:action="@{/prod}" th:object="${test}" method="post">-->
-		<form th:object="${shopModel}" th:action="@{/search}" method="post">
+		<form th:object="${shopModel}" th:action="@{/search}" method="get">
+			<!--th:action="@{/search}"-->
 			<div class="form-group">
 				<label>Shop</label>
 				<div th:each="model : ${T(com.bmxApp.enums.Shop).values()}">
@@ -73,10 +74,17 @@ button {
 							th:text="${model}">model</label>
 					</div>
 				</div>
+				<!--  <label>Parts</label>
+				<div th:each="partModel : ${T(com.bmxApp.enums.Part).values()}">
+					<a th:href="@{/search(category=${partModel.name})}">
+						<button type="button" th:text="#{partModel}" />
+					</a>
+				</div>-->
+				<button class="btn btn-primary" type="submit" name="category"
+					value="pegs">AAA</button>
 			</div>
-			<button class="btn btn-primary" type="submit" name="partName"
-				value="pegi">AAA</button>
-		</form>
+	</div>
+	</form>
 	</div>
 	<!--<div class="form-check">
 		<input type="radio" class="form-check-input" id="shop1Button"

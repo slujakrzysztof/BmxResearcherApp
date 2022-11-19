@@ -23,7 +23,7 @@ import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.ShopModel;
 import com.bmxApp.model.ShopProduct;
-
+import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.service.MainControllerService;
 
 @Controller
@@ -32,6 +32,8 @@ public class MainController {
 
 	@Autowired
 	MainControllerService mainControllerService;
+
+	PropertyReader propertyReader = PropertyReader.getInstance();
 
 	static List<String> shopList = null;
 
@@ -42,16 +44,16 @@ public class MainController {
 	}
 
 	// @RequestMapping(value = "/search")
-	@PostMapping(value = "/search")
-	public String searchProducts(Model model, @ModelAttribute("shop") ShopModel shopModel) {
-		model.addAttribute("shopModel", shopModel);
-		System.out.println("222: " + shopModel.getShop());
-		System.out.println("333: " + shopModel.getPartName());
-		mainControllerService.setResearcher(shopModel.getPartName().toLowerCase(),
-				shopModel.getShop().name().toLowerCase(), 1, true);// this.mainControllerService.getPartSearched());
-		model.addAttribute("products",
-				mainControllerService.getDatabaseService().getProductsByCategoryAndShopName("pegi", "bmxlife"));
-
+	@GetMapping(value = "/search")
+	public String searchProducts(Model model, @RequestParam("category") String category,
+			@RequestParam("shop") String shopName) {
+		propertyReader.setPropertyFilename("lang/res.properties");
+		propertyReader.setConnection();
+		mainControllerService.setResearcher(propertyReader.getProperty(category.toLowerCase()).toLowerCase(),
+				shopName.toLowerCase(), 1, true);
+		System.out.println("NAZWA PARTA: " + propertyReader.getProperty(category.toLowerCase()));
+		model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
+				propertyReader.getProperty(category.toLowerCase()), shopName.toLowerCase()));
 		return "products";
 	}
 
