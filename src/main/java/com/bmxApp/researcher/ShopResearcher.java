@@ -31,7 +31,7 @@ public class ShopResearcher {
 	private String html;
 	protected Document doc;
 	private int tryCounter = 0;
-	private boolean initialized, browserActivated;
+	private boolean initialized, browserActivated, productUpdated;
 	private Elements div, productName, productPrice, productURL, imageURL, pages;
 	private int productIndex = 0, productIndexURL = 0, productImageIndex = 0, indexSearchPage = 0;
 	private String category;
@@ -52,6 +52,10 @@ public class ShopResearcher {
 	 * public ShopResearcher(String html, String shopName) { this.html = html;
 	 * this.shopName = shopName; }
 	 */
+
+	public void setProductUpdated(boolean value) {
+		this.productUpdated = value;
+	}
 
 	public String getShopName() {
 		return this.shopName;
@@ -180,33 +184,35 @@ public class ShopResearcher {
 				imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
 
 				System.out.println("ILOSC PRODUKTOW: " + productName.size());
-				double price = 0;
-				String productURLComplete;
-				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
-					try {
-						price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
-					} catch (NumberFormatException ex) {
-						price = Double.parseDouble(productPrice.get(productIndex)
-								.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
-								.replaceAll("[^\\d.]", ""));
+				if (!productUpdated) {
+					double price = 0;
+					String productURLComplete;
+					for (productIndex = 0; productIndex < productName.size(); productIndex++) {
+						try {
+							price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
+						} catch (NumberFormatException ex) {
+							price = Double.parseDouble(productPrice.get(productIndex)
+									.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement"))
+									.text().replaceAll("[^\\d.]", ""));
+						}
+
+						if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
+							productURLComplete = "https://avebmx.pl" + productURL.get(productIndex)
+									.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+						} else {
+							productURLComplete = productURL.get(productIndex)
+									.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+						}
+
+						products.add(new ShopProduct(productName.get(productIndex).text().replace("'", ""),
+								this.getShopName(), this.getCategory(), productURLComplete, imageURL.get(productIndex)
+										.attr(PropertyReader.getInstance().getProperty("imageAttribute")),
+								price));
+
+						System.out.println(products.get(productIndex).toString());
 					}
-
-					if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
-						productURLComplete = "https://avebmx.pl" + productURL.get(productIndex)
-								.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
-					} else {
-						productURLComplete = productURL.get(productIndex)
-								.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
-					}
-
-					products.add(new ShopProduct(productName.get(productIndex).text().replace("'", ""),
-							this.getShopName(), this.getCategory(), productURLComplete,
-							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
-							price));
-
-					System.out.println(products.get(productIndex).toString());
+					databaseService.insertAllProducts(products);
 				}
-				databaseService.insertAllProducts(products);
 			}
 		}
 	}

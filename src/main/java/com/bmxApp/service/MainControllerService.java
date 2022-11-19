@@ -57,10 +57,14 @@ public class MainControllerService {
 			shopResearcher.setInitialized(true);
 			if (!this.partPreviousSearched(shopName, category)) {
 				System.out.println("ZACZYNAM SZUKAĆ");
+				shopResearcher.setProductUpdated(false);
 				shopResearcher.searchNewProducts();
 
-			} else
+			} else {
+				shopResearcher.setProductUpdated(true);				
 				shopResearcher.searchPreviousProducts(shopName, category);
+			}
+				
 
 			shopResearcher.setSpecificInformations(category);
 			this.setPartSearched(true);
