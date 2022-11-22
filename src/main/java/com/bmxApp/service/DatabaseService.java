@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.handler.BasketProductDatabaseHandler;
 import com.bmxApp.handler.ProductDatabaseHandler;
+import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 
 import jakarta.transaction.Transactional;
@@ -21,8 +22,6 @@ public class DatabaseService {
 	@Autowired
 	BasketProductDatabaseHandler basketProductDatabaseHandler;
 
-
-	
 	@Transactional
 	public List<Product> getAllProducts() {
 		return IterableUtils.toList(productDatabaseHandler.findAll());
@@ -32,9 +31,9 @@ public class DatabaseService {
 	public void insertOrUpdateProduct(Product product) {
 		productDatabaseHandler.save(product);
 	}
-	
+
 	@Transactional
-	public List<Product> getProductsByCategoryAndShopName(String category, String shopName){
+	public List<Product> getProductsByCategoryAndShopName(String category, String shopName) {
 		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
 	}
 
@@ -52,20 +51,26 @@ public class DatabaseService {
 	public void deleteAllProducts() {
 		productDatabaseHandler.deleteAll();
 	}
-	
+
 	@Transactional
-	public boolean wasPartSearchedPrevious(String shopName, String category){
-		if(productDatabaseHandler.findByShopNameAndCategory(shopName, category).isEmpty()) return false;
+	public boolean wasPartSearchedPrevious(String shopName, String category) {
+		if (productDatabaseHandler.findByShopNameAndCategory(shopName, category).isEmpty())
+			return false;
 		return true;
 	}
-	
+
 	public boolean wasShopUsed(String shopName) {
-		if(productDatabaseHandler.findByShopName(shopName).isEmpty()) return false;
+		if (productDatabaseHandler.findByShopName(shopName).isEmpty())
+			return false;
 		return true;
 	}
-	
+
 	@Transactional
 	public Product getProductByName(String productName, String shopName) {
 		return productDatabaseHandler.findByProductNameAndShopName(productName, shopName);
+	}
+
+	public List<BasketProduct> getBasketProducts() {
+		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
 	}
 }

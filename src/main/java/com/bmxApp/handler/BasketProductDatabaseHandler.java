@@ -13,5 +13,5 @@ import com.bmxApp.model.Product;
 @Repository
 public interface BasketProductDatabaseHandler extends CrudRepository<BasketProduct, Integer> {
 
-	List<BasketProduct> findByProduct(Product product);
+	List<BasketProduct> findByShopName(String shopName);
 }

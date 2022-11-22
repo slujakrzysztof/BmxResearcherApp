@@ -62,8 +62,9 @@ public class MainControllerService {
 				shopResearcher.searchNewProducts();
 
 			} else {
-				shopResearcher.setProductUpdated(true);				
-				shopResearcher.searchPreviousProducts(shopName, category);
+				shopResearcher.setProductUpdated(true);			
+				//---- NA RZECZ TESTÓW ----//
+				//shopResearcher.searchPreviousProducts(shopName, category);
 			}
 				
 
