@@ -53,6 +53,7 @@ public class MainControllerService {
 			shopResearcher.setConnection();
 			shopResearcher.setCategory(category);
 			shopResearcher.searchPage();
+			shopResearcher.setPagesArray();
 
 			shopResearcher.setInitialized(true);
 			if (!this.partPreviousSearched(shopName, category)) {

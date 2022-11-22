@@ -31,7 +31,7 @@ public class ShopResearcher {
 	private String html;
 	protected Document doc;
 	private int tryCounter = 0;
-	private boolean initialized, browserActivated, productUpdated;
+	private boolean initialized, browserActivated, productUpdated = false;
 	private Elements div, productName, productPrice, productURL, imageURL, pages;
 	private int productIndex = 0, productIndexURL = 0, productImageIndex = 0, indexSearchPage = 0;
 	private String category;
@@ -45,8 +45,13 @@ public class ShopResearcher {
 	List<String> pagesArray = new ArrayList<>();
 	ArrayList<String> pagesArrayAve = new ArrayList<>();
 
+	List<Product> existingProducts;
+
 	@Autowired
 	DatabaseService databaseService;
+
+	double price = 0;
+	String productURLComplete;
 
 	/*
 	 * public ShopResearcher(String html, String shopName) { this.html = html;
@@ -124,6 +129,7 @@ public class ShopResearcher {
 
 	// --- Get url to pages with products ---
 	public void setPagesArray() {
+		pagesArray.clear();
 		try {
 			pages = doc.select(PropertyReader.getInstance().getProperty("numberOfPages"));
 			int pageNumber = 0;
@@ -141,84 +147,104 @@ public class ShopResearcher {
 		} catch (ValidationException validationException) {
 			pagesArray.add(this.html);
 		}
+		numberOfPages = pagesArray.size();
+		productIndex = 0;
 	}
 
 	public String getHTML() {
 		return this.html;
 	}
 
+	private void getProductsFromPage() {
+		div = doc.select(PropertyReader.getInstance().getProperty("div"));
+		productName = div.select(PropertyReader.getInstance().getProperty("productNameElement"));
+		productPrice = div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
+		productURL = div.select(PropertyReader.getInstance().getProperty("productURLElement"));
+		imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+	}
+
+	private void searchNextPage() {
+		if (numberOfPages > 1) {
+			setHTML(pagesArray.get(indexSearchPage));
+			if (indexSearchPage == pagesArray.size() - 1)
+				indexSearchPage = pagesArray.size() - 1;
+			else
+				indexSearchPage++;
+			System.out.println("ZMIANA STRONY");
+			setConnection();
+		}
+	}
+
+	private void formatDataStructure() {
+		try {
+			price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
+		} catch (NumberFormatException ex) {
+			price = Double.parseDouble(productPrice.get(productIndex)
+					.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
+					.replaceAll("[^\\d.]", ""));
+		}
+
+		if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
+			productURLComplete = "https://avebmx.pl"
+					+ productURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+		} else {
+			productURLComplete = productURL.get(productIndex)
+					.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+		}
+	}
+
 	public void searchNewProducts() {
 
-		productIndex = 0;
-		productIndexURL = 0;
-		productImageIndex = 0;
-
-		pagesArray.clear();
-
-		this.setPagesArray();
-		numberOfPages = pagesArray.size();
-		//
+		indexSearchPage = 0;
 		if (initialized) {
 			System.out.println("WCIĄŻ SZUKAM");
 			System.out.println("AAA: " + this.getHTML());
-			// System.out.println("ILOSC STRON PRZED WYSZ " + numberOfPages);
 
 			for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
 
-				if (numberOfPages > 1) {
-					setHTML(pagesArray.get(indexSearchPage));
-					if (indexSearchPage == pagesArray.size() - 1)
-						indexSearchPage = pagesArray.size() - 1;
-					else
-						indexSearchPage++;
-					System.out.println("ZMIANA STRONY");
-					setConnection();
-				}
-
+				this.searchNextPage();
 				System.out.println("PROPERTY: " + doc.location());
 
-				div = doc.select(PropertyReader.getInstance().getProperty("div"));
-				productName = div.select(PropertyReader.getInstance().getProperty("productNameElement"));
-				productPrice = div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
-				productURL = div.select(PropertyReader.getInstance().getProperty("productURLElement"));
-				imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+				this.getProductsFromPage();
 
 				System.out.println("ILOSC PRODUKTOW: " + productName.size());
-				if (!productUpdated) {
-					double price = 0;
-					String productURLComplete;
-					for (productIndex = 0; productIndex < productName.size(); productIndex++) {
-						try {
-							price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
-						} catch (NumberFormatException ex) {
-							price = Double.parseDouble(productPrice.get(productIndex)
-									.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement"))
-									.text().replaceAll("[^\\d.]", ""));
-						}
 
-						if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
-							productURLComplete = "https://avebmx.pl" + productURL.get(productIndex)
-									.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
-						} else {
-							productURLComplete = productURL.get(productIndex)
-									.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
-						}
+				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
+					this.formatDataStructure();
 
-						products.add(new ShopProduct(productName.get(productIndex).text().replace("'", ""),
-								this.getShopName(), this.getCategory(), productURLComplete, imageURL.get(productIndex)
-										.attr(PropertyReader.getInstance().getProperty("imageAttribute")),
-								price));
+					products.add(new ShopProduct(productName.get(productIndex).text().replace("'", ""),
+							this.getShopName(), this.getCategory(), productURLComplete,
+							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
+							price));
 
-						System.out.println(products.get(productIndex).toString());
-					}
-					databaseService.insertAllProducts(products);
+					System.out.println(products.get(productIndex).toString());
 				}
+				databaseService.insertAllProducts(products);
 			}
 		}
 	}
 
 	public void searchPreviousProducts(String shopName, String category) {
+		existingProducts = databaseService.getProductsByCategoryAndShopName(category, shopName);
+		for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
+			this.searchNextPage();
+			this.getProductsFromPage();
+			for (productIndex = 0; productIndex < productName.size(); productIndex++) {
+				this.formatDataStructure();
 
+				ShopProduct product = new ShopProduct(productName.get(productIndex).text().replace("'", ""),
+						this.getShopName(), this.getCategory(), productURLComplete,
+						imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
+						price);
+				if(existingProducts.contains(product)) continue;
+				else {
+					
+				}
+				
+				System.out.println(products.get(productIndex).toString());
+			}
+
+		}
 	}
 
 	public String getDescription(String className) throws NullPointerException {
