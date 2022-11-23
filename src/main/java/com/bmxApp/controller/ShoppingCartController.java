@@ -15,12 +15,14 @@ public class ShoppingCartController {
 
 	@Autowired
 	private ShoppingCartService shoppingCartService;
-	
+
 	@GetMapping("/cart")
 	public String showShoppingCart(Model model) {
 		List<BasketProduct> basketProducts = shoppingCartService.listAllItems();
+		System.out.println("LACZNY HAJS: " + shoppingCartService.getTotalPrice(1));
+		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice(1));
 		model.addAttribute("basketProducts", basketProducts);
 		return "cart";
 	}
-	
+
 }

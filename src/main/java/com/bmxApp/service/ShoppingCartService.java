@@ -16,4 +16,11 @@ public class ShoppingCartService {
 	public List<BasketProduct> listAllItems(){
 		return databaseService.getBasketProducts();
 	}
+	
+	public float getTotalPrice(int id) {
+		return databaseService.getTotalPrice(id);
+	}
+	/*public float getTotalPrice(int id) {
+		return databaseService.getTotalPrice(id);
+	}*/
 }

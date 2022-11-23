@@ -73,4 +73,12 @@ public class DatabaseService {
 	public List<BasketProduct> getBasketProducts() {
 		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
 	}
+	
+	/*public float getTotalPrice(int id) {
+		return basketProductDatabaseHandler.calculateTotalPrice(id);
+	}*/
+	
+	public float getTotalPrice(int id) {
+		return basketProductDatabaseHandler.getTotalPrice(id);
+	}
 }
