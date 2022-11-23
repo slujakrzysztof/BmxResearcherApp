@@ -26,19 +26,25 @@ public class Product {
 	private String category;
 	@Column(name = "price", length = 255)
 	private double price;
+	@Column(name = "url", length = 255)
+	private String url;
+	@Column(name = "imageUrl", length = 255)
+	private String imageUrl;
 
-	public Product(String productName, String shopName, String category, double price) {
+	public Product(String productName, String shopName, String category, String url, String imageUrl, double price) {
 		this.productName = productName;
 		this.shopName = shopName;
 		this.category = category;
 		this.price = price;
+		this.url = url;
+		this.imageUrl = imageUrl;
 	}
-	
+
 	@Transient
 	public String getImage() {
 		return "/images/image";
 	}
-	
+
 	public Product() {
 	}
 
@@ -80,5 +86,21 @@ public class Product {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

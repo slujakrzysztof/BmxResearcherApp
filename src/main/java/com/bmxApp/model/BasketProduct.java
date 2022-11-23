@@ -1,6 +1,5 @@
 package com.bmxApp.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +19,7 @@ public class BasketProduct {
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")
-	private ShopProduct shopProduct;
+	private Product product;
 
 	@Column(name = "quantity")
 	private int quantity;
@@ -29,6 +28,38 @@ public class BasketProduct {
 	private String shopName;
 
 	public BasketProduct() {
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
 
 }

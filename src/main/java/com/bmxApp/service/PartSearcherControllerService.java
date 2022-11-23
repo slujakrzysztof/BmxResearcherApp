@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.handler.ImageHandler;
 import com.bmxApp.model.Product;
-import com.bmxApp.model.ShopProduct;
 import com.bmxApp.researcher.ShopResearcher;
 
 @Service
@@ -52,7 +51,7 @@ public class PartSearcherControllerService {
 	}
 
 	public String getImageUrl(String productName) {
-		imageUrl = ((ShopProduct) databaseService.getProductByName(productName, shopResearcher.getShopName()))
+		imageUrl = ((Product) databaseService.getProductByName(productName, shopResearcher.getShopName()))
 				.getImageUrl();
 		return imageUrl;
 	}
@@ -64,7 +63,7 @@ public class PartSearcherControllerService {
 	public String getImage(String productName) {
 		imageHandler.setImageSize(300, 300);
 		imageHandler.setImageName(
-				((ShopProduct) databaseService.getProductByName(productName, shopResearcher.getShopName()))
+				((Product) databaseService.getProductByName(productName, shopResearcher.getShopName()))
 						.getImageUrl());
 		return imageHandler.getImageName();
 	}

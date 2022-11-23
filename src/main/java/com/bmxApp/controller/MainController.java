@@ -22,7 +22,6 @@ import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.ShopModel;
-import com.bmxApp.model.ShopProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.service.MainControllerService;
 

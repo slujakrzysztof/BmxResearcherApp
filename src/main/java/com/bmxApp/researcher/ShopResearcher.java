@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.bmxApp.model.Product;
-import com.bmxApp.model.ShopProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.service.DatabaseService;
 
@@ -212,7 +211,7 @@ public class ShopResearcher {
 				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 					this.formatDataStructure();
 
-					products.add(new ShopProduct(productName.get(productIndex).text().replace("'", ""),
+					products.add(new Product(productName.get(productIndex).text().replace("'", ""),
 							this.getShopName(), this.getCategory(), productURLComplete,
 							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 							price));
@@ -232,7 +231,7 @@ public class ShopResearcher {
 			for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 				this.formatDataStructure();
 
-				ShopProduct product = new ShopProduct(productName.get(productIndex).text().replace("'", ""),
+				Product product = new Product(productName.get(productIndex).text().replace("'", ""),
 						this.getShopName(), this.getCategory(), productURLComplete,
 						imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 						price);
