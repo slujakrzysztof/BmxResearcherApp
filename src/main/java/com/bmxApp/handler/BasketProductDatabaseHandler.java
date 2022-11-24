@@ -16,5 +16,7 @@ public interface BasketProductDatabaseHandler extends CrudRepository<BasketProdu
 
 	List<BasketProduct> findByShopName(String shopName);
 	@Query(value = "Select (bt.quantity * pt.price) from BasketProduct bt inner join Product pt on bt.product = pt.id where bt.id=?1")
-	public float getTotalPrice(int id);
+	public float getTotalPriceForProduct(int id);
+	@Query(value = "Select SUM(bt.quantity * pt.price) from BasketProduct bt inner join Product pt on bt.product = pt.id")
+	public float getTotalPrice();
 }

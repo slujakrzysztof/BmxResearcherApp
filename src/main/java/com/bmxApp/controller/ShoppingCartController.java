@@ -19,8 +19,9 @@ public class ShoppingCartController {
 	@GetMapping("/cart")
 	public String showShoppingCart(Model model) {
 		List<BasketProduct> basketProducts = shoppingCartService.listAllItems();
-		System.out.println("LACZNY HAJS: " + shoppingCartService.getTotalPrice(1));
-		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice(1));
+		System.out.println("LACZNY HAJS: " + shoppingCartService.getTotalPriceForProduct(1));
+		model.addAttribute("totalPriceByProduct", shoppingCartService.getTotalPriceForProduct(1));
+		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice());
 		model.addAttribute("basketProducts", basketProducts);
 		return "cart";
 	}

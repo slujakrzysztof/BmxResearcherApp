@@ -73,12 +73,16 @@ public class DatabaseService {
 	public List<BasketProduct> getBasketProducts() {
 		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
 	}
-	
-	/*public float getTotalPrice(int id) {
-		return basketProductDatabaseHandler.calculateTotalPrice(id);
-	}*/
-	
-	public float getTotalPrice(int id) {
-		return basketProductDatabaseHandler.getTotalPrice(id);
+
+	/*
+	 * public float getTotalPrice(int id) { return
+	 * basketProductDatabaseHandler.calculateTotalPrice(id); }
+	 */
+
+	public float getTotalPriceForProduct(int id) {
+		System.out.println("SIEMA: " + basketProductDatabaseHandler.findAll());
+		if (this.getBasketProducts().isEmpty())
+			return 0f;
+		return basketProductDatabaseHandler.getTotalPriceForProduct(id);
 	}
 }
