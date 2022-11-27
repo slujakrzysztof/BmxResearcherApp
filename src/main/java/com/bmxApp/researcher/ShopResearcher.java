@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
-import com.bmxApp.service.DatabaseService;
+import com.bmxApp.service.ProductDatabaseService;
 
 @Component
 @Scope("prototype")
@@ -47,7 +47,7 @@ public class ShopResearcher {
 	List<Product> existingProducts;
 
 	@Autowired
-	DatabaseService databaseService;
+	ProductDatabaseService databaseService;
 
 	double price = 0;
 	String productURLComplete;

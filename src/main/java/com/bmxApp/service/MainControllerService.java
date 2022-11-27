@@ -15,7 +15,7 @@ import com.bmxApp.researcher.ShopResearcher;
 public class MainControllerService {
 
 	@Autowired
-	DatabaseService databaseService;
+	ProductDatabaseService databaseService;
 
 	ArrayList<ShopResearcher> usedResearcherArray = new ArrayList<ShopResearcher>();
 
@@ -29,7 +29,7 @@ public class MainControllerService {
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
 
-	public DatabaseService getDatabaseService() {
+	public ProductDatabaseService getDatabaseService() {
 		return this.databaseService;
 	}
 

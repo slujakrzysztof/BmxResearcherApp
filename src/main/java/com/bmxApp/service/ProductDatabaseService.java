@@ -1,6 +1,7 @@
 package com.bmxApp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,11 @@ import com.bmxApp.model.Product;
 import jakarta.transaction.Transactional;
 
 @Service
-public class DatabaseService {
+public class ProductDatabaseService {
 
 	@Autowired
 	ProductDatabaseHandler productDatabaseHandler;
-	@Autowired
-	BasketProductDatabaseHandler basketProductDatabaseHandler;
+
 
 	@Transactional
 	public List<Product> getAllProducts() {
@@ -35,6 +35,10 @@ public class DatabaseService {
 	@Transactional
 	public List<Product> getProductsByCategoryAndShopName(String category, String shopName) {
 		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
+	}
+	
+	public Product getProductById(int id) {
+		return productDatabaseHandler.findById(id);
 	}
 
 	@Transactional
@@ -70,19 +74,5 @@ public class DatabaseService {
 		return productDatabaseHandler.findByProductNameAndShopName(productName, shopName);
 	}
 
-	public List<BasketProduct> getBasketProducts() {
-		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
-	}
-
-	/*
-	 * public float getTotalPrice(int id) { return
-	 * basketProductDatabaseHandler.calculateTotalPrice(id); }
-	 */
-
-	public float getTotalPriceForProduct(int id) {
-		System.out.println("SIEMA: " + basketProductDatabaseHandler.findAll());
-		if (this.getBasketProducts().isEmpty())
-			return 0f;
-		return basketProductDatabaseHandler.getTotalPriceForProduct(id);
-	}
+	
 }

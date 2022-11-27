@@ -20,9 +20,11 @@ public interface ProductDatabaseHandler extends CrudRepository<Product, Integer>
 
 	List<Product> findByCategoryAndShopName(String category, String shopName);
 	
-	@Query(value = "SELECT DISTINCT category from product_table")
-	List<String> getAllExistingCategories();
+	Product findById(int id);
+	
+	/*@Query(value = "SELECT DISTINCT category from product_table")
+	List<Product> getAllExistingCategories();
 	
 	@Query(value = "SELECT DISTINCT shopName from product_table")
-	List<String> getAllExistingShops();
+	List<Product> getAllExistingShops();*/
 }

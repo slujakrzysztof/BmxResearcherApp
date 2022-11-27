@@ -6,27 +6,51 @@ import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bmxApp.handler.BasketProductDatabaseHandler;
+import com.bmxApp.service.BasketProductDatabaseService;
 import com.bmxApp.model.BasketProduct;
+import com.bmxApp.model.Product;
 
 @Service
 public class ShoppingCartService {
 
 	@Autowired
-	private BasketProductDatabaseHandler basketProductDatabaseHandler;
+	private BasketProductDatabaseService basketProductDatabaseService;
+
+	@Autowired
+	private ProductDatabaseService productDatabaseService;
 
 	public List<BasketProduct> getAllProducts() {
-		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
+		return basketProductDatabaseService.getAllBasketProducts();
 	}
 
 	public float getTotalPriceForProduct(int id) {
-		return basketProductDatabaseHandler.getTotalPriceForProduct(id);
+		return basketProductDatabaseService.getTotalPriceForProduct(id);
 	}
 
 	public float getTotalPrice() {
-		if (IterableUtils.toList(basketProductDatabaseHandler.findAll()).isEmpty())
+		if (basketProductDatabaseService.getAllBasketProducts().isEmpty())
 			return 0f;
-		return basketProductDatabaseHandler.getTotalPrice();
+		return basketProductDatabaseService.getTotalPrice();
+	}
+
+	public void addProductToBasket(Integer productId, Integer quantity) {
+
+		BasketProduct basketProduct;
+
+		if (basketProductDatabaseService.productAdded(productDatabaseService.getProductById(productId))) {
+			basketProduct = basketProductDatabaseService.getProductByProductId(productId);
+			basketProduct.setQuantity(
+					basketProductDatabaseService.getProductByProductId(productId).getQuantity() + quantity);
+		} else
+
+		{
+			basketProduct = new BasketProduct();
+			basketProduct.setQuantity(quantity);
+			basketProduct.setProduct(productDatabaseService.getProductById(productId));
+		}
+
+		basketProductDatabaseService.insertOrUpdateBasketProduct(basketProduct);
+
 	}
 
 }
