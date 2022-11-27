@@ -13,21 +13,19 @@ import com.bmxApp.model.BasketProduct;
 public class ShoppingCartService {
 
 	@Autowired
-	private DatabaseService databaseService;
-	
-	@Autowired
 	private BasketProductDatabaseHandler basketProductDatabaseHandler;
 
-	public List<BasketProduct> listAllItems(){
-		return databaseService.getBasketProducts();
+	public List<BasketProduct> getAllProducts() {
+		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
 	}
-	
+
 	public float getTotalPriceForProduct(int id) {
-		return databaseService.getTotalPriceForProduct(id);
+		return basketProductDatabaseHandler.getTotalPriceForProduct(id);
 	}
-	
+
 	public float getTotalPrice() {
-		if(IterableUtils.toList(basketProductDatabaseHandler.findAll()).isEmpty()) return 0f;
+		if (IterableUtils.toList(basketProductDatabaseHandler.findAll()).isEmpty())
+			return 0f;
 		return basketProductDatabaseHandler.getTotalPrice();
 	}
 
