@@ -23,4 +23,5 @@ public interface BasketProductDatabaseHandler extends CrudRepository<BasketProdu
 	public BasketProduct findByProduct(Product product);
 	
 	BasketProduct findByProductId(int productId);
+
 }

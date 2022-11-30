@@ -33,19 +33,20 @@ public class ShoppingCartService {
 		return basketProductDatabaseService.getTotalPrice();
 	}
 
-	public void addProductToBasket(Integer productId, Integer quantity) {
+	public void addProductToBasket(Integer productId, String shopName) {
 
 		BasketProduct basketProduct;
 
 		if (basketProductDatabaseService.productAdded(productDatabaseService.getProductById(productId))) {
 			basketProduct = basketProductDatabaseService.getProductByProductId(productId);
 			basketProduct.setQuantity(
-					basketProductDatabaseService.getProductByProductId(productId).getQuantity() + quantity);
+					basketProductDatabaseService.getProductByProductId(productId).getQuantity() + 1);
 		} else
 
 		{
 			basketProduct = new BasketProduct();
-			basketProduct.setQuantity(quantity);
+			basketProduct.setQuantity(1);
+			basketProduct.setShopName(shopName);
 			basketProduct.setProduct(productDatabaseService.getProductById(productId));
 		}
 

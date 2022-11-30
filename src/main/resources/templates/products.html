@@ -26,9 +26,13 @@
 				<td class="w-25"><img th:src="${product.imageUrl}"
 					alt="${product.imageUrl}" class="img-responsive" /></td>
 				<!-- <td th:text="${product.imageUrl}"/> -->
-				<td><a th:href="@{/cart}">
-						<button type="button" th:text="#{addBasket}" />
-				</a> <!--<button class="btn btn-primary" type="submit" name="partName"
+				<td><form action="#" th:action="@{addProduct}" method="post"
+						th:object="${product}">
+						<input type="hidden" th:attr="name='id'" th:value="${product.id}" />
+						<input type="hidden" th:attr="name='shopName'"
+							th:value="${product.shopName}" />
+						<button type="submit" value="submit" th:text="#{addBasket}"></button>
+					</form> <!--<button class="btn btn-primary" type="submit" name="partName"
 						th:text="#{addBasket}" value="pegi"
 						onclick="window.location.href='http://localhost:8080/?localeData=en'" />
 					<a th:href="@{/search(category=${model.shopName})}">

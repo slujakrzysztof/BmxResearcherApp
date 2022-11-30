@@ -21,9 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.ProductDatabaseHandler;
+import com.bmxApp.model.Product;
 import com.bmxApp.model.ShopModel;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.service.MainControllerService;
+import com.bmxApp.service.ShoppingCartService;
 
 @Controller
 @RequestMapping({ "/", "/main" })
@@ -34,6 +36,9 @@ public class MainController {
 
 	PropertyReader propertyReader = PropertyReader.getInstance();
 
+	@Autowired
+	private ShoppingCartService shoppingCartService;
+	
 	static List<String> shopList = null;
 
 	static {
@@ -71,6 +76,16 @@ public class MainController {
 		System.out.println(shopModel.getShop());
 
 		return "nic";
+	}
+
+	@PostMapping("/addProduct")
+	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
+			BindingResult bindingResult) {
+
+		System.out.println(product.getShopName());
+	    shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
+
+		return "cart";
 	}
 
 	// @RequestMapping(value = "/main")
