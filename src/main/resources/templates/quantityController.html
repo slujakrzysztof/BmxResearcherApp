@@ -5,10 +5,19 @@
 	<div th:fragment="quantityController(quantityValue, productId)">
 		<nav>
 			<ul class="pagination">
-				<li class="page-item"><a class="page-link minusButton" href="" th:pid="${productId}"><b>-</b></a></li>
-				<li class="page-item"><input type="text" th:value="${quantityValue}" class="form-control text-center"
-						style="max-width: 55px" th:id="'quantity' + ${productId}" /></li>
-				<li class="page-item"><a class="page-link plusButton" href="" th:pid="${productId}"><b>+</b></a></li>
+				<li class="page-item"><a class="page-link minusButton" href=""
+					th:pid="${productId}"><b>-</b></a></li>
+				<li class="page-item"><input type="text"
+					th:value="${quantityValue}" class="form-control text-center"
+					style="max-width: 55px" th:id="'quantity' + ${productId}" /></li>
+
+				<li class="page-item">
+					<form th:action="@{addProduct}" method="post">
+						<input type="hidden" th:attr="name='id'"
+							th:value="${productId.id}" /> <a class="page-link plusButton"
+							th:href="@{quantityChanged}" th:pid="${productId}"><b>+</b></a>
+					</form>
+				</li>
 			</ul>
 		</nav>
 	</div>

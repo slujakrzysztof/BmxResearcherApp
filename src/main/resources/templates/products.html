@@ -30,7 +30,9 @@
 						th:object="${product}">
 						<input type="hidden" th:attr="name='id'" th:value="${product.id}" />
 						<input type="hidden" th:attr="name='shopName'"
-							th:value="${product.shopName}" />
+							th:value="${product.shopName}" /> 
+							<input type="hidden"
+							th:attr="name='category'" th:value="${product.category}" />
 						<button type="submit" value="submit" th:text="#{addBasket}"></button>
 					</form> <!--<button class="btn btn-primary" type="submit" name="partName"
 						th:text="#{addBasket}" value="pegi"

@@ -12,7 +12,7 @@ import com.bmxApp.service.MainControllerService;
 public enum Part {
 	GRIPS("gripy"), BARS("kierownice"), BARENDS("barendy"), STEMS("mostki"), HEADS("stery"), FRAMES("ramy"),
 	FORKS("widelce"), RIMS("obrecze"), TIRES("opony"), SPOKES("szprychy"), HUBS("piasty"), POSTS("sztyce"),
-	GEARS("zebatki"), CRANKS("korby"), PEDALS("pedaly"), CHAINS("lancuchy"), SEATS("siodelka"), SUPPORTS("suporty");
+	GEARS("zebatki"), CRANKS("korby"), PEDALS("pedaly"), CHAINS("lancuchy"), SEATS("siodelka"), SUPPORTS("suporty"), PEGS("pegi");
 
 	@Autowired
 	MainControllerService mainControllerService;
@@ -46,7 +46,15 @@ public enum Part {
 		}
 		value = (String) properties.get(this.toString());
 	}
-
+	
+    public static Part fromString(String text) {
+        for (Part pt : Part.values()) {
+            if (pt.getValue().equalsIgnoreCase(text)) {
+                return pt;
+            }
+        }
+        return null;
+    }
 	/*
 	 * public String getValue() { if (value == null) { init(); } return value; }
 	 */

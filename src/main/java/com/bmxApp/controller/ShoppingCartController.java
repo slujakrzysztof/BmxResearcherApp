@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
@@ -30,6 +31,12 @@ public class ShoppingCartController {
 		return "cart";
 	}
 
-
+	@GetMapping("/quantityChanged")
+	public String changeQuantity(@ModelAttribute("quantityValue") BasketProduct basketProduct, Model model,
+			BindingResult bindingResult) {
+		System.out.println("JESREM TUT");
+		System.out.println("HAHAH: " + basketProduct.getId());
+		return "cart";
+	}
 
 }

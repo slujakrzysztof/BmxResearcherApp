@@ -38,7 +38,7 @@ public class MainController {
 
 	@Autowired
 	private ShoppingCartService shoppingCartService;
-	
+
 	static List<String> shopList = null;
 
 	static {
@@ -83,13 +83,15 @@ public class MainController {
 			BindingResult bindingResult) {
 
 		System.out.println(product.getShopName());
-	    shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
+		System.out.println(product.getCategory());
+		System.out.println(Part.fromString(product.getCategory()));
+		shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
 
-		return "cart";
+		return "redirect:/search?shop=" + product.getShopName() + "&category="
+				+ Part.fromString(product.getCategory()).toString().toLowerCase();
 	}
 
-	// @RequestMapping(value = "/main")
-	// @ResponseBody
+	
 	@GetMapping("/main")
 	public String hello1(Model model) {
 		// ModelAndView model = new ModelAndView("main");
