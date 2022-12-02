@@ -36,8 +36,6 @@ public class ShoppingCartController {
 			BindingResult bindingResult) {
 
 		int quantity = shoppingCartService.getQuantity(basketProduct.getId()) + 1;
-		System.out.println("INDEKS: " + shoppingCartService.getQuantity(basketProduct.getId()));
-		System.out.println("QUNATITTY: " + quantity);
 		shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
 
 		return "redirect:/cart";
@@ -51,6 +49,12 @@ public class ShoppingCartController {
 		shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
 
 		return "redirect:/cart";
+	}
+	
+	@GetMapping("/cart/bmxlife")
+	public String nic() {
+		System.out.println("SIEMA");
+		return "cart";
 	}
 
 }

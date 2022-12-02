@@ -14,13 +14,9 @@
 <body>
 	<ul class="nav nav-pills">
 		<th:block th:each="shopModel : ${T(com.bmxApp.enums.Shop).values()}">
-			<li class="nav-item"><a class="nav-link active"
-				aria-current="page" href="#" th:value="${shopModel}"
+			<li class="nav-item"><a class="nav-link"
+				aria-current="page" th:href="@{cart?shop={shop}(shop=${shopModel})}" th:value="${shopModel}"
 				th:text="${shopModel}"></a></li>
-			<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
-			<li class="nav-item"><a class="nav-link disabled" href="#"
-				tabindex="-1" aria-disabled="true">Disabled</a></li>
 		</th:block>
 	</ul>
 	<div class="container-fluid">
