@@ -103,4 +103,10 @@ public class Product {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", productName=" + productName + ", shopName=" + shopName + ", category="
+				+ category + ", price=" + price + ", url=" + url + ", imageUrl=" + imageUrl + "]";
+	}
 }

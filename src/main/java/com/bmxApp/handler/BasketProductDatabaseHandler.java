@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface BasketProductDatabaseHandler extends CrudRepository<BasketProduct, Integer> {
 
@@ -20,8 +22,13 @@ public interface BasketProductDatabaseHandler extends CrudRepository<BasketProdu
 	@Query(value = "Select SUM(bt.quantity * pt.price) from BasketProduct bt inner join Product pt on bt.product = pt.id")
 	public float getTotalPrice();
 	
+	@Query(value = "Select quantity from BasketProduct where id = ?1")
+	public float getProductQuantity(int id);
+	
 	public BasketProduct findByProduct(Product product);
 	
 	BasketProduct findByProductId(int productId);
+	
+	BasketProduct findById(int id);
 
 }

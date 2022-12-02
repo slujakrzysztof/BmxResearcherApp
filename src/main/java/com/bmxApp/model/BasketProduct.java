@@ -62,4 +62,10 @@ public class BasketProduct {
 		this.shopName = shopName;
 	}
 
+	@Override
+	public String toString() {
+		return "BasketProduct [id=" + id + ", product=" + product + ", quantity=" + quantity + ", shopName=" + shopName
+				+ "]";
+	}
+
 }

@@ -31,12 +31,26 @@ public class ShoppingCartController {
 		return "cart";
 	}
 
-	@GetMapping("/quantityChanged")
-	public String changeQuantity(@ModelAttribute("quantityValue") BasketProduct basketProduct, Model model,
+	@PostMapping("/quantityChangedPlus")
+	public String changeQuantityPlus(@ModelAttribute("basketProductId") BasketProduct basketProduct, Model model,
 			BindingResult bindingResult) {
-		System.out.println("JESREM TUT");
-		System.out.println("HAHAH: " + basketProduct.getId());
-		return "cart";
+
+		int quantity = shoppingCartService.getQuantity(basketProduct.getId()) + 1;
+		System.out.println("INDEKS: " + shoppingCartService.getQuantity(basketProduct.getId()));
+		System.out.println("QUNATITTY: " + quantity);
+		shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
+
+		return "redirect:/cart";
+	}
+
+	@PostMapping("/quantityChangedMinus")
+	public String changeQuantityMinus(@ModelAttribute("basketProductId") BasketProduct basketProduct, Model model,
+			BindingResult bindingResult) {
+
+		int quantity = shoppingCartService.getQuantity(basketProduct.getId()) - 1;
+		shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
+
+		return "redirect:/cart";
 	}
 
 }

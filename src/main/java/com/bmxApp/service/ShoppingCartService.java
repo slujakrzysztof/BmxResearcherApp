@@ -39,8 +39,7 @@ public class ShoppingCartService {
 
 		if (basketProductDatabaseService.productAdded(productDatabaseService.getProductById(productId))) {
 			basketProduct = basketProductDatabaseService.getProductByProductId(productId);
-			basketProduct.setQuantity(
-					basketProductDatabaseService.getProductByProductId(productId).getQuantity() + 1);
+			basketProduct.setQuantity(basketProductDatabaseService.getProductByProductId(productId).getQuantity() + 1);
 		} else
 
 		{
@@ -51,7 +50,17 @@ public class ShoppingCartService {
 		}
 
 		basketProductDatabaseService.insertOrUpdateBasketProduct(basketProduct);
+	}
 
+	public int getQuantity(int basketProductId) {
+		return basketProductDatabaseService.getQuantity(basketProductId);
+	}
+
+	public void changeQuantity(int id, int value) {
+		BasketProduct basketProduct = basketProductDatabaseService.getProductById(id);
+		System.out.println("PRODUKT : " + basketProduct.getId());
+		basketProduct.setQuantity(value);
+		basketProductDatabaseService.insertOrUpdateBasketProduct(basketProduct);
 	}
 
 }

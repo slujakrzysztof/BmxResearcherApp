@@ -41,7 +41,7 @@
 							</a>
 						</div>
 						<div
-							th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product})">
+							th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product}, ${basketProduct})">
 							Quantity</div>
 						<div class="col">Cena jednostkowa: [[${product.price}]]</div>
 						<div class="col">Cena laczna: [[${totalPriceByProduct}]]</div>

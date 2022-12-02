@@ -33,15 +33,24 @@ public class BasketProductDatabaseService {
 	}
 
 	public boolean productAdded(Product product) {
-		if(basketProductDatabaseHandler.findByProduct(product) != null) return true;
+		if (basketProductDatabaseHandler.findByProduct(product) != null)
+			return true;
 		return false;
 	}
-	
+
 	public BasketProduct getProductByProductId(int productId) {
 		return basketProductDatabaseHandler.findByProductId(productId);
 	}
-	
+
+	public BasketProduct getProductById(int id) {
+		return basketProductDatabaseHandler.findById(id);
+	}
+
 	public void insertOrUpdateBasketProduct(BasketProduct basketProduct) {
 		basketProductDatabaseHandler.save(basketProduct);
+	}
+
+	public int getQuantity(int productId) {
+		return (int) basketProductDatabaseHandler.getProductQuantity(productId);
 	}
 }
