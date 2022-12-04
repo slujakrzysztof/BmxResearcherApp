@@ -21,9 +21,12 @@ public class ShoppingCartController {
 	@Autowired
 	private ShoppingCartService shoppingCartService;
 
-	@GetMapping("/cart")
-	public String showShoppingCart(Model model) {
-		List<BasketProduct> basketProducts = shoppingCartService.getAllProducts();
+	@GetMapping({"/cart" , "/cart/{shop}"})
+	public String showShoppingCart(@PathVariable(required=false) String shop, Model model) {
+		List<BasketProduct> basketProducts;
+		if(shop == null) basketProducts = shoppingCartService.getAllProducts();
+		else basketProducts = shoppingCartService.getBasketProductsByShopName(shop);
+		System.out.println("SKLEPIK: " + shop);
 		System.out.println("LACZNY HAJS: " + shoppingCartService.getTotalPriceForProduct(1));
 		model.addAttribute("totalPriceByProduct", shoppingCartService.getTotalPriceForProduct(1));
 		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice());

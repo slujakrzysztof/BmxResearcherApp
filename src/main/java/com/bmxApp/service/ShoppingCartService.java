@@ -62,5 +62,9 @@ public class ShoppingCartService {
 		basketProduct.setQuantity(value);
 		basketProductDatabaseService.insertOrUpdateBasketProduct(basketProduct);
 	}
+	
+	public List<BasketProduct> getBasketProductsByShopName(String shopName){
+		return basketProductDatabaseService.getBasketProductsByShopName(shopName);
+	}
 
 }
