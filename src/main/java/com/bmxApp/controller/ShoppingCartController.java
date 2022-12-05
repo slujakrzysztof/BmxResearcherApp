@@ -51,10 +51,5 @@ public class ShoppingCartController {
 		return "redirect:/cart";
 	}
 	
-	@GetMapping("/cart/bmxlife")
-	public String nic() {
-		System.out.println("SIEMA");
-		return "cart";
-	}
 
 }
