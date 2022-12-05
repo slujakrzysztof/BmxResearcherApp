@@ -47,13 +47,15 @@ public class MainControllerService {
 			System.out.println("htmmml: " + html);
 
 			System.out.println("CZESC: " + category);
-			
+
 			shopResearcher.setHTML(html);
 			shopResearcher.setShopName(shopName);
 			shopResearcher.setConnection();
 			shopResearcher.setCategory(category);
 			shopResearcher.searchPage();
 			shopResearcher.setPagesArray();
+			shopResearcher.setHTML(shopResearcher.getPagesArray().get(0));
+			shopResearcher.setConnection();
 
 			shopResearcher.setInitialized(true);
 			if (!this.partPreviousSearched(shopName, category)) {
@@ -62,11 +64,10 @@ public class MainControllerService {
 				shopResearcher.searchNewProducts();
 
 			} else {
-				shopResearcher.setProductUpdated(true);			
-				//---- NA RZECZ TESTÓW ----//
-				//shopResearcher.searchPreviousProducts(shopName, category);
+				shopResearcher.setProductUpdated(true);
+				// ---- NA RZECZ TESTÓW ----//
+				// shopResearcher.searchPreviousProducts(shopName, category);
 			}
-				
 
 			shopResearcher.setSpecificInformations(category);
 			this.setPartSearched(true);
