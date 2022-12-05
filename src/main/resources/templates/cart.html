@@ -42,7 +42,7 @@
 							th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product}, ${basketProduct})">
 							Quantity</div>
 						<div class="col">Cena jednostkowa: [[${product.price}]]</div>
-						<div class="col">Cena laczna: [[${totalPriceByProduct}]]</div>
+						<div class="col">Cena laczna: [[${totalPriceByProduct.get(basketProduct.id)}]]</div>
 						<div class="col">
 							<img th:src="@{${product.imageUrl}}" class="img-fluid">
 						</div>

@@ -7,7 +7,7 @@
 		<nav>
 			<ul class="pagination">
 				<li class="page-item">
-					<form action="#" th:action="@{quantityChangedMinus}"
+					<form action="#" th:action="@{/quantityChangedMinus}"
 						th:object="${basketProductId}" method="post">
 						<input type="hidden" th:attr="name='id'"
 							th:value="${basketProductId.id}" />
@@ -20,7 +20,7 @@
 					th:value="${quantityValue}" class="form-control text-center"
 					style="max-width: 55px" th:id="'quantity' + ${productId}" /></li>
 				<li class="page-item">
-					<form action="#" th:action="@{quantityChangedPlus}"
+					<form action="#" th:action="@{/quantityChangedPlus}"
 						th:object="${basketProductId}" method="post">
 						<input type="hidden" th:attr="name='id'"
 							th:value="${basketProductId.id}" />

@@ -27,10 +27,11 @@ public class ShoppingCartService {
 		return basketProductDatabaseService.getTotalPriceForProduct(id);
 	}
 
-	public float getTotalPrice() {
+	public float getTotalPrice(String shopName) {
 		if (basketProductDatabaseService.getAllBasketProducts().isEmpty())
 			return 0f;
-		return basketProductDatabaseService.getTotalPrice();
+		if(shopName == null) return basketProductDatabaseService.getTotalPrice();
+		return basketProductDatabaseService.getTotalPriceByShopName(shopName);
 	}
 
 	public void addProductToBasket(Integer productId, String shopName) {

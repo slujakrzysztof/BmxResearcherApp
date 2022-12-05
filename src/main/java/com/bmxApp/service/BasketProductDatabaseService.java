@@ -19,6 +19,10 @@ public class BasketProductDatabaseService {
 	public float getTotalPrice() {
 		return basketProductDatabaseHandler.getTotalPrice();
 	}
+	
+	public float getTotalPriceByShopName(String shopName) {
+		return basketProductDatabaseHandler.getTotalPriceByShopName(shopName);
+	}
 
 	public float getTotalPriceForProduct(int id) {
 		return basketProductDatabaseHandler.getTotalPriceForProduct(id);
