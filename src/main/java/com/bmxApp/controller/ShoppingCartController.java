@@ -56,6 +56,12 @@ public class ShoppingCartController {
 		return "redirect:/cart";
 	}
 
+	@PostMapping("/deleteProducts")
+	public String deleteBasketProducts() {
+		shoppingCartService.deleteProducts();
+		return "cart";
+	}
+
 	@PostMapping("/quantityChangedMinus")
 	public String changeQuantityMinus(@ModelAttribute("basketProductId") BasketProduct basketProduct, Model model,
 			BindingResult bindingResult) {

@@ -61,4 +61,8 @@ public class BasketProductDatabaseService {
 	public int getQuantity(int productId) {
 		return (int) basketProductDatabaseHandler.getProductQuantity(productId);
 	}
+	
+	public void deleteProducts() {
+		basketProductDatabaseHandler.deleteAll();
+	}
 }

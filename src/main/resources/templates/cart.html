@@ -42,7 +42,8 @@
 							th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product}, ${basketProduct})">
 							Quantity</div>
 						<div class="col">Cena jednostkowa: [[${product.price}]]</div>
-						<div class="col">Cena laczna: [[${totalPriceByProduct.get(basketProduct.id)}]]</div>
+						<div class="col">Cena laczna:
+							[[${totalPriceByProduct.get(basketProduct.id)}]]</div>
 						<div class="col">
 							<img th:src="@{${product.imageUrl}}" class="img-fluid">
 						</div>
@@ -55,6 +56,12 @@
 				</div>
 				<div>
 					<span> [[${totalPrice}]]</span>
+				</div>
+				<div>
+					<form action="#" th:action="@{deleteProducts}" method="post">
+						<button type="submit" value="submit" class="btn btn-danger">USUN
+							WSZYSTKIE PRODUKTY</button>
+					</form>
 				</div>
 			</div>
 

@@ -28,10 +28,16 @@ public class ShoppingCartService {
 	}
 
 	public float getTotalPrice(String shopName) {
-		if (basketProductDatabaseService.getAllBasketProducts().isEmpty())
+		if ((basketProductDatabaseService.getAllBasketProducts().isEmpty()
+				|| basketProductDatabaseService.getBasketProductsByShopName(shopName).isEmpty()) && shopName != null)
 			return 0f;
-		if(shopName == null) return basketProductDatabaseService.getTotalPrice();
+		else if (shopName == null)
+			return basketProductDatabaseService.getTotalPrice();
 		return basketProductDatabaseService.getTotalPriceByShopName(shopName);
+	}
+	
+	public void deleteProducts() {
+		basketProductDatabaseService.deleteProducts();
 	}
 
 	public void addProductToBasket(Integer productId, String shopName) {
@@ -63,8 +69,8 @@ public class ShoppingCartService {
 		basketProduct.setQuantity(value);
 		basketProductDatabaseService.insertOrUpdateBasketProduct(basketProduct);
 	}
-	
-	public List<BasketProduct> getBasketProductsByShopName(String shopName){
+
+	public List<BasketProduct> getBasketProductsByShopName(String shopName) {
 		return basketProductDatabaseService.getBasketProductsByShopName(shopName);
 	}
 
