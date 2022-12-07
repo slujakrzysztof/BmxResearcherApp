@@ -17,6 +17,7 @@ public class BasketProductDatabaseService {
 	BasketProductDatabaseHandler basketProductDatabaseHandler;
 
 	public float getTotalPrice() {
+		if(this.getAllBasketProducts().isEmpty()) return 0f;
 		return basketProductDatabaseHandler.getTotalPrice();
 	}
 	

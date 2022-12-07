@@ -39,7 +39,7 @@ public class ShoppingCartController {
 		}
 
 		System.out.println("SKLEPIK: " + shop);
-		System.out.println("LACZNY HAJS: " + shoppingCartService.getTotalPriceForProduct(1));
+		//System.out.println("LACZNY HAJS: " + shoppingCartService.getTotalPriceForProduct(1));
 		model.addAttribute("totalPriceByProduct", basketProductsPrices);
 		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice(shop));
 		model.addAttribute("basketProducts", basketProducts);

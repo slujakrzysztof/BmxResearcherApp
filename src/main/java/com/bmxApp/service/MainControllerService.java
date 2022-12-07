@@ -1,6 +1,7 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.midi.Soundbank;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.model.BasketProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcher;
 
@@ -16,6 +18,9 @@ public class MainControllerService {
 
 	@Autowired
 	ProductDatabaseService databaseService;
+	
+	@Autowired
+	BasketProductDatabaseService basketProductDatabaseService;
 
 	ArrayList<ShopResearcher> usedResearcherArray = new ArrayList<ShopResearcher>();
 
@@ -31,6 +36,10 @@ public class MainControllerService {
 
 	public ProductDatabaseService getDatabaseService() {
 		return this.databaseService;
+	}
+	
+	public List<BasketProduct> getBasketProducts(){
+		return basketProductDatabaseService.getAllBasketProducts();
 	}
 
 	public void setResearcher(String category, String shopName, int shopNumber, boolean partSelection) {
