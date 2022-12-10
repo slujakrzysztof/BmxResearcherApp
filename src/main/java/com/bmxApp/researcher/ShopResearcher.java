@@ -95,7 +95,7 @@ public class ShopResearcher {
 	public void searchPage() {
 		Elements partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearch"));// doc.select("div.category-miniature.no-image
 																								// > p > a[href]");
-		System.out.println("JESTEM TU KURWWY: " + partPage);
+		System.out.println("JESTEM TU: " + partPage);
 
 		for (Element e : partPage) {
 			if (e.absUrl("href").contains(this.getCategory())) {
