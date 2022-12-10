@@ -128,6 +128,7 @@ public class ShopResearcher {
 
 	// --- Get url to pages with products ---
 	public void setPagesArray() {
+		System.out.println("SETPAGESARRAY");
 		pagesArray.clear();
 		try {
 			pages = doc.select(PropertyReader.getInstance().getProperty("numberOfPages"));

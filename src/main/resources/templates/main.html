@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<!-- HEADER -->
+	<!-- HEADER -->
 
 	<header class="header">
 
@@ -37,7 +37,8 @@
 			<div class="cart-item" th:each="product : ${products}">
 				<span class="fas fa-times"></span>
 				<div class="content">
-				<h3>[[${product.product.productName}]] | [[${product.shopName}]]</h3>
+					<h3>[[${product.product.productName}]] |
+						[[${product.shopName}]]</h3>
 				</div>
 			</div>
 
@@ -45,19 +46,34 @@
 
 	</header>
 
-<!-- HEADER -->
+	<!-- HEADER -->
 
-<section class="home" id="mainPage">
-
-
-
-
-</section>
+	<section class="home" id="mainPage">
+		<div class="parent">
+			<form th:object="${shopModel}" th:action="@{/search}" method="get">
+				<div class="child">
+					<div th:each="model : ${T(com.bmxApp.enums.Shop).values()}">
+						<div class="custom-control custom-radio custom-control-inline">
+							<input type="radio" th:field="*{shop}" th:value="${model}"
+								class="custom-control-input"> <label
+								class="custom-control-label" th:for="${#ids.prev('shop')}"
+								th:text="${model}">model</label>
+						</div>
+					</div>
+				</div>
+				<div class="child">
+					<div th:each="partButton : ${T(com.bmxApp.enums.Part).values()}">
+						<button class="btn btn-primary" type="submit" name="category"
+							th:value="${partButton.name}" th:text="#{${partButton.name().toLowerCase()}}"></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
 	<!--<div class="container">
 		<img th:src="@{images/bmx.jpg}" class="img-fluid"
 			alt="Responsive Image" width="900" height="750">
-		<button class="btn btn-primary" type="submit" name="category"
-			value="pegs">AAA</button>
+
 	</div>
 
 	<div class="container">
@@ -175,6 +191,6 @@
 				</div>
 			</div>
 			<button class="btn btn-primary" type="submit">Submit form</button>-->
-			<script type="text/javascript" th:src="@{/js/mainPageJS.js}"></script>
+	<script type="text/javascript" th:src="@{/js/mainPageJS.js}"></script>
 </body>
 </html>

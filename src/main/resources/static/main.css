@@ -1,5 +1,5 @@
 :root { 
-	--main-color: #d3ad7f; 
+	--main-color: #5ff3f3; 
 	--black: #13131a; 
 	--bg: #010103; 
 	--border: .1rem solid rgba(255, 255, 255, .3);
@@ -150,7 +150,18 @@ section{
 	background-position: center;
 }
 
-
+.parent {
+  border: 1px solid;
+  margin: 1rem;
+  padding: 2rem 2rem;
+  text-align: center;
+}
+.child {
+  display: inline-block;
+  border: 1px solid;
+  padding: 1rem 1rem;
+  vertical-align: middle;
+}
 
 
 
