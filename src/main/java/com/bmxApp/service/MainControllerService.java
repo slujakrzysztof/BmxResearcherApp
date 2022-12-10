@@ -37,6 +37,10 @@ public class MainControllerService {
 	public ProductDatabaseService getDatabaseService() {
 		return this.databaseService;
 	}
+
+	public ShopResearcher getShopResearcher() {
+		return this.shopResearcher;
+	}
 	
 	public List<BasketProduct> getBasketProducts(){
 		return basketProductDatabaseService.getAllBasketProducts();

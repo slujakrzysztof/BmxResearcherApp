@@ -2,6 +2,7 @@ package com.bmxApp.enums;
 
 import java.util.Properties;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,20 @@ public enum Part {
 	private Part(String value) {
 		this.value = value;
 	}
+	
+	public void setValue(String value) {
+		this.value = value;
+	}
 
+	public String getValue(String shopName) {
+		if(shopName.equals(Shop.AVEBMX.name())) {
+			System.out.println("AVEEEEEEEEEEEEEEEEEE");
+			STEMS.setValue("wsporniki-kierownicy");
+			System.out.println("MOSTKI VALUE: " + STEMS.getValue());
+		}
+		return value;
+	}
+	
 	public String getValue() {
 		return value;
 	}
