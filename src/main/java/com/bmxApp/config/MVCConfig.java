@@ -12,12 +12,6 @@ public class MVCConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		showImageDirectory("images", registry);
-	}
-
-	private void showImageDirectory(String directory, ResourceHandlerRegistry registry) {
-		String path = Paths.get(directory).toFile().getAbsolutePath();
-        if (directory.startsWith("../")) directory = directory.replace("../", "");
-        registry.addResourceHandler("/" + directory + "/**").addResourceLocations("file:/"+ path + "/");
+		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
 	}
 }

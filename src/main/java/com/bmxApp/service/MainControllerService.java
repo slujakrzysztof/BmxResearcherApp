@@ -1,6 +1,7 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.midi.Soundbank;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.model.BasketProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcher;
 
@@ -16,6 +18,9 @@ public class MainControllerService {
 
 	@Autowired
 	ProductDatabaseService databaseService;
+	
+	@Autowired
+	BasketProductDatabaseService basketProductDatabaseService;
 
 	ArrayList<ShopResearcher> usedResearcherArray = new ArrayList<ShopResearcher>();
 
@@ -32,6 +37,10 @@ public class MainControllerService {
 	public ProductDatabaseService getDatabaseService() {
 		return this.databaseService;
 	}
+	
+	public List<BasketProduct> getBasketProducts(){
+		return basketProductDatabaseService.getAllBasketProducts();
+	}
 
 	public void setResearcher(String category, String shopName, int shopNumber, boolean partSelection) {
 
@@ -47,13 +56,15 @@ public class MainControllerService {
 			System.out.println("htmmml: " + html);
 
 			System.out.println("CZESC: " + category);
-			
+
 			shopResearcher.setHTML(html);
 			shopResearcher.setShopName(shopName);
 			shopResearcher.setConnection();
 			shopResearcher.setCategory(category);
 			shopResearcher.searchPage();
 			shopResearcher.setPagesArray();
+			shopResearcher.setHTML(shopResearcher.getPagesArray().get(0));
+			shopResearcher.setConnection();
 
 			shopResearcher.setInitialized(true);
 			if (!this.partPreviousSearched(shopName, category)) {
@@ -62,11 +73,10 @@ public class MainControllerService {
 				shopResearcher.searchNewProducts();
 
 			} else {
-				shopResearcher.setProductUpdated(true);			
-				//---- NA RZECZ TESTÓW ----//
-				//shopResearcher.searchPreviousProducts(shopName, category);
+				shopResearcher.setProductUpdated(true);
+				// ---- NA RZECZ TESTÓW ----//
+				// shopResearcher.searchPreviousProducts(shopName, category);
 			}
-				
 
 			shopResearcher.setSpecificInformations(category);
 			this.setPartSearched(true);

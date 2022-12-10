@@ -61,15 +61,6 @@ public class MainController {
 		return "products";
 	}
 
-	@PostMapping("/main1")
-	public String hello2(Model model, ShopModel shopModel) {
-		model.addAttribute("shopModel", shopModel);
-		System.out.println("222: " + shopModel.getShop());
-		System.out.println("333: " + shopModel.getPartName());
-		return "nic2";
-	}
-
-	// @RequestMapping(value = "/main")
 	@PostMapping
 	public String submitTest(Model model, ShopModel shopModel) {
 		model.addAttribute("shopModel", shopModel);
@@ -97,6 +88,7 @@ public class MainController {
 		// ModelAndView model = new ModelAndView("main");
 		System.out.println(Part.BARS.getValue());
 		model.addAttribute("shopModel", new ShopModel());
+		model.addAttribute("products", mainControllerService.getBasketProducts());
 		// researcherControllerService.insertProduct();
 		return "main";
 	}

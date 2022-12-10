@@ -132,22 +132,32 @@ public class ShopResearcher {
 		try {
 			pages = doc.select(PropertyReader.getInstance().getProperty("numberOfPages"));
 			int pageNumber = 0;
-			for (Element page : pages) {
-				System.out.println("STRONY: " + pages.attr("href"));
-				try {
-					pageNumber = Integer.parseInt(page.text());
-				} catch (NumberFormatException ex) {
-					continue;
+
+			if (Boolean.valueOf(PropertyReader.getInstance().getProperty("allProductsDisplay"))) {
+				pagesArray.add(pages.get(pages.size() - 1).attr("href"));
+			} else {
+				for (Element page : pages) {
+					System.out.println("STROONY 111: " + page);
+					System.out.println("STRONY: " + pages.attr("href"));
+					try {
+						pageNumber = Integer.parseInt(page.text());
+					} catch (NumberFormatException ex) {
+						continue;
+					}
+					pagesArray.add(pages.attr("href").substring(0, pages.attr("href").length() - 1) + pageNumber);
 				}
-				pagesArray.add(pages.attr("href").substring(0, pages.attr("href").length() - 1) + pageNumber);
+				pagesArray = pagesArray.stream().distinct().collect(Collectors.toList());
 			}
-			pagesArray = pagesArray.stream().distinct().collect(Collectors.toList());
 
 		} catch (ValidationException validationException) {
 			pagesArray.add(this.html);
 		}
 		numberOfPages = pagesArray.size();
 		productIndex = 0;
+	}
+
+	public List<String> getPagesArray() {
+		return pagesArray;
 	}
 
 	public String getHTML() {
@@ -159,7 +169,12 @@ public class ShopResearcher {
 		productName = div.select(PropertyReader.getInstance().getProperty("productNameElement"));
 		productPrice = div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
 		productURL = div.select(PropertyReader.getInstance().getProperty("productURLElement"));
-		imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+		// DLA MANYFEST DOC DLA INNYCH DIV
+		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase()))
+			imageURL = doc.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+		else
+			imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+		System.out.println("imageURL: " + imageURL);
 	}
 
 	private void searchNextPage() {
@@ -175,14 +190,18 @@ public class ShopResearcher {
 	}
 
 	private void formatDataStructure() {
-		try {
-			price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
-		} catch (NumberFormatException ex) {
-			price = Double.parseDouble(productPrice.get(productIndex)
-					.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
-					.replaceAll("[^\\d.]", ""));
-		}
 
+		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase())) {
+			price = Double.parseDouble(productPrice.get(productIndex).attr("content"));
+		} else {
+			try {
+				price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
+			} catch (NumberFormatException ex) {
+				price = Double.parseDouble(productPrice.get(productIndex)
+						.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
+						.replaceAll("[^\\d.]", ""));
+			}
+		}
 		if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
 			productURLComplete = "https://avebmx.pl"
 					+ productURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
@@ -190,6 +209,8 @@ public class ShopResearcher {
 			productURLComplete = productURL.get(productIndex)
 					.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
 		}
+		System.out.println("productURLComplete: " + productURLComplete);
+
 	}
 
 	public void searchNewProducts() {
@@ -211,11 +232,12 @@ public class ShopResearcher {
 				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 					this.formatDataStructure();
 
-					products.add(new Product(productName.get(productIndex).text().replace("'", ""),
-							this.getShopName(), this.getCategory(), productURLComplete,
+					products.add(new Product(productName.get(productIndex).text().replace("'", ""), this.getShopName(),
+							this.getCategory(), productURLComplete,
 							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 							price));
-
+					System.out.println("PRODUKT: " + imageURL.get(productIndex)
+							.attr(PropertyReader.getInstance().getProperty("imageAttribute")));
 					System.out.println(products.get(productIndex).toString());
 				}
 				databaseService.insertAllProducts(products);
@@ -231,15 +253,16 @@ public class ShopResearcher {
 			for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 				this.formatDataStructure();
 
-				Product product = new Product(productName.get(productIndex).text().replace("'", ""),
-						this.getShopName(), this.getCategory(), productURLComplete,
+				Product product = new Product(productName.get(productIndex).text().replace("'", ""), this.getShopName(),
+						this.getCategory(), productURLComplete,
 						imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 						price);
-				if(existingProducts.contains(product)) continue;
+				if (existingProducts.contains(product))
+					continue;
 				else {
-					
+
 				}
-				
+
 				System.out.println(products.get(productIndex).toString());
 			}
 
