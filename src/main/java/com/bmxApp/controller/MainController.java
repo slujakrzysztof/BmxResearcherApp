@@ -51,13 +51,11 @@ public class MainController {
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
-		propertyReader.setPropertyFilename("lang/res.properties");
-		propertyReader.setConnection();
-		mainControllerService.setResearcher(propertyReader.getProperty(category.toLowerCase()).toLowerCase(),
+		mainControllerService.setResearcher(Part.valueOf(category).getValue(shopName),
 				shopName.toLowerCase(), 1, true);
-		System.out.println("NAZWA PARTA: " + propertyReader.getProperty(category.toLowerCase()));
+		System.out.println("NAZWA PARTA: " + Part.valueOf(category).getValue(shopName));
 		model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
-				propertyReader.getProperty(category.toLowerCase()), shopName.toLowerCase()));
+				Part.valueOf(category).getValue(shopName), shopName.toLowerCase()));
 		return "products";
 	}
 
@@ -86,7 +84,6 @@ public class MainController {
 	@GetMapping("/main")
 	public String hello1(Model model) {
 		// ModelAndView model = new ModelAndView("main");
-		System.out.println(Part.BARS.getValue());
 		model.addAttribute("shopModel", new ShopModel());
 		model.addAttribute("products", mainControllerService.getBasketProducts());
 		// researcherControllerService.insertProduct();

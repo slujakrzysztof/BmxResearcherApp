@@ -24,7 +24,7 @@
 				<td th:text="${product.productName}" />
 				<td th:text="${product.price}" />
 				<td class="w-25"><img th:src="${product.imageUrl}"
-					alt="${product.imageUrl}" class="img-responsive" /></td>
+					alt="${product.imageUrl}" class="img-fluid" width=200 height=200/></td>
 				<!-- <td th:text="${product.imageUrl}"/> -->
 				<td><form action="#" th:action="@{addProduct}" method="post"
 						th:object="${product}">
