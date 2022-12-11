@@ -11,9 +11,10 @@ import org.springframework.core.Constants;
 import com.bmxApp.service.MainControllerService;
 
 public enum Part {
-	GRIPS("gripy"), BARS("kierownice"), BARENDS("barendy"), STEMS("mostki"), HEADS("stery"), FRAMES("ramy"),
+	GRIPS("gripy"), BARS("kierownice"), BARENDS("barendy"), STEMS("wsporniki"), HEADS("stery"), FRAMES("ramy"),
 	FORKS("widelce"), RIMS("obrecze"), TIRES("opony"), SPOKES("szprychy"), HUBS("piasty"), POSTS("sztyce"),
-	GEARS("zebatki"), CRANKS("korby"), PEDALS("pedaly"), CHAINS("lancuchy"), SEATS("siodelka"), SUPPORTS("suporty"), PEGS("pegi");
+	GEARS("zebatki"), CRANKS("korby"), PEDALS("pedaly"), CHAINS("lancuchy"), SEATS("siodelka"), SUPPORTS("suporty"),
+	PEGS("pegi");
 
 	@Autowired
 	MainControllerService mainControllerService;
@@ -30,20 +31,22 @@ public enum Part {
 	private Part(String value) {
 		this.value = value;
 	}
-	
+
 	public void setValue(String value) {
 		this.value = value;
 	}
 
-	public String getValue(String shopName) {
-		if(shopName.equals(Shop.AVEBMX.name())) {
-			System.out.println("AVEEEEEEEEEEEEEEEEEE");
-			STEMS.setValue("wsporniki-kierownicy");
-			System.out.println("MOSTKI VALUE: " + STEMS.getValue());
+	private void setSpecificValue(String shopName) {
+		if(shopName.equals(Shop.MANYFESTBMX.name())) {
+			STEMS.setValue("mosty");
 		}
+	}
+
+	public String getValue(String shopName) {
+		this.setSpecificValue(shopName);
 		return value;
 	}
-	
+
 	public String getValue() {
 		return value;
 	}
@@ -60,15 +63,15 @@ public enum Part {
 		}
 		value = (String) properties.get(this.toString());
 	}
-	
-    public static Part fromString(String text) {
-        for (Part pt : Part.values()) {
-            if (pt.getValue().equalsIgnoreCase(text)) {
-                return pt;
-            }
-        }
-        return null;
-    }
+
+	public static Part fromString(String text) {
+		for (Part pt : Part.values()) {
+			if (pt.getValue().equalsIgnoreCase(text)) {
+				return pt;
+			}
+		}
+		return null;
+	}
 	/*
 	 * public String getValue() { if (value == null) { init(); } return value; }
 	 */

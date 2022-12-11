@@ -154,6 +154,10 @@ public class ShopResearcher {
 			pagesArray.add(this.html);
 		}
 		numberOfPages = pagesArray.size();
+		if (numberOfPages == 0) {
+			pagesArray.add(this.html);
+			numberOfPages = pagesArray.size();
+		}
 		productIndex = 0;
 	}
 
@@ -222,7 +226,7 @@ public class ShopResearcher {
 			System.out.println("AAA: " + this.getHTML());
 
 			for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
-
+				System.out.println("IN FOR");
 				this.searchNextPage();
 				System.out.println("PROPERTY: " + doc.location());
 
