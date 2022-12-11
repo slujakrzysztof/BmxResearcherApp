@@ -135,7 +135,7 @@ public class ShopResearcher {
 			int pageNumber = 0;
 
 			if (Boolean.valueOf(PropertyReader.getInstance().getProperty("allProductsDisplay"))) {
-				pagesArray.add(pages.get(pages.size() - 1).attr("href"));
+				pagit pushgesArray.add(pages.get(pages.size() - 1).attr("href"));
 			} else {
 				for (Element page : pages) {
 					System.out.println("STROONY 111: " + page);
