@@ -35,6 +35,7 @@ public class ShopResearcher {
 	private int productIndex = 0, productIndexURL = 0, productImageIndex = 0, indexSearchPage = 0;
 	private String category;
 	private String shopName;
+	private boolean partFound = false;
 
 	Document.OutputSettings outputSettings = new Document.OutputSettings();
 	String[] shopArray = { "bmxlife", "avebmx", "manyfestbmx", "allday" };
@@ -91,19 +92,23 @@ public class ShopResearcher {
 				return i;
 		return -1;
 	}
-
-	public void searchPage() {
-		Elements partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearch"));// doc.select("div.category-miniature.no-image
-																								// > p > a[href]");
-		System.out.println("JESTEM TU: " + partPage);
-
+	
+	private boolean findProductPage(Elements partPage) {
 		for (Element e : partPage) {
 			if (e.absUrl("href").contains(this.getCategory())) {
 				this.setHTML(e.absUrl("href"));
 				this.setConnection();
-				System.out.println("ZNALEZIONO " + e.absUrl("href"));
-				return;
+				return true;
 			}
+		}
+		return false;
+	}
+
+	public void searchPage() {
+		Elements partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearch"));
+		while (!partFound) {
+			if(findProductPage(partPage)) return;
+			partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearchFrames"));
 		}
 	}
 
@@ -135,7 +140,7 @@ public class ShopResearcher {
 			int pageNumber = 0;
 
 			if (Boolean.valueOf(PropertyReader.getInstance().getProperty("allProductsDisplay"))) {
-				pagit pushgesArray.add(pages.get(pages.size() - 1).attr("href"));
+				pagesArray.add(pages.get(pages.size() - 1).attr("href"));
 			} else {
 				for (Element page : pages) {
 					System.out.println("STROONY 111: " + page);

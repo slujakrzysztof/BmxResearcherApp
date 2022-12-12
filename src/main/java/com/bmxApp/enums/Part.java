@@ -64,14 +64,26 @@ public enum Part {
 		value = (String) properties.get(this.toString());
 	}
 
-	public static Part fromString(String text) {
-		for (Part pt : Part.values()) {
-			if (pt.getValue().equalsIgnoreCase(text)) {
-				return pt;
+	public static Part fromStringValue(String value) {
+		for (Part part : Part.values()) {
+			if (part.getValue().equalsIgnoreCase(value)) {
+				return part;
 			}
 		}
 		return null;
 	}
+	
+	public static Part fromString(String partName) {
+		for (Part part : Part.values()) {
+			if (part.name().equalsIgnoreCase(partName)) {
+				return part;
+			}
+		}
+		return null;
+	}
+	
+	
+
 	/*
 	 * public String getValue() { if (value == null) { init(); } return value; }
 	 */

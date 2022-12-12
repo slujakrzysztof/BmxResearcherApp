@@ -58,7 +58,7 @@ public class ShoppingCartController {
 
 	@PostMapping("/deleteProducts")
 	public String deleteBasketProducts() {
-		shoppingCartService.deleteProducts();
+		shoppingCartService.removeProducts();
 		return "cart";
 	}
 
@@ -70,6 +70,12 @@ public class ShoppingCartController {
 		shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
 
 		return "redirect:/cart";
+	}
+	
+	@GetMapping("/removeProduct/{id}")
+	public String removeBasketProduct(@PathVariable Integer id) {
+		shoppingCartService.removeBasketProduct(id);
+		return "redirect:/main";
 	}
 
 }

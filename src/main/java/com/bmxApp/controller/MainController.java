@@ -51,11 +51,10 @@ public class MainController {
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
-		mainControllerService.setResearcher(Part.valueOf(category).getValue(shopName),
+		mainControllerService.setResearcher(Part.fromString(category).getValue(shopName),
 				shopName.toLowerCase(), 1, true);
-		System.out.println("NAZWA PARTA: " + Part.valueOf(category).getValue(shopName));
 		model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
-				Part.valueOf(category).getValue(shopName), shopName.toLowerCase()));
+				Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
 		return "products";
 	}
 
@@ -73,19 +72,20 @@ public class MainController {
 
 		System.out.println(product.getShopName());
 		System.out.println(product.getCategory());
-		System.out.println(Part.fromString(product.getCategory()));
+		//System.out.println(Part.fromString(product.getCategory()));
 		shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
-
+		//Part.fromString("aa");
 		return "redirect:/search?shop=" + product.getShopName() + "&category="
-				+ Part.fromString(product.getCategory()).toString().toLowerCase();
+				+  Part.fromStringValue(product.getCategory()).toString().toLowerCase();
 	}
+	
 
 	
 	@GetMapping("/main")
 	public String hello1(Model model) {
 		// ModelAndView model = new ModelAndView("main");
 		model.addAttribute("shopModel", new ShopModel());
-		model.addAttribute("products", mainControllerService.getBasketProducts());
+		model.addAttribute("basketProducts", mainControllerService.getBasketProducts());
 		// researcherControllerService.insertProduct();
 		return "main";
 	}
