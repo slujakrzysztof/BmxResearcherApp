@@ -1,5 +1,7 @@
 package com.bmxApp.model;
 
+import java.util.Locale;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -104,6 +106,10 @@ public class Product {
 		this.imageUrl = imageUrl;
 	}
 
+	public String formatPrice() {
+		return String.format(Locale.US, "%.2f", this.getPrice());
+	}
+	
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", productName=" + productName + ", shopName=" + shopName + ", category="

@@ -10,11 +10,18 @@
 	crossorigin="anonymous" />
 
 <link rel="stylesheet" th:href="@{/main.css}">
+<link rel="stylesheet" th:href="@{/header.css}">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
 	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+<style>
+input[type=radio] {
+	display: none;
+}
+</style>
+
 <body>
 
 	<!-- HEADER -->
@@ -28,14 +35,21 @@
 				th:href="@{/cart}" th:text="#{profile}"></a> <a th:href="@{/cart}"
 				th:text="#{contact}"></a>
 		</nav>
+		<form th:action="@{/(lang=en)}">
+			<input type="image" th:src="@{/images/pl.png}" width="30" height="20"
+				alt="Submit"> <input type="image" th:src="@{/images/gb.png}"
+				width="30" height="20" alt="Submit">
+		</form>
 
 		<div class="icons">
+
 			<div class="fas fa-shopping-cart" id="cart-btn"></div>
 		</div>
 
 		<div class="cart-items-container">
 			<div class="cart-item" th:each="basketProduct : ${basketProducts}">
-				<a th:href="@{/removeProduct/{id}(id=${basketProduct.id})}"> <span class="fas fa-times"></span>
+				<a th:href="@{/removeProduct/main/{id}(id=${basketProduct.id})}">
+					<span class="fas fa-times"></span>
 				</a>
 				<div class="content">
 					<h3>[[${basketProduct.product.productName}]] |

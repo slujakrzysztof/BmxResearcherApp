@@ -9,6 +9,10 @@
 	rel="stylesheet"
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -24,28 +28,35 @@
 	<div class="container-fluid">
 
 		<div>
-			<h2>Shopping Cart</h2>
+			<h2>[[#{cartLabel}]]</h2>
 		</div>
 		<div class="row">
 			<div class="col">
 				<th:block th:each="basketProduct : ${basketProducts}">
 					<div th:with="product = ${basketProduct.product}">
 						<div class="col">
-							<a class="fas fa-trash icon-dark" th:href="@{/}"></a>
-						</div>
-						<div class="col">
 							<a th:href="@{${product.url}}" th:title="${product.productName}"
 								target="_blank"> <b>[[${product.productName}]]</b>
 							</a>
 						</div>
-						<div
-							th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product}, ${basketProduct})">
-							Quantity</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div>
+									<a class="fas fa-trash icon-dark"
+										th:href="@{/removeProduct/cart/{id}(id=${basketProduct.id})}"></a>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div
+									th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product}, ${basketProduct})"></div>
+							</div>
+						</div>
 						<div class="col">Cena jednostkowa: [[${product.price}]]</div>
 						<div class="col">Cena laczna:
 							[[${totalPriceByProduct.get(basketProduct.id)}]]</div>
 						<div class="col">
-							<img th:src="@{${product.imageUrl}}" class="img-fluid">
+							<img th:src="@{${product.imageUrl}}" class="img-fluid" width=100
+								height=100>
 						</div>
 					</div>
 				</th:block>
@@ -62,6 +73,9 @@
 						<button type="submit" value="submit" class="btn btn-danger">USUN
 							WSZYSTKIE PRODUKTY</button>
 					</form>
+					<label for="customRange1" class="form-label">Example range</label>
+					<input type="range" class="form-range" min="0" max="100" step="1"
+						id="customRange3">
 				</div>
 			</div>
 

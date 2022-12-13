@@ -67,15 +67,16 @@ public class ShoppingCartController {
 			BindingResult bindingResult) {
 
 		int quantity = shoppingCartService.getQuantity(basketProduct.getId()) - 1;
-		shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
+		if(quantity==0) shoppingCartService.removeBasketProduct(basketProduct.getId());
+		else shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
 
 		return "redirect:/cart";
 	}
 	
-	@GetMapping("/removeProduct/{id}")
-	public String removeBasketProduct(@PathVariable Integer id) {
+	@GetMapping("/removeProduct/{page}/{id}")
+	public String removeBasketProduct(@PathVariable String page, @PathVariable Integer id) {
 		shoppingCartService.removeBasketProduct(id);
-		return "redirect:/main";
+		return "redirect:/" + page;
 	}
 
 }

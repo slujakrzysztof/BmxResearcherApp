@@ -10,17 +10,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.bmxApp.enums.Part;
-import com.bmxApp.enums.Shop;
-import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.Product;
 import com.bmxApp.model.ShopModel;
 import com.bmxApp.properties.PropertyReader;
@@ -41,13 +34,7 @@ public class MainController {
 
 	static List<String> shopList = null;
 
-	static {
-		shopList = new ArrayList<>();
-		shopList.add("bmxlife");
-		shopList.add("avebmx");
-	}
 
-	// @RequestMapping(value = "/search")
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
@@ -55,6 +42,8 @@ public class MainController {
 				shopName.toLowerCase(), 1, true);
 		model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
 				Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
+		model.addAttribute("shopName", shopName);
+		model.addAttribute("category", category.toLowerCase());
 		return "products";
 	}
 
@@ -69,12 +58,7 @@ public class MainController {
 	@PostMapping("/addProduct")
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
 			BindingResult bindingResult) {
-
-		System.out.println(product.getShopName());
-		System.out.println(product.getCategory());
-		//System.out.println(Part.fromString(product.getCategory()));
 		shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
-		//Part.fromString("aa");
 		return "redirect:/search?shop=" + product.getShopName() + "&category="
 				+  Part.fromStringValue(product.getCategory()).toString().toLowerCase();
 	}
@@ -82,39 +66,10 @@ public class MainController {
 
 	
 	@GetMapping("/main")
-	public String hello1(Model model) {
-		// ModelAndView model = new ModelAndView("main");
+	public String showMainPage(Model model) {
 		model.addAttribute("shopModel", new ShopModel());
 		model.addAttribute("basketProducts", mainControllerService.getBasketProducts());
-		// researcherControllerService.insertProduct();
 		return "main";
 	}
-
-	/*
-	 * @RequestMapping(value = "/main")
-	 * 
-	 * @ResponseBody
-	 * 
-	 * @PostMapping public String hello2(Model model, Shop shopp) {
-	 * System.out.println("NAZWA SKLEPU: " + shopp.name());
-	 * model.addAttribute("shopp", shopp); return "products"; }
-	 */
-
-	/*
-	 * @RequestMapping(value = "/getNumber") public String hello() { return
-	 * "Sieeeeeema: " + productDatabaseHandler.findByCategory("aaa").toString(); }
-	 */
-
-	/*
-	 * @RequestMapping(value = "/main")
-	 * 
-	 * @ResponseBody public ModelAndView hello2() {
-	 * 
-	 * ModelAndView modelAndView = new ModelAndView();
-	 * modelAndView.setViewName("main.html");
-	 * 
-	 * return modelAndView; //+
-	 * productDatabaseHandler.findByCategory("aaa").toString(); }
-	 */
 
 }
