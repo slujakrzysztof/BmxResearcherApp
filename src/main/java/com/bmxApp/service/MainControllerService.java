@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.enums.Part;
+import com.bmxApp.enums.Shop;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcher;
@@ -45,8 +47,9 @@ public class MainControllerService {
 	public List<BasketProduct> getBasketProducts(){
 		return basketProductDatabaseService.getAllBasketProducts();
 	}
+	
 
-	public void setResearcher(String category, String shopName, int shopNumber, boolean partSelection) {
+	public void setResearcher(String category, String shopName, boolean partSelection) {
 
 		try {
 			this.setPropertyReader(shopName);
@@ -90,6 +93,12 @@ public class MainControllerService {
 			System.out.println("SIEMANO JESTEM TU");
 			ex.printStackTrace();
 		}
+	}
+	
+	//Iterate all available shops to get products
+	public void setResearcherAllShops(String category, boolean partSelection) {
+		for(Shop shop : Shop.getShops())
+			this.setResearcher(category, shop.name().toLowerCase(), partSelection);
 	}
 
 	public String getLanguage() {
@@ -138,14 +147,4 @@ public class MainControllerService {
 	public void setPartSearched(boolean partSearched) {
 		this.partSearched = partSearched;
 	}
-	/*
-	 * public void startSearching(String partName, boolean value) { this.partName =
-	 * partName; if (frame.getFeaturePanel().getAvebmxBox().isSelected() ||
-	 * frame.getFeaturePanel().getBmxlifeBox().isSelected() ||
-	 * frame.getFeaturePanel().getManyfestbmxBox().isSelected() ||
-	 * frame.getFeaturePanel().getAlldayBox().isSelected()) setResearcher(partName,
-	 * shopName, shopNumber, value); else if
-	 * (frame.getFeaturePanel().getAllShopsBox().isSelected())
-	 * setResearcher(nameOfPart, nameOfShop, shopNumber, value); }
-	 */
 }

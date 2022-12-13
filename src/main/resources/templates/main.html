@@ -16,11 +16,6 @@
 	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<style>
-input[type=radio] {
-	display: none;
-}
-</style>
 
 <body>
 
@@ -73,7 +68,7 @@ input[type=radio] {
 							<input type="radio" th:field="*{shop}" th:value="${model}"
 								class="custom-control-input"> <label
 								class="custom-control-label" th:for="${#ids.prev('shop')}"
-								th:text="${model}">model</label>
+								th:text="${model.name()}"></label>
 						</div>
 					</div>
 				</div>
@@ -87,127 +82,6 @@ input[type=radio] {
 			</form>
 		</div>
 	</section>
-	<!--<div class="container">
-		<img th:src="@{images/bmx.jpg}" class="img-fluid"
-			alt="Responsive Image" width="900" height="750">
-
-	</div>
-
-	<div class="container">
-		<button type="button" class="btn btn-default">
-		<img src="../static/images/plFlag.png" th:src="@{images/plFlag.png}" />
-		 </button>
-		
-	</div> 
-	<span class="kakao"> <a href=""> <img
-			th:src="/images/bmxIcon2.png">
-	</a>
-	</span>
-	<div class="container">
-		<!--<form th:action="@{/prod}" th:object="${test}" method="post">-->
-	<form th:object="${shopModel}" th:action="@{/search}" method="get">
-		<!--th:action="@{/search}"
-			<div class="form-group">
-				<label>Shop</label>
-				<div th:each="model : ${T(com.bmxApp.enums.Shop).values()}">
-					<div class="custom-control custom-radio custom-control-inline">
-						<input type="radio" th:field="*{shop}" th:value="${model}"
-							class="custom-control-input"> <label
-							class="custom-control-label" th:for="${#ids.prev('shop')}"
-							th:text="${model}">model</label>
-					</div>
-				</div>-->
-		<!--  <label>Parts</label>
-				<div th:each="partModel : ${T(com.bmxApp.enums.Part).values()}">
-					<a th:href="@{/search(category=${partModel.name})}">
-						<button type="button" th:text="#{partModel}" />
-					</a>
-				</div>
-				<button class="btn btn-primary" type="submit" name="category"
-					value="pegs">AAA</button>
-			</div>
-			<div class="container">
-				<img th:src="@{images/bmx.jpg}" width="800" height="800"
-					class="img-fluid" alt="...">
-				<button class="btn btn-primary" type="submit" name="category"
-					value="pegs">AAA</button>
-			</div>-->
-	</form>
-
-	<!--<div class="form-check">
-		<input type="radio" class="form-check-input" id="shop1Button"
-			name="optradio" value="option1" checked> ${T(com.bmxApp.enums.Shop)} <label
-			class="form-check-label" for="radio1"></label>
-	</div>
-	<div class="form-check">
-		<input type="radio" class="form-check-input" id="shop2Button"
-			name="optradio" value="option2">Option 2 <label
-			class="form-check-label" for="radio2"></label>
-	</div>
-	<div class="form-check">
-		<input type="radio" class="form-check-input" id="shop3Button"
-			name="optradio" value="option3">Option 2 <label
-			class="form-check-label" for="radio2"></label>
-	</div>
-		<div class="form-check">
-		<input type="radio" class="form-check-input" id="shop4Button"
-			name="optradio" value="option3">Option 2 <label
-			class="form-check-label" for="radio2"></label>
-	</div>
-	<div class="form-check">
-		<input th:each="shopp : ${T(com.bmxApp.enums.Shop).values()}"
-			th:value="${shopp}" th:text="${shopp}"></input>
-	</div>
-	<select name="shop">
-		<option th:each="shopp : ${T(com.bmxApp.enums.Shop).values()}"
-			th:value="${shopp}" th:text="${shopp}"></option>
-	</select>
-	<div class="form-check">
-		<input type="radio" class="form-check-input" id="radio1"
-			name="optradio" value="option1" checked>{${shops.BMXLIFE}} <label
-			class="form-check-label" for="radio1"></label>
-	</div>
-	<div class="form-check">
-		<input type="radio" class="form-check-input" id="radio2"
-			name="optradio" value="option2">Option 2 <label
-			class="form-check-label" for="radio2"></label>
-	</div>
-	<div class="form-check">
-		<input type="radio" class="form-check-input" disabled>Option 3
-		<label class="form-check-label"></label>
-	</div>
-	 <div class="container">
-		<<form method="post" th:object="${shopp}" class="mt-5">
-			<div class="form-group">
-				<label>Model</label>
-				<div
-					th:each="shopp : ${T(com.bmxApp.enums.Shop).values()}">
-					<div class="custom-control custom-radio custom-control-inline">
-						<input type="radio" th:field="*{shop}" th:value="${shopp}"
-							class="custom-control-input"> <label
-							class="custom-control-label" th:for="${#ids.prev('shop')}"
-							th:text="${shopp}">shopp</label>
-					</div>
-				</div>
-			</div>
-			 <div class="form-group">
-				<div class="custom-control custom-radio custom-control-inline">
-					<input type="radio" id="option1" name="option1"
-						class="custom-control-input" value="1" th:field="*{option}">
-					<label class="custom-control-label" for="option1">Option1</label>
-				</div>
-				<div class="custom-control custom-radio custom-control-inline">
-					<input type="radio" id="option2" name="option2"
-						class="custom-control-input" value="2" th:field="*{option}">
-					<label class="custom-control-label" for="option2">Option2</label>
-				</div>
-				<div class="custom-control custom-radio custom-control-inline">
-					<input type="radio" id="option3" name="option3"
-						class="custom-control-input" value="3" th:field="*{option}">
-					<label class="custom-control-label" for="option3">Option3</label>
-				</div>
-			</div>
-			<button class="btn btn-primary" type="submit">Submit form</button>-->
 	<script type="text/javascript" th:src="@{/js/mainPageJS.js}"></script>
 </body>
 </html>

@@ -39,7 +39,7 @@ public class MainController {
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
 		mainControllerService.setResearcher(Part.fromString(category).getValue(shopName),
-				shopName.toLowerCase(), 1, true);
+				shopName.toLowerCase(), true);
 		model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
 				Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
 		model.addAttribute("shopName", shopName);
