@@ -54,7 +54,7 @@
 	</div>
 	<div id="info_container_2">
 		<p class="h5 infoText" th:text="#{partName}"></p>
-		<p class="h5 infoText" id="shopName" th:text="#{${category}}"></p>
+		<p class="h5 infoText" id="category" th:text="#{${category}}"></p>
 	</div>
 	<div id="product_container">
 		<table class="table table-bordered">
@@ -64,6 +64,7 @@
 					<th scope="col" th:text="#{price}" />
 					<th scope="col" th:text="#{image}" />
 					<th scope="col" />
+
 				</tr>
 			</thead>
 			<tbody>

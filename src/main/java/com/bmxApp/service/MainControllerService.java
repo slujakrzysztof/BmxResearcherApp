@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
+import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcher;
@@ -21,6 +22,9 @@ public class MainControllerService {
 	@Autowired
 	ProductDatabaseService databaseService;
 	
+	@Autowired 
+	ProductDatabaseHandler productDatabaseHandler;
+	
 	@Autowired
 	BasketProductDatabaseService basketProductDatabaseService;
 
@@ -28,8 +32,7 @@ public class MainControllerService {
 
 	private boolean firstInitialized = true;
 	private boolean partSearched = false;
-
-	private String category, partName, shopName;
+	private String currentShop;
 
 	private String language = "polish";
 
@@ -46,6 +49,14 @@ public class MainControllerService {
 	
 	public List<BasketProduct> getBasketProducts(){
 		return basketProductDatabaseService.getAllBasketProducts();
+	}
+	
+	public void setCurrentShop(String currentShop) {
+		this.currentShop = currentShop;
+	}
+	
+	public String getCurrentShop() {
+		return this.currentShop;
 	}
 	
 
@@ -98,7 +109,7 @@ public class MainControllerService {
 	//Iterate all available shops to get products
 	public void setResearcherAllShops(String category, boolean partSelection) {
 		for(Shop shop : Shop.getShops())
-			this.setResearcher(category, shop.name().toLowerCase(), partSelection);
+			this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase(), partSelection);
 	}
 
 	public String getLanguage() {
@@ -110,7 +121,6 @@ public class MainControllerService {
 	}
 
 	public void setPropertyReader(String filename) {
-		// this.resource = ResourceBundle.getBundle("properties/" + getLanguage());
 		PropertyReader.getInstance().setPropertyFilename("com/bmxApp/properties/" + filename + ".properties");
 		System.out.println("Jestem tu: " + PropertyReader.getInstance().getFilename());
 		PropertyReader.getInstance().setConnection();

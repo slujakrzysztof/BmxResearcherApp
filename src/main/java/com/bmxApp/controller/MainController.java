@@ -9,11 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bmxApp.enums.Part;
+import com.bmxApp.enums.Shop;
 import com.bmxApp.model.Product;
 import com.bmxApp.model.ShopModel;
 import com.bmxApp.properties.PropertyReader;
@@ -34,14 +36,19 @@ public class MainController {
 
 	static List<String> shopList = null;
 
-
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
-		mainControllerService.setResearcher(Part.fromString(category).getValue(shopName),
-				shopName.toLowerCase(), true);
-		model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
-				Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
+		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
+			mainControllerService.setResearcherAllShops(category, true);
+			model.addAttribute("products", mainControllerService.getDatabaseService().findByCategory(category));
+		} else {
+			mainControllerService.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(),
+					true);
+			model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
+					Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
+		}
+		mainControllerService.setCurrentShop(shopName);
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		return "products";
@@ -59,12 +66,10 @@ public class MainController {
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
 			BindingResult bindingResult) {
 		shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
-		return "redirect:/search?shop=" + product.getShopName() + "&category="
-				+  Part.fromStringValue(product.getCategory()).toString().toLowerCase();
+		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category="
+				+ Part.fromStringValue(product.getCategory()).toString().toLowerCase();
 	}
-	
 
-	
 	@GetMapping("/main")
 	public String showMainPage(Model model) {
 		model.addAttribute("shopModel", new ShopModel());

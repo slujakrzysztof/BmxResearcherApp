@@ -1,5 +1,6 @@
 package com.bmxApp.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.enums.Part;
+import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.BasketProductDatabaseHandler;
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
@@ -21,7 +24,6 @@ public class ProductDatabaseService {
 	@Autowired
 	ProductDatabaseHandler productDatabaseHandler;
 
-
 	@Transactional
 	public List<Product> getAllProducts() {
 		return IterableUtils.toList(productDatabaseHandler.findAll());
@@ -33,10 +35,20 @@ public class ProductDatabaseService {
 	}
 
 	@Transactional
+	public List<Product> findByCategory(String category) {
+		List<Product> productList = new ArrayList<Product>();
+		for (Shop shop : Shop.values())
+			productList.addAll(this.getProductsByCategoryAndShopName(
+					Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase()));
+
+		return productList;
+	}
+
+	@Transactional
 	public List<Product> getProductsByCategoryAndShopName(String category, String shopName) {
 		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
 	}
-	
+
 	public Product getProductById(int id) {
 		return productDatabaseHandler.findById(id);
 	}
@@ -74,5 +86,4 @@ public class ProductDatabaseService {
 		return productDatabaseHandler.findByProductNameAndShopName(productName, shopName);
 	}
 
-	
 }
