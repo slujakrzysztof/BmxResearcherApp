@@ -17,9 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
-import com.bmxApp.service.ProductDatabaseService;
+
 
 @Component
 @Scope("prototype")
@@ -48,7 +49,7 @@ public class ShopResearcher {
 	List<Product> existingProducts;
 
 	@Autowired
-	ProductDatabaseService databaseService;
+	ProductDatabaseHandler productDatabaseHandler;
 
 	double price = 0;
 	String productURLComplete;
@@ -250,13 +251,13 @@ public class ShopResearcher {
 							.attr(PropertyReader.getInstance().getProperty("imageAttribute")));
 					System.out.println(products.get(productIndex).toString());
 				}
-				databaseService.insertAllProducts(products);
+				productDatabaseHandler.saveAll(products);
 			}
 		}
 	}
 
 	public void searchPreviousProducts(String shopName, String category) {
-		existingProducts = databaseService.getProductsByCategoryAndShopName(category, shopName);
+		existingProducts = productDatabaseHandler.findByCategoryAndShopName(category, shopName);
 		for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
 			this.searchNextPage();
 			this.getProductsFromPage();

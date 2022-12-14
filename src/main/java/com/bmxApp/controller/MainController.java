@@ -41,12 +41,12 @@ public class MainController {
 			@RequestParam("shop") String shopName) {
 		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
 			mainControllerService.setResearcherAllShops(category, true);
-			model.addAttribute("products", mainControllerService.getDatabaseService().findByCategory(category));
+			model.addAttribute("products", mainControllerService.findByCategory(category));
 		} else {
 			mainControllerService.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(),
 					true);
-			model.addAttribute("products", mainControllerService.getDatabaseService().getProductsByCategoryAndShopName(
-					Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
+			model.addAttribute("products", mainControllerService
+					.findByCategoryAndShopName(Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
 		}
 		mainControllerService.setCurrentShop(shopName);
 		model.addAttribute("shopName", shopName);
@@ -57,7 +57,6 @@ public class MainController {
 	@PostMapping
 	public String submitTest(Model model, ShopModel shopModel) {
 		model.addAttribute("shopModel", shopModel);
-		System.out.println(shopModel.getShop());
 
 		return "nic";
 	}

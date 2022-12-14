@@ -13,6 +13,7 @@ import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
+import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcher;
 
@@ -21,10 +22,10 @@ public class MainControllerService {
 
 	@Autowired
 	ProductDatabaseService databaseService;
-	
-	@Autowired 
+
+	@Autowired
 	ProductDatabaseHandler productDatabaseHandler;
-	
+
 	@Autowired
 	BasketProductDatabaseService basketProductDatabaseService;
 
@@ -39,26 +40,34 @@ public class MainControllerService {
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
 
-	public ProductDatabaseService getDatabaseService() {
-		return this.databaseService;
-	}
-
 	public ShopResearcher getShopResearcher() {
 		return this.shopResearcher;
 	}
-	
-	public List<BasketProduct> getBasketProducts(){
-		return basketProductDatabaseService.getAllBasketProducts();
+
+	public List<Product> findByCategory(String category) {
+		List<Product> productList = new ArrayList<Product>();
+		for (Shop shop : Shop.values())
+			productList.addAll(this.productDatabaseHandler.findByCategoryAndShopName(
+					Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase()));
+
+		return productList;
 	}
 	
+	public List<Product> findByCategoryAndShopName(String category, String shopName) {
+		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
+	}
+
+	public List<BasketProduct> getBasketProducts() {
+		return basketProductDatabaseService.getAllBasketProducts();
+	}
+
 	public void setCurrentShop(String currentShop) {
 		this.currentShop = currentShop;
 	}
-	
+
 	public String getCurrentShop() {
 		return this.currentShop;
 	}
-	
 
 	public void setResearcher(String category, String shopName, boolean partSelection) {
 
@@ -105,11 +114,12 @@ public class MainControllerService {
 			ex.printStackTrace();
 		}
 	}
-	
-	//Iterate all available shops to get products
+
+	// Iterate all available shops to get products
 	public void setResearcherAllShops(String category, boolean partSelection) {
-		for(Shop shop : Shop.getShops())
-			this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase(), partSelection);
+		for (Shop shop : Shop.getShops())
+			this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase(),
+					partSelection);
 	}
 
 	public String getLanguage() {
@@ -127,11 +137,15 @@ public class MainControllerService {
 	}
 
 	public boolean wasShopUsed(String shopName) {
-		return databaseService.wasShopUsed(shopName);
+		if (productDatabaseHandler.findByShopName(shopName).isEmpty())
+			return false;
+		return true;
 	}
 
 	public boolean partPreviousSearched(String shopName, String category) {
-		return databaseService.wasPartSearchedPrevious(shopName, category);
+		if (productDatabaseHandler.findByShopNameAndCategory(shopName, category).isEmpty())
+			return false;
+		return true;
 	}
 
 	public ShopResearcher getResearcher(String shopName) {

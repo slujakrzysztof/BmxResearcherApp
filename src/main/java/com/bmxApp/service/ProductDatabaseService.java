@@ -34,21 +34,6 @@ public class ProductDatabaseService {
 		productDatabaseHandler.save(product);
 	}
 
-	@Transactional
-	public List<Product> findByCategory(String category) {
-		List<Product> productList = new ArrayList<Product>();
-		for (Shop shop : Shop.values())
-			productList.addAll(this.getProductsByCategoryAndShopName(
-					Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase()));
-
-		return productList;
-	}
-
-	@Transactional
-	public List<Product> getProductsByCategoryAndShopName(String category, String shopName) {
-		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
-	}
-
 	public Product getProductById(int id) {
 		return productDatabaseHandler.findById(id);
 	}
