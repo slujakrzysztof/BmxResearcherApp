@@ -88,3 +88,18 @@
 .header .cart-items-container.active{
 	right: 0;
 }
+
+.header .discount-container {
+	position: absolute;
+	top: -200%;
+	right: -100%;
+	height: calc(30vh - 9.5rem);
+	width: 35rem;
+	background: #fff;
+	padding: 0 1.5rem;
+}
+
+.header .discount-container.active{
+	right: 40%;
+	top: 110%;
+}

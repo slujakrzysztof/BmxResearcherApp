@@ -36,18 +36,17 @@ public class MainController {
 
 	static List<String> shopList = null;
 
+	private boolean discountApplied = false;
+
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
-		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
-			mainControllerService.setResearcherAllShops(category, true);
-			model.addAttribute("products", mainControllerService.findByCategory(category));
-		} else {
-			mainControllerService.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(),
-					true);
-			model.addAttribute("products", mainControllerService
-					.findByCategoryAndShopName(Part.fromString(category).getValue(shopName), shopName.toLowerCase()));
+		if (!isDiscountApplied()) {
+			mainControllerService.getProducts().clear();
+			mainControllerService.setProductsSearching(shopName, category);
+			mainControllerService.setProducts(shopName, category);
 		}
+		model.addAttribute("products", mainControllerService.getProducts());
 		mainControllerService.setCurrentShop(shopName);
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
@@ -66,7 +65,7 @@ public class MainController {
 			BindingResult bindingResult) {
 		shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
 		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category="
-				+ Part.fromStringValue(product.getCategory()).toString().toLowerCase();
+				+ Part.fromStringValue(product.getCategory()).toString();
 	}
 
 	@GetMapping("/main")
@@ -74,6 +73,24 @@ public class MainController {
 		model.addAttribute("shopModel", new ShopModel());
 		model.addAttribute("basketProducts", mainControllerService.getBasketProducts());
 		return "main";
+	}
+
+	@GetMapping("/applyDiscount")
+	public String applyDiscount(Model model) {
+		String category = Part.fromStringValue(mainControllerService.getProducts().get(0).getCategory()).toString();
+		mainControllerService.getProducts().clear();
+		mainControllerService.setProducts(mainControllerService.getCurrentShop(), category);
+		mainControllerService.applyDiscount(mainControllerService.getProducts(), (double) 20);
+		this.setDiscountApplied(true);
+		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category=" + category;
+	}
+
+	private boolean isDiscountApplied() {
+		return discountApplied;
+	}
+
+	private void setDiscountApplied(boolean discountApplied) {
+		this.discountApplied = discountApplied;
 	}
 
 }

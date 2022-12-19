@@ -37,6 +37,8 @@ public class MainControllerService {
 
 	private String language = "polish";
 
+	List<Product> products = new ArrayList<Product>();
+
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
 
@@ -52,7 +54,7 @@ public class MainControllerService {
 
 		return productList;
 	}
-	
+
 	public List<Product> findByCategoryAndShopName(String category, String shopName) {
 		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
 	}
@@ -170,5 +172,33 @@ public class MainControllerService {
 
 	public void setPartSearched(boolean partSearched) {
 		this.partSearched = partSearched;
+	}
+
+	public void applyDiscount(List<Product> products, double discountValue) {
+		for (int counter = 0; counter < products.size(); counter++) {
+			products.get(counter).setPrice(products.get(counter).getPrice() * ((100.0 - discountValue) / 100.0));
+			System.out.println("CENA: " + products.get(counter).getPrice());
+		}
+	}
+
+	public void setProductsSearching(String shopName, String category) {
+		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
+			this.setResearcherAllShops(category, true);
+		} else {
+			this.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(), true);
+		}
+	}
+
+	public void setProducts(String shopName, String category) {
+		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
+			products.addAll(this.findByCategory(category));
+		} else {
+			products.addAll(this.findByCategoryAndShopName(Part.fromString(category).getValue(shopName),
+					shopName.toLowerCase()));
+		}
+	}
+	
+	public List<Product> getProducts(){
+		return this.products;
 	}
 }

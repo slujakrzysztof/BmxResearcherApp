@@ -20,11 +20,12 @@
 
 	<header class="header">
 
-		<a href="#" class="logo"> <img th:src="@{/logo.png}">
+		<a th:href="@{/main}" class="logo"> <img th:src="@{/logo.png}">
 		</a>
 		<nav class="navbar">
-			<a th:href="@{/cart}" th:text="#{discountLabel}"></a> <a
-				th:href="@{/cart}" th:text="#{profile}"></a> <a th:href="@{/cart}"
+
+			<a th:href="'javascript:setActive();'" th:text="#{discountLabel}"></a>
+			<a th:href="@{/cart}" th:text="#{profile}"></a> <a th:href="@{/cart}"
 				th:text="#{contact}"></a>
 		</nav>
 		<div class="icons">
@@ -43,6 +44,16 @@
 			</div>
 			<a class="btn btn-primary" th:href="@{/cart}" role="button"
 				th:text="#{basket}"></a>
+		</div>
+
+		<div class="discount-container">
+			<label for="customRange1" class="form-label">[[#{discountLabel}]]</label>
+			<input type="range" class="form-range" min="0" max="100" step="1"
+				id="customRange3">
+			<div class="text-center">
+				<a class="btn btn-primary" role="button" th:text="ENTER"
+					th:href="@{/applyDiscount}"></a>
+			</div>
 		</div>
 
 	</header>
@@ -89,5 +100,6 @@
 		</button>
 	</div>
 	<script type="text/javascript" th:src="@{/js/scrollFunction.js}"></script>
+	<script type="text/javascript" th:src="@{/js/productsFunction.js}"></script>
 </body>
 </html>
