@@ -47,18 +47,19 @@
 		</div>
 
 		<div class="discount-container">
-			<label for="customRange1" class="form-label">[[#{discountLabel}]]</label>
-			<input type="range" class="form-range" min="0" max="100" step="1"
-				id="customRange3">
-			<div class="text-center">
-				<a class="btn btn-primary" role="button" th:text="ENTER"
-					th:href="@{/applyDiscount}"></a>
-			</div>
+			<form role="form" th:object="${discountValue}"
+				th:action="@{/applyDiscount}" method="get">
+				<label for="customRange1" class="form-label">[[#{discountLabel}]]</label>
+				<input class="form-control-lg" type="number" min="0" max="100"
+					step="1" th:placeholder="#{discountText}" th:field="*{discountValue}" />
+				<button type="submit">ENTER</button>
+			</form>
 		</div>
 
 	</header>
 
 	<!-- HEADER -->
+	
 	<div id="info_container_1">
 		<p class="h5 infoText" th:text="#{shopName}"></p>
 		<p class="h5 infoText" id="shopName" th:text="${shopName}"></p>
@@ -101,5 +102,9 @@
 	</div>
 	<script type="text/javascript" th:src="@{/js/scrollFunction.js}"></script>
 	<script type="text/javascript" th:src="@{/js/productsFunction.js}"></script>
+	<script th:src="@{/src/bootstrap-input-spinner.js}"></script>
+	<script>
+		$("input[type='number']").inputSpinner()
+	</script>
 </body>
 </html>

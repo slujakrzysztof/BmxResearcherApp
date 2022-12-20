@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
+import com.bmxApp.model.Discount;
 import com.bmxApp.model.Product;
 import com.bmxApp.model.ShopModel;
 import com.bmxApp.properties.PropertyReader;
@@ -38,6 +39,8 @@ public class MainController {
 
 	private boolean discountApplied = false;
 
+	private Discount discountValue = new Discount();
+
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
@@ -46,19 +49,20 @@ public class MainController {
 			mainControllerService.setProductsSearching(shopName, category);
 			mainControllerService.setProducts(shopName, category);
 		}
+		this.setDiscountApplied(false);
 		model.addAttribute("products", mainControllerService.getProducts());
 		mainControllerService.setCurrentShop(shopName);
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
+		model.addAttribute("discountValue", discountValue);
 		return "products";
 	}
 
-	@PostMapping
+/*	@PostMapping
 	public String submitTest(Model model, ShopModel shopModel) {
 		model.addAttribute("shopModel", shopModel);
-
 		return "nic";
-	}
+	}*/
 
 	@PostMapping("/addProduct")
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
@@ -76,11 +80,12 @@ public class MainController {
 	}
 
 	@GetMapping("/applyDiscount")
-	public String applyDiscount(Model model) {
+	public String applyDiscount(@ModelAttribute("discountValue") Discount discountValue, Model model) {
 		String category = Part.fromStringValue(mainControllerService.getProducts().get(0).getCategory()).toString();
 		mainControllerService.getProducts().clear();
 		mainControllerService.setProducts(mainControllerService.getCurrentShop(), category);
-		mainControllerService.applyDiscount(mainControllerService.getProducts(), (double) 20);
+		mainControllerService.applyDiscount(mainControllerService.getProducts(),
+				(double) discountValue.getDiscountValue());
 		this.setDiscountApplied(true);
 		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category=" + category;
 	}
