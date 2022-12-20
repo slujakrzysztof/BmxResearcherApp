@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.bmxApp.model.BasketProduct;
+import com.bmxApp.model.ShopModel;
 import com.bmxApp.service.ShoppingCartService;
 
 @Controller
@@ -37,13 +38,17 @@ public class ShoppingCartController {
 			basketProductsPrices.put(bProduct.getId(), shoppingCartService.getTotalPriceForProduct(bProduct.getId()));
 			System.out.println(basketProductsPrices.toString());
 		}
-
-		System.out.println("SKLEPIK: " + shop);
-		//System.out.println("LACZNY HAJS: " + shoppingCartService.getTotalPriceForProduct(1));
+		
+		model.addAttribute("shopModel", new ShopModel());
 		model.addAttribute("totalPriceByProduct", basketProductsPrices);
 		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice(shop));
 		model.addAttribute("basketProducts", basketProducts);
-		return "cart";
+		return "basket";
+	}
+	
+	@GetMapping({ "/cart1"})
+	public String showShoppingCart() {
+		return "NewFile";
 	}
 
 	@PostMapping("/quantityChangedPlus")
@@ -59,7 +64,7 @@ public class ShoppingCartController {
 	@PostMapping("/deleteProducts")
 	public String deleteBasketProducts() {
 		shoppingCartService.removeProducts();
-		return "cart";
+		return "basket";
 	}
 
 	@PostMapping("/quantityChangedMinus")

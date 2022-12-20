@@ -24,7 +24,7 @@ public class ProductDatabaseUpdater {
 	@Scheduled(fixedDelay = 4000)
 	@Async
 	public void updateProductDatabase() {
-		
+
 	}
 	
 }
