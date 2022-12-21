@@ -102,10 +102,10 @@
 								</div>
 								<div class="summary-item">
 									<span class="text">[[#{discountText}]]</span><span
-										class="price"></span>
+										class="price" style="color: red">[[${totalDiscount}]]</span>
 								</div>
 								<div class="summary-item">
-									<span class="text"></span><span class="price"></span>
+									<span class="text">[[#{finalPrice}]]</span><span class="price">[[${finalPrice}]]</span>
 								</div>
 								<form action="#" th:action="@{deleteProducts}" method="post">
 									<button type="submit" value="submit" class="btn btn-danger">[[#{deleteButton}]]</button>

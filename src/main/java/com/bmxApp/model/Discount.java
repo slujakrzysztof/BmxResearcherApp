@@ -1,7 +1,10 @@
 package com.bmxApp.model;
 
-public class Discount {
+import org.springframework.beans.factory.annotation.Value;
 
+public class Discount {
+	
+	@Value("0")
 	public int discountValue;
 
 	public int getDiscountValue() {

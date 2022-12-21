@@ -22,7 +22,7 @@ import com.bmxApp.service.ShoppingCartService;
 public class ShoppingCartController {
 
 	List<BasketProduct> basketProducts;
-	Map<Integer, Float> basketProductsPrices = new TreeMap<>();
+	Map<Integer, String> basketProductsPrices = new TreeMap<>();
 
 	@Autowired
 	private ShoppingCartService shoppingCartService;
@@ -36,18 +36,21 @@ public class ShoppingCartController {
 			basketProducts = shoppingCartService.getBasketProductsByShopName(shop);
 
 		for (BasketProduct bProduct : basketProducts) {
-			basketProductsPrices.put(bProduct.getId(), shoppingCartService.getTotalPriceForProduct(bProduct.getId()));
+			basketProductsPrices.put(bProduct.getId(),
+					shoppingCartService.formatPrice(shoppingCartService.getTotalPriceForProduct(bProduct.getId())));
 			System.out.println(basketProductsPrices.toString());
 		}
-		
+
 		model.addAttribute("shopModel", new ShopModel());
 		model.addAttribute("totalPriceByProduct", basketProductsPrices);
-		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice(shop));
-		model.addAttribute("basketProducts", basketProducts);	
+		model.addAttribute("totalPrice", shoppingCartService.formatPrice(shoppingCartService.getTotalPrice(shop)));
+		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shop));
+		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shop));
+		model.addAttribute("basketProducts", basketProducts);
 		return "basket";
 	}
-	
-	@GetMapping({ "/cart1"})
+
+	@GetMapping({ "/cart1" })
 	public String showShoppingCart() {
 		return "NewFile";
 	}
@@ -73,12 +76,14 @@ public class ShoppingCartController {
 			BindingResult bindingResult) {
 
 		int quantity = shoppingCartService.getQuantity(basketProduct.getId()) - 1;
-		if(quantity==0) shoppingCartService.removeBasketProduct(basketProduct.getId());
-		else shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
+		if (quantity == 0)
+			shoppingCartService.removeBasketProduct(basketProduct.getId());
+		else
+			shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
 
 		return "redirect:/cart";
 	}
-	
+
 	@GetMapping("/removeProduct/{page}/{id}")
 	public String removeBasketProduct(@PathVariable String page, @PathVariable Integer id) {
 		shoppingCartService.removeBasketProduct(id);
