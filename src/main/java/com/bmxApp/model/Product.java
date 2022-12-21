@@ -26,6 +26,8 @@ public class Product {
 	private String shopName;
 	@Column(name = "category", length = 255)
 	private String category;
+	@Column(name = "categoryEnum", length = 255)
+	private String categoryEnum;
 	@Column(name = "price", length = 255)
 	private double price;
 	@Column(name = "url", length = 255)
@@ -33,10 +35,11 @@ public class Product {
 	@Column(name = "imageUrl", length = 255)
 	private String imageUrl;
 
-	public Product(String productName, String shopName, String category, String url, String imageUrl, double price) {
+	public Product(String productName, String shopName, String category, String categoryEnum, String url, String imageUrl, double price) {
 		this.productName = productName;
 		this.shopName = shopName;
 		this.category = category;
+		this.categoryEnum = categoryEnum;
 		this.price = price;
 		this.url = url;
 		this.imageUrl = imageUrl;
@@ -106,13 +109,24 @@ public class Product {
 		this.imageUrl = imageUrl;
 	}
 
+	public String getCategoryEnum() {
+		return categoryEnum;
+	}
+
+	public void setCategoryEnum(String categoryEnum) {
+		this.categoryEnum = categoryEnum;
+	}
+
 	public String formatPrice() {
 		return String.format(Locale.US, "%.2f", this.getPrice());
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", productName=" + productName + ", shopName=" + shopName + ", category="
-				+ category + ", price=" + price + ", url=" + url + ", imageUrl=" + imageUrl + "]";
+				+ category + ", categoryEnum=" + categoryEnum + ", price=" + price + ", url=" + url + ", imageUrl="
+				+ imageUrl + "]";
 	}
+	
+
 }

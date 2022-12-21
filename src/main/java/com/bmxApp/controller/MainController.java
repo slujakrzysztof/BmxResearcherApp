@@ -52,6 +52,7 @@ public class MainController {
 		this.setDiscountApplied(false);
 		model.addAttribute("products", mainControllerService.getProducts());
 		mainControllerService.setCurrentShop(shopName);
+		mainControllerService.setCategoryEnum(category);
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discountValue", discountValue);

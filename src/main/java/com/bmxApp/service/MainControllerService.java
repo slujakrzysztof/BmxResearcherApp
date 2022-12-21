@@ -34,6 +34,7 @@ public class MainControllerService {
 	private boolean firstInitialized = true;
 	private boolean partSearched = false;
 	private String currentShop;
+	private String categoryEnum;
 
 	private String language = "polish";
 
@@ -71,7 +72,7 @@ public class MainControllerService {
 		return this.currentShop;
 	}
 
-	public void setResearcher(String category, String shopName, boolean partSelection) {
+	public void setResearcher(String category, String shopName, String categoryEnum, boolean partSelection) {
 
 		try {
 			this.setPropertyReader(shopName);
@@ -90,6 +91,8 @@ public class MainControllerService {
 			shopResearcher.setShopName(shopName);
 			shopResearcher.setConnection();
 			shopResearcher.setCategory(category);
+			shopResearcher.setCategoryEnum(categoryEnum);
+			System.out.println("SHOP RES CZESC ENUM: " + shopResearcher.getCategoryEnum());
 			shopResearcher.searchPage();
 			shopResearcher.setPagesArray();
 			shopResearcher.setHTML(shopResearcher.getPagesArray().get(0));
@@ -121,7 +124,7 @@ public class MainControllerService {
 	public void setResearcherAllShops(String category, boolean partSelection) {
 		for (Shop shop : Shop.getShops())
 			this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase(),
-					partSelection);
+					category, partSelection);
 	}
 
 	public String getLanguage() {
@@ -185,7 +188,8 @@ public class MainControllerService {
 		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
 			this.setResearcherAllShops(category, true);
 		} else {
-			this.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(), true);
+			this.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(), category,
+					true);
 		}
 	}
 
@@ -197,8 +201,16 @@ public class MainControllerService {
 					shopName.toLowerCase()));
 		}
 	}
-	
-	public List<Product> getProducts(){
+
+	public String getCategoryEnum() {
+		return categoryEnum;
+	}
+
+	public void setCategoryEnum(String categoryEnum) {
+		this.categoryEnum = categoryEnum;
+	}
+
+	public List<Product> getProducts() {
 		return this.products;
 	}
 }

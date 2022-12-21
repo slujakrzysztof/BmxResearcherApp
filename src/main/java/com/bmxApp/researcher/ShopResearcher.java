@@ -21,7 +21,6 @@ import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
 
-
 @Component
 @Scope("prototype")
 public class ShopResearcher {
@@ -35,6 +34,7 @@ public class ShopResearcher {
 	private Elements div, productName, productPrice, productURL, imageURL, pages;
 	private int productIndex = 0, productIndexURL = 0, productImageIndex = 0, indexSearchPage = 0;
 	private String category;
+	private String categoryEnum;
 	private String shopName;
 	private boolean partFound = false;
 
@@ -93,7 +93,7 @@ public class ShopResearcher {
 				return i;
 		return -1;
 	}
-	
+
 	private boolean findProductPage(Elements partPage) {
 		for (Element e : partPage) {
 			if (e.absUrl("href").contains(this.getCategory())) {
@@ -108,7 +108,8 @@ public class ShopResearcher {
 	public void searchPage() {
 		Elements partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearch"));
 		while (!partFound) {
-			if(findProductPage(partPage)) return;
+			if (findProductPage(partPage))
+				return;
 			partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearchFrames"));
 		}
 	}
@@ -173,6 +174,14 @@ public class ShopResearcher {
 
 	public String getHTML() {
 		return this.html;
+	}
+
+	public String getCategoryEnum() {
+		return categoryEnum;
+	}
+
+	public void setCategoryEnum(String categoryEnum) {
+		this.categoryEnum = categoryEnum;
 	}
 
 	private void getProductsFromPage() {
@@ -244,7 +253,7 @@ public class ShopResearcher {
 					this.formatDataStructure();
 
 					products.add(new Product(productName.get(productIndex).text().replace("'", ""), this.getShopName(),
-							this.getCategory(), productURLComplete,
+							this.getCategory(), this.getCategoryEnum(), productURLComplete,
 							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 							price));
 					System.out.println("PRODUKT: " + imageURL.get(productIndex)
@@ -263,9 +272,8 @@ public class ShopResearcher {
 			this.getProductsFromPage();
 			for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 				this.formatDataStructure();
-
 				Product product = new Product(productName.get(productIndex).text().replace("'", ""), this.getShopName(),
-						this.getCategory(), productURLComplete,
+						this.getCategory(), this.getCategoryEnum(), productURLComplete,
 						imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 						price);
 				if (existingProducts.contains(product))
@@ -273,10 +281,8 @@ public class ShopResearcher {
 				else {
 
 				}
-
 				System.out.println(products.get(productIndex).toString());
 			}
-
 		}
 	}
 

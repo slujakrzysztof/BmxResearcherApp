@@ -62,10 +62,10 @@
 																	<div>
 																		<form th:object="${shopModel}" th:action="@{/search}"
 																			method="get">
-																			<input type="hidden" name="shopName"
+																			<input type="hidden" name="shop"
 																				th:value="${product.shopName}"> <input
 																				type="hidden" name="category"
-																				th:value="${(com.bmxApp.enums.Part).fromStringValue(product.category)}">
+																				th:value="${product.categoryEnum}">
 																			<button type="submit" value="submit"
 																				class="btn btn-info">[[#{selectProducts}]]</button>
 																		</form>

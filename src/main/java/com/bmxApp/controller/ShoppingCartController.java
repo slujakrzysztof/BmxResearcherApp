@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import com.bmxApp.enums.Part;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.ShopModel;
 import com.bmxApp.service.ShoppingCartService;
@@ -42,7 +43,7 @@ public class ShoppingCartController {
 		model.addAttribute("shopModel", new ShopModel());
 		model.addAttribute("totalPriceByProduct", basketProductsPrices);
 		model.addAttribute("totalPrice", shoppingCartService.getTotalPrice(shop));
-		model.addAttribute("basketProducts", basketProducts);
+		model.addAttribute("basketProducts", basketProducts);	
 		return "basket";
 	}
 	
