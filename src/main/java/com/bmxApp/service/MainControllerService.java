@@ -188,8 +188,7 @@ public class MainControllerService {
 		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
 			this.setResearcherAllShops(category, true);
 		} else {
-			this.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(), category,
-					true);
+			this.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(), category, true);
 		}
 	}
 

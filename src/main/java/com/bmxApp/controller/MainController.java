@@ -60,12 +60,6 @@ public class MainController {
 		return "products";
 	}
 
-/*	@PostMapping
-	public String submitTest(Model model, ShopModel shopModel) {
-		model.addAttribute("shopModel", shopModel);
-		return "nic";
-	}*/
-
 	@PostMapping("/addProduct")
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
 			BindingResult bindingResult) {

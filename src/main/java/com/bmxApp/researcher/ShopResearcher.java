@@ -260,7 +260,7 @@ public class ShopResearcher {
 							.attr(PropertyReader.getInstance().getProperty("imageAttribute")));
 					System.out.println(products.get(productIndex).toString());
 				}
-				productDatabaseHandler.saveAll(products);
+				//productDatabaseHandler.saveAll(products);
 			}
 		}
 	}
