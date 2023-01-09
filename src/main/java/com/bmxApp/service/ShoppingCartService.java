@@ -7,10 +7,11 @@ import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.handler.BasketProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.Discount;
 import com.bmxApp.model.Product;
+import com.bmxApp.researcher.ShopResearcher;
 
 @Service
 public class ShoppingCartService {
@@ -24,7 +25,10 @@ public class ShoppingCartService {
 	@Autowired
 	private  BasketProductDatabaseHandler basketProductDatabaseHandler;
 	
-	private Discount discountValue;
+	//private Discount discountValue;
+	
+	@Autowired(required = false)
+	private ShopResearcher shopResearcher;
 
 	public List<BasketProduct> getAllProducts() {
 		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
@@ -89,13 +93,6 @@ public class ShoppingCartService {
 		return basketProductDatabaseService.getQuantity(basketProductId);
 	}
 
-	public Discount getDiscountValue() {
-		return discountValue;
-	}
-
-	public void setDiscountValue(Discount discountValue) {
-		this.discountValue = discountValue;
-	}
 
 	public void changeQuantity(int id, int value) {
 		BasketProduct basketProduct = basketProductDatabaseHandler.findById(id);
@@ -109,7 +106,7 @@ public class ShoppingCartService {
 	}
 	
 	public String getTotalDiscount(String shop) {
-		float discount = (float)(this.getTotalPrice(shop) * ((100.0 - discountValue.getDiscountValue())/100.0));
+		float discount = (float)(this.getTotalPrice(shop) * ((100.0 - shopResearcher.getDiscount().getValue())/100.0));
 		float totalDiscount  = this.getTotalPrice(shop) - discount;
 		if(totalDiscount == 0f) return formatPrice(totalDiscount);
 		return "-  " + formatPrice(totalDiscount);

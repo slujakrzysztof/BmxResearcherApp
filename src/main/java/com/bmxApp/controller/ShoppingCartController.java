@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import com.bmxApp.dto.shopModel.ShopModelDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.ShopModel;
 import com.bmxApp.service.ShoppingCartService;
 
 @Controller
@@ -41,7 +41,7 @@ public class ShoppingCartController {
 			System.out.println(basketProductsPrices.toString());
 		}
 
-		model.addAttribute("shopModel", new ShopModel());
+		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("totalPriceByProduct", basketProductsPrices);
 		model.addAttribute("totalPrice", shoppingCartService.formatPrice(shoppingCartService.getTotalPrice(shop)));
 		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shop));

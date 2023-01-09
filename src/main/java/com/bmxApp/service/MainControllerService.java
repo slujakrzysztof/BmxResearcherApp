@@ -17,7 +17,14 @@ import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcher;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Service
+@Getter
+@Setter
+@NoArgsConstructor
 public class MainControllerService {
 
 	@Autowired
@@ -29,12 +36,9 @@ public class MainControllerService {
 	@Autowired
 	BasketProductDatabaseService basketProductDatabaseService;
 
-	ArrayList<ShopResearcher> usedResearcherArray = new ArrayList<ShopResearcher>();
-
-	private boolean firstInitialized = true;
 	private boolean partSearched = false;
-	private String currentShop;
 	private String categoryEnum;
+	private String currentShop;
 
 	private String language = "polish";
 
@@ -43,17 +47,8 @@ public class MainControllerService {
 	@Autowired(required = false)
 	ShopResearcher shopResearcher;
 
-	public ShopResearcher getShopResearcher() {
-		return this.shopResearcher;
-	}
-
 	public List<Product> findByCategory(String category) {
-		List<Product> productList = new ArrayList<Product>();
-		for (Shop shop : Shop.values())
-			productList.addAll(this.productDatabaseHandler.findByCategoryAndShopName(
-					Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase()));
-
-		return productList;
+		return productDatabaseHandler.findByCategory(category);
 	}
 
 	public List<Product> findByCategoryAndShopName(String category, String shopName) {
@@ -62,14 +57,6 @@ public class MainControllerService {
 
 	public List<BasketProduct> getBasketProducts() {
 		return basketProductDatabaseService.getAllBasketProducts();
-	}
-
-	public void setCurrentShop(String currentShop) {
-		this.currentShop = currentShop;
-	}
-
-	public String getCurrentShop() {
-		return this.currentShop;
 	}
 
 	public void setResearcher(String category, String shopName, String categoryEnum, boolean partSelection) {
@@ -87,20 +74,18 @@ public class MainControllerService {
 
 			System.out.println("CZESC: " + category);
 
-			shopResearcher.setHTML(html);
+			shopResearcher.startSearching(html);
 			shopResearcher.setShopName(shopName);
-			shopResearcher.setConnection();
+			// shopResearcher.setConnection();
 			shopResearcher.setCategory(category);
 			shopResearcher.setCategoryEnum(categoryEnum);
-			System.out.println("SHOP RES CZESC ENUM: " + shopResearcher.getCategoryEnum());
 			shopResearcher.searchPage();
 			shopResearcher.setPagesArray();
-			shopResearcher.setHTML(shopResearcher.getPagesArray().get(0));
-			shopResearcher.setConnection();
+			shopResearcher.startSearching(shopResearcher.getPagesArray().get(0));
+			// shopResearcher.setConnection();
 
 			shopResearcher.setInitialized(true);
 			if (!this.partPreviousSearched(shopName, category)) {
-				System.out.println("ZACZYNAM SZUKAĆ");
 				shopResearcher.setProductUpdated(false);
 				shopResearcher.searchNewProducts();
 
@@ -114,8 +99,6 @@ public class MainControllerService {
 			this.setPartSearched(true);
 
 		} catch (NullPointerException ex) {
-			this.removeResearcher(this.getResearcher(shopName));
-			System.out.println("SIEMANO JESTEM TU");
 			ex.printStackTrace();
 		}
 	}
@@ -125,14 +108,6 @@ public class MainControllerService {
 		for (Shop shop : Shop.getShops())
 			this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase(),
 					category, partSelection);
-	}
-
-	public String getLanguage() {
-		return this.language;
-	}
-
-	public boolean getPartSearched() {
-		return this.partSearched;
 	}
 
 	public void setPropertyReader(String filename) {
@@ -151,30 +126,6 @@ public class MainControllerService {
 		if (productDatabaseHandler.findByShopNameAndCategory(shopName, category).isEmpty())
 			return false;
 		return true;
-	}
-
-	public ShopResearcher getResearcher(String shopName) {
-		for (int index = 0; index < usedResearcherArray.size(); index++) {
-			if (usedResearcherArray.get(index).getShopName().equals(shopName))
-				return this.usedResearcherArray.get(index);
-		}
-		return null;
-	}
-
-	public void removeResearcher(ShopResearcher researcher) {
-		usedResearcherArray.remove(researcher);
-	}
-
-	public ArrayList<ShopResearcher> getResearcherArray() {
-		return this.usedResearcherArray;
-	}
-
-	public void setFirstInitialized(boolean firstInitialized) {
-		this.firstInitialized = firstInitialized;
-	}
-
-	public void setPartSearched(boolean partSearched) {
-		this.partSearched = partSearched;
 	}
 
 	public void applyDiscount(List<Product> products, double discountValue) {
@@ -201,15 +152,4 @@ public class MainControllerService {
 		}
 	}
 
-	public String getCategoryEnum() {
-		return categoryEnum;
-	}
-
-	public void setCategoryEnum(String categoryEnum) {
-		this.categoryEnum = categoryEnum;
-	}
-
-	public List<Product> getProducts() {
-		return this.products;
-	}
 }

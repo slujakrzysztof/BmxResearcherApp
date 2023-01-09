@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
@@ -28,7 +29,7 @@ public class ShopResearcher {
 	final int MAX_TRIES = 20;
 	private int numberOfPages;
 	private String html;
-	protected Document doc;
+	protected Document document;
 	private int tryCounter = 0;
 	private boolean initialized, browserActivated, productUpdated = false;
 	private Elements div, productName, productPrice, productURL, imageURL, pages;
@@ -37,6 +38,8 @@ public class ShopResearcher {
 	private String categoryEnum;
 	private String shopName;
 	private boolean partFound = false;
+	
+	private DiscountDTO discount = new DiscountDTO();
 
 	Document.OutputSettings outputSettings = new Document.OutputSettings();
 	String[] shopArray = { "bmxlife", "avebmx", "manyfestbmx", "allday" };
@@ -54,10 +57,57 @@ public class ShopResearcher {
 	double price = 0;
 	String productURLComplete;
 
+
 	/*
 	 * public ShopResearcher(String html, String shopName) { this.html = html;
 	 * this.shopName = shopName; }
 	 */
+	
+	
+	
+	public DiscountDTO getDiscount() {
+		return this.discount;
+	}
+	
+	public void setDiscount(DiscountDTO discount) {
+		this.discount = discount;
+	}
+	
+	public String getHTML() {
+		return this.html;
+	}
+
+	public void setHTML(String html) {
+		this.html = html;
+	}
+	
+	public void startSearching(String html) {
+		this.setHTML(html);
+		this.setConnection();
+	}
+	
+	public Document getDocument() {
+		return this.document;
+	}
+
+	public void setConnection() {
+		while (tryCounter < MAX_TRIES) {
+			try {
+				document = Jsoup.connect(this.getHTML()).timeout(6000).userAgent(
+						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36")
+						.get();
+				break;
+			} catch (IOException ex) {
+				if (++tryCounter == MAX_TRIES) {
+					// JOptionPane.showMessageDialog(null,
+					// this.frame.getPropertyReader().getProperty("warningTimeoutInformation"),
+					// this.frame.getPropertyReader().getProperty("warning"),
+					// JOptionPane.ERROR_MESSAGE);
+					throw new NullPointerException();
+				}
+			}
+		}
+	}
 
 	public void setProductUpdated(boolean value) {
 		this.productUpdated = value;
@@ -77,10 +127,6 @@ public class ShopResearcher {
 
 	public String getCategory() {
 		return this.category;
-	}
-
-	public void setHTML(String html) {
-		this.html = html;
 	}
 
 	public void setInitialized(boolean initialized) {
@@ -106,30 +152,12 @@ public class ShopResearcher {
 	}
 
 	public void searchPage() {
-		Elements partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearch"));
+		Elements partPage = this.getDocument()
+				.select(PropertyReader.getInstance().getProperty("urlSearch"));
 		while (!partFound) {
 			if (findProductPage(partPage))
 				return;
-			partPage = doc.select(PropertyReader.getInstance().getProperty("urlSearchFrames"));
-		}
-	}
-
-	public void setConnection() {
-		while (tryCounter < MAX_TRIES) {
-			try {
-				doc = Jsoup.connect(this.html).timeout(6000).userAgent(
-						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36")
-						.get();
-				break;
-			} catch (IOException ex) {
-				if (++tryCounter == MAX_TRIES) {
-					// JOptionPane.showMessageDialog(null,
-					// this.frame.getPropertyReader().getProperty("warningTimeoutInformation"),
-					// this.frame.getPropertyReader().getProperty("warning"),
-					// JOptionPane.ERROR_MESSAGE);
-					throw new NullPointerException();
-				}
-			}
+			partPage = this.getDocument().select(PropertyReader.getInstance().getProperty("urlSearchFrames"));
 		}
 	}
 
@@ -138,7 +166,7 @@ public class ShopResearcher {
 		System.out.println("SETPAGESARRAY");
 		pagesArray.clear();
 		try {
-			pages = doc.select(PropertyReader.getInstance().getProperty("numberOfPages"));
+			pages = this.getDocument().select(PropertyReader.getInstance().getProperty("numberOfPages"));
 			int pageNumber = 0;
 
 			if (Boolean.valueOf(PropertyReader.getInstance().getProperty("allProductsDisplay"))) {
@@ -172,10 +200,6 @@ public class ShopResearcher {
 		return pagesArray;
 	}
 
-	public String getHTML() {
-		return this.html;
-	}
-
 	public String getCategoryEnum() {
 		return categoryEnum;
 	}
@@ -185,13 +209,13 @@ public class ShopResearcher {
 	}
 
 	private void getProductsFromPage() {
-		div = doc.select(PropertyReader.getInstance().getProperty("div"));
+		div = this.getDocument().select(PropertyReader.getInstance().getProperty("div"));
 		productName = div.select(PropertyReader.getInstance().getProperty("productNameElement"));
 		productPrice = div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
 		productURL = div.select(PropertyReader.getInstance().getProperty("productURLElement"));
 		// DLA MANYFEST DOC DLA INNYCH DIV
 		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase()))
-			imageURL = doc.select(PropertyReader.getInstance().getProperty("imageURLElement"));
+			imageURL = this.getDocument().select(PropertyReader.getInstance().getProperty("imageURLElement"));
 		else
 			imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
 		System.out.println("imageURL: " + imageURL);
@@ -199,13 +223,11 @@ public class ShopResearcher {
 
 	private void searchNextPage() {
 		if (numberOfPages > 1) {
-			setHTML(pagesArray.get(indexSearchPage));
+			this.startSearching(pagesArray.get(indexSearchPage));
 			if (indexSearchPage == pagesArray.size() - 1)
 				indexSearchPage = pagesArray.size() - 1;
 			else
 				indexSearchPage++;
-			System.out.println("ZMIANA STRONY");
-			setConnection();
 		}
 	}
 
@@ -237,13 +259,11 @@ public class ShopResearcher {
 
 		indexSearchPage = 0;
 		if (initialized) {
-			System.out.println("WCIĄŻ SZUKAM");
-			System.out.println("AAA: " + this.getHTML());
 
 			for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
 				System.out.println("IN FOR");
 				this.searchNextPage();
-				System.out.println("PROPERTY: " + doc.location());
+				System.out.println("PROPERTY: " + this.getDocument().location());
 
 				this.getProductsFromPage();
 
@@ -260,7 +280,7 @@ public class ShopResearcher {
 							.attr(PropertyReader.getInstance().getProperty("imageAttribute")));
 					System.out.println(products.get(productIndex).toString());
 				}
-				//productDatabaseHandler.saveAll(products);
+				productDatabaseHandler.saveAll(products);
 			}
 		}
 	}
@@ -291,7 +311,7 @@ public class ShopResearcher {
 		String finalS, str;
 		Document jsoupDoc;
 		for (int i = 0; i < separator.length; i++) {
-			finalS = doc.select(separator[i]).html();
+			finalS = this.getDocument().select(separator[i]).html();
 			jsoupDoc = Jsoup.parse(finalS);
 			// select all <br> tags and append \n after that
 			jsoupDoc.select("br").after("\\n");
@@ -308,9 +328,9 @@ public class ShopResearcher {
 	}
 
 	public String searchProduct(String html, String partName) {
-		this.setHTML(html);
+		this.startSearching(html);
 		this.setCategory(partName);
-		this.setConnection();
+		// this.setConnection();
 		initialized = true;
 		browserActivated = true;
 		this.searchNewProducts();

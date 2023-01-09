@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bmxApp.dto.discount.DiscountDTO;
+import com.bmxApp.dto.shopModel.ShopModelDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
-import com.bmxApp.model.Discount;
 import com.bmxApp.model.Product;
-import com.bmxApp.model.ShopModel;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.service.MainControllerService;
 import com.bmxApp.service.ShoppingCartService;
@@ -39,24 +39,27 @@ public class MainController {
 
 	private boolean discountApplied = false;
 
-	private Discount discountValue = new Discount();
+	//private Discount discountValue = new Discount();
 
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
-		if (!isDiscountApplied()) {
+		
+		DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
+		
+		if(!discount.isApplied()) {
 			mainControllerService.getProducts().clear();
 			mainControllerService.setProductsSearching(shopName, category);
 			mainControllerService.setProducts(shopName, category);
 		}
-		this.setDiscountApplied(false);
-		shoppingCartService.setDiscountValue(discountValue);
+		discount.setApplied(false);
+		//shoppingCartService.setDiscountValue(discount);
 		model.addAttribute("products", mainControllerService.getProducts());
 		mainControllerService.setCurrentShop(shopName);
 		mainControllerService.setCategoryEnum(category);
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
-		model.addAttribute("discountValue", discountValue);
+		model.addAttribute("discount", discount);
 		return "products";
 	}
 
@@ -70,18 +73,20 @@ public class MainController {
 
 	@GetMapping("/main")
 	public String showMainPage(Model model) {
-		model.addAttribute("shopModel", new ShopModel());
+		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("basketProducts", mainControllerService.getBasketProducts());
 		return "main";
 	}
 
 	@GetMapping("/applyDiscount")
-	public String applyDiscount(@ModelAttribute("discountValue") Discount discountValue, Model model) {
+	public String applyDiscount(@ModelAttribute("discountValue") DiscountDTO discountValue, Model model) {
 		String category = Part.fromStringValue(mainControllerService.getProducts().get(0).getCategory()).toString();
+		DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
+		
 		mainControllerService.getProducts().clear();
 		mainControllerService.setProducts(mainControllerService.getCurrentShop(), category);
 		mainControllerService.applyDiscount(mainControllerService.getProducts(),
-				(double) discountValue.getDiscountValue());
+				(double) discount.getValue());
 		this.setDiscountApplied(true);
 		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category=" + category;
 	}
