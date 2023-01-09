@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
-import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
+import com.bmxApp.repository.ProductRepository;
 import com.bmxApp.researcher.ShopResearcher;
 
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class MainControllerService {
 	ProductDatabaseService databaseService;
 
 	@Autowired
-	ProductDatabaseHandler productDatabaseHandler;
+	ProductRepository productDatabaseHandler;
 
 	@Autowired
 	BasketProductDatabaseService basketProductDatabaseService;

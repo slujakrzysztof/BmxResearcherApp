@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.discount.DiscountDTO;
-import com.bmxApp.handler.BasketProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
+import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.researcher.ShopResearcher;
 
 @Service
@@ -23,7 +23,7 @@ public class ShoppingCartService {
 	private ProductDatabaseService productDatabaseService;
 	
 	@Autowired
-	private  BasketProductDatabaseHandler basketProductDatabaseHandler;
+	private  BasketProductRepository basketProductDatabaseHandler;
 	
 	//private Discount discountValue;
 	

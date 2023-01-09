@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.bmxApp.enums.Part;
-import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.Product;
+import com.bmxApp.repository.ProductRepository;
 import com.bmxApp.researcher.ShopResearcher;
 import com.bmxApp.service.MainControllerService;
 
@@ -19,7 +19,7 @@ import com.bmxApp.service.MainControllerService;
 public class ProductDatabaseUpdater {
 
 	@Autowired
-	ProductDatabaseHandler productDatabaseHandler;
+	ProductRepository productDatabaseHandler;
 	
 	@Autowired
 	ShopResearcher shopResearcher;

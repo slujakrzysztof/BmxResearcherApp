@@ -1,4 +1,4 @@
-package com.bmxApp.handler;
+package com.bmxApp.repository;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.bmxApp.model.Product;
 import jakarta.transaction.Transactional;
 
 @Repository
-public interface BasketProductDatabaseHandler extends CrudRepository<BasketProduct, Integer> {
+public interface BasketProductRepository extends CrudRepository<BasketProduct, Integer> {
 
 	List<BasketProduct> findByShopName(String shopName);
 

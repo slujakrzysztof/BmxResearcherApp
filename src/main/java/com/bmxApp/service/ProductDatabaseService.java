@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
-import com.bmxApp.handler.BasketProductDatabaseHandler;
-import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
+import com.bmxApp.repository.BasketProductRepository;
+import com.bmxApp.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -22,7 +22,7 @@ import jakarta.transaction.Transactional;
 public class ProductDatabaseService {
 
 	@Autowired
-	ProductDatabaseHandler productDatabaseHandler;
+	ProductRepository productDatabaseHandler;
 
 	@Transactional
 	public List<Product> getAllProducts() {

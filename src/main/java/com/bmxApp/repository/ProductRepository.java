@@ -1,4 +1,4 @@
-package com.bmxApp.handler;
+package com.bmxApp.repository;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.bmxApp.model.Product;
 
 @Repository
-public interface ProductDatabaseHandler extends CrudRepository<Product, Integer> {
+public interface ProductRepository extends CrudRepository<Product, Integer> {
 
 
 	List<Product> findByShopNameAndCategory(String shopName, String category);

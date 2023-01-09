@@ -18,9 +18,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.bmxApp.dto.discount.DiscountDTO;
-import com.bmxApp.handler.ProductDatabaseHandler;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
+import com.bmxApp.repository.ProductRepository;
 
 @Component
 @Scope("prototype")
@@ -52,7 +52,7 @@ public class ShopResearcher {
 	List<Product> existingProducts;
 
 	@Autowired
-	ProductDatabaseHandler productDatabaseHandler;
+	ProductRepository productDatabaseHandler;
 
 	double price = 0;
 	String productURLComplete;
