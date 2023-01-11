@@ -128,9 +128,9 @@ public class ShopResearcher {
 
 	private boolean findProductPage(Elements partPage, String category) {
 		
-		/*partPage.stream().filter(element -> 
+		List<Element> productPage = partPage.stream().filter(element -> 
 			element.absUrl("href").contains(this.getCategory())
-		).collect(Collectors.toList());*/
+		).collect(Collectors.toList());
 		
 		for (Element e : partPage) {
 			if (e.absUrl("href").contains(this.getCategory())) {
