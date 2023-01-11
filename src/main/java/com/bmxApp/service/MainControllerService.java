@@ -86,11 +86,11 @@ public class MainControllerService {
 
 			shopResearcher.setInitialized(true);
 			if (!this.partPreviousSearched(shopName, category)) {
-				shopResearcher.setProductUpdated(false);
+				//shopResearcher.setProductUpdated(false);
 				shopResearcher.searchNewProducts();
 
 			} else {
-				shopResearcher.setProductUpdated(true);
+				//shopResearcher.setProductUpdated(true);
 				// ---- NA RZECZ TESTÓW ----//
 				// shopResearcher.searchPreviousProducts(shopName, category);
 			}

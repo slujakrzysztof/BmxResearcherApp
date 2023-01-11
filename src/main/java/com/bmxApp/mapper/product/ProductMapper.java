@@ -16,4 +16,16 @@ public class ProductMapper {
 				.imageUrl(product.getImageUrl())
 				.build();
 	}
+	
+	public static Product mapToProduct(ProductDTO productDTO) {
+		return Product.builder()
+				.productName(productDTO.getProductName())
+				.shopName(productDTO.getShopName())
+				.category(productDTO.getCategory())
+				.categoryEnum(productDTO.getCategoryEnum())
+				.price(productDTO.getPrice())
+				.url(productDTO.getUrl())
+				.imageUrl(productDTO.getImageUrl())
+				.build();
+	}
 }

@@ -31,9 +31,9 @@ public class ShopResearcher {
 	private String html;
 	protected Document document;
 	private int tryCounter = 0;
-	private boolean initialized, browserActivated, productUpdated = false;
+	private boolean initialized;
 	private Elements div, productName, productPrice, productURL, imageURL, pages;
-	private int productIndex = 0, productIndexURL = 0, productImageIndex = 0, indexSearchPage = 0;
+	private int productIndex = 0, indexSearchPage = 0;
 	private String category;
 	private String categoryEnum;
 	private String shopName;
@@ -42,7 +42,6 @@ public class ShopResearcher {
 	private DiscountDTO discount = new DiscountDTO();
 
 	Document.OutputSettings outputSettings = new Document.OutputSettings();
-	String[] shopArray = { "bmxlife", "avebmx", "manyfestbmx", "allday" };
 
 	ArrayList<com.bmxApp.model.Product> products = new ArrayList<>();
 	ArrayList<Product> specificProducts = new ArrayList<>();
@@ -99,19 +98,13 @@ public class ShopResearcher {
 				break;
 			} catch (IOException ex) {
 				if (++tryCounter == MAX_TRIES) {
-					// JOptionPane.showMessageDialog(null,
-					// this.frame.getPropertyReader().getProperty("warningTimeoutInformation"),
-					// this.frame.getPropertyReader().getProperty("warning"),
-					// JOptionPane.ERROR_MESSAGE);
 					throw new NullPointerException();
 				}
 			}
 		}
 	}
 
-	public void setProductUpdated(boolean value) {
-		this.productUpdated = value;
-	}
+
 
 	public String getShopName() {
 		return this.shopName;
@@ -133,14 +126,12 @@ public class ShopResearcher {
 		this.initialized = initialized;
 	}
 
-	public int getShopNumber(String name) {
-		for (int i = 0; i < shopArray.length; i++)
-			if (name.equals(shopArray[i]))
-				return i;
-		return -1;
-	}
-
-	private boolean findProductPage(Elements partPage) {
+	private boolean findProductPage(Elements partPage, String category) {
+		
+		/*partPage.stream().filter(element -> 
+			element.absUrl("href").contains(this.getCategory())
+		).collect(Collectors.toList());*/
+		
 		for (Element e : partPage) {
 			if (e.absUrl("href").contains(this.getCategory())) {
 				this.setHTML(e.absUrl("href"));
@@ -163,7 +154,6 @@ public class ShopResearcher {
 
 	// --- Get url to pages with products ---
 	public void setPagesArray() {
-		System.out.println("SETPAGESARRAY");
 		pagesArray.clear();
 		try {
 			pages = this.getDocument().select(PropertyReader.getInstance().getProperty("numberOfPages"));
@@ -251,7 +241,6 @@ public class ShopResearcher {
 			productURLComplete = productURL.get(productIndex)
 					.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
 		}
-		System.out.println("productURLComplete: " + productURLComplete);
 
 	}
 
@@ -261,13 +250,9 @@ public class ShopResearcher {
 		if (initialized) {
 
 			for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
-				System.out.println("IN FOR");
 				this.searchNextPage();
-				System.out.println("PROPERTY: " + this.getDocument().location());
 
 				this.getProductsFromPage();
-
-				System.out.println("ILOSC PRODUKTOW: " + productName.size());
 
 				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
 					this.formatDataStructure();
@@ -276,9 +261,6 @@ public class ShopResearcher {
 							this.getCategory(), this.getCategoryEnum(), productURLComplete,
 							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
 							price));
-					System.out.println("PRODUKT: " + imageURL.get(productIndex)
-							.attr(PropertyReader.getInstance().getProperty("imageAttribute")));
-					System.out.println(products.get(productIndex).toString());
 				}
 				productDatabaseHandler.saveAll(products);
 			}
@@ -332,7 +314,7 @@ public class ShopResearcher {
 		this.setCategory(partName);
 		// this.setConnection();
 		initialized = true;
-		browserActivated = true;
+		//browserActivated = true;
 		this.searchNewProducts();
 		return "";
 	}

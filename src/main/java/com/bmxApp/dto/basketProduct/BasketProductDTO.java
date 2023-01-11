@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 public class BasketProductDTO {
 	private Integer id;
-	private ProductDTO product;
+	private ProductDTO productDTO;
 	private int quantity;
 	private String shopName;
 }
