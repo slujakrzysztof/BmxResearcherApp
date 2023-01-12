@@ -1,6 +1,7 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.sound.midi.Soundbank;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
+import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
@@ -59,16 +61,19 @@ public class MainControllerService {
 		return basketProductDatabaseService.getAllBasketProducts();
 	}
 
-	public void setResearcher(String category, String shopName, String categoryEnum, boolean partSelection) {
+	public void search(String category, String shopName, boolean partSelection) {
 
+		String html;
+		
 		try {
-			this.setPropertyReader(shopName);
-
-			String html = "";
+			PropertyReader.getInstance().connectPropertyReader(shopName);
+		
 			if (partSelection)
-				html = PropertyReader.getInstance().getProperty("url");
+				html = PropertyManager.getInstance().URL; 
+				//PropertyReader.getInstance().getProperty("url");
 			else
-				html = PropertyReader.getInstance().getProperty("safetyURL");
+				html = PropertyManager.getInstance().SAFETY_URL;
+				//html = PropertyReader.getInstance().getProperty("safetyURL");
 
 			System.out.println("htmmml: " + html);
 
@@ -78,19 +83,19 @@ public class MainControllerService {
 			shopResearcher.setShopName(shopName);
 			// shopResearcher.setConnection();
 			shopResearcher.setCategory(category);
-			shopResearcher.setCategoryEnum(categoryEnum);
-			shopResearcher.searchPage();
-			shopResearcher.setPagesArray();
+
+			// shopResearcher.searchPage(); <-- W START SEARCHING
+			// shopResearcher.setPagesArray();
 			shopResearcher.startSearching(shopResearcher.getPagesArray().get(0));
 			// shopResearcher.setConnection();
 
 			shopResearcher.setInitialized(true);
 			if (!this.partPreviousSearched(shopName, category)) {
-				//shopResearcher.setProductUpdated(false);
-				shopResearcher.searchNewProducts();
+				// shopResearcher.setProductUpdated(false);
+				shopResearcher.searchNewProducts(shopName, category);
 
 			} else {
-				//shopResearcher.setProductUpdated(true);
+				// shopResearcher.setProductUpdated(true);
 				// ---- NA RZECZ TESTÓW ----//
 				// shopResearcher.searchPreviousProducts(shopName, category);
 			}
@@ -104,17 +109,23 @@ public class MainControllerService {
 	}
 
 	// Iterate all available shops to get products
-	public void setResearcherAllShops(String category, boolean partSelection) {
-		for (Shop shop : Shop.getShops())
-			this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase()), shop.name().toLowerCase(),
-					category, partSelection);
+	public void searchAllShops(String category, boolean partSelection) {
+
+		Arrays.asList(Shop.values()).stream()
+				.forEach(shop -> this.search(category, shop.name().toLowerCase(), partSelection));
+
+		/*
+		 * for (Shop shop : Shop.getShops())
+		 * this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase
+		 * ()), shop.name().toLowerCase(), category, partSelection);
+		 */
 	}
 
-	public void setPropertyReader(String filename) {
+	/*public void setPropertyReader(String filename) {
 		PropertyReader.getInstance().setPropertyFilename("com/bmxApp/properties/" + filename + ".properties");
 		System.out.println("Jestem tu: " + PropertyReader.getInstance().getFilename());
 		PropertyReader.getInstance().setConnection();
-	}
+	}*/
 
 	public boolean wasShopUsed(String shopName) {
 		if (productDatabaseHandler.findByShopName(shopName).isEmpty())
@@ -135,11 +146,11 @@ public class MainControllerService {
 		}
 	}
 
-	public void setProductsSearching(String shopName, String category) {
+	public void searchProducts(String shopName, String category) {
 		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
-			this.setResearcherAllShops(category, true);
+			this.searchAllShops(category, true);
 		} else {
-			this.setResearcher(Part.fromString(category).getValue(shopName), shopName.toLowerCase(), category, true);
+			this.search(category, shopName.toLowerCase(), true);
 		}
 	}
 

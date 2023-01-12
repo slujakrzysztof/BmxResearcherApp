@@ -30,8 +30,6 @@ public class Product {
 	private String shopName;
 	@Column(name = "category", length = 255)
 	private String category;
-	@Column(name = "categoryEnum", length = 255)
-	private String categoryEnum;
 	@Column(name = "price", length = 255)
 	private double price;
 	@Column(name = "url", length = 255)

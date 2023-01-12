@@ -31,7 +31,7 @@ public class ProductDatabaseUpdater {
 	@Async
 	public void updateProductDatabase() {
 		shopResearcher.getProductsArray().clear();
-		shopResearcher.searchNewProducts();
+		//shopResearcher.searchNewProducts();
 		Iterable<Product> actualProducts = productDatabaseHandler.findAll();
 	/*	Part[] parts = Part.values();
 		for(int counter = 0; counter < parts.length; counter++)

@@ -3,6 +3,7 @@ package com.bmxApp.researcher;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -18,6 +19,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.bmxApp.dto.discount.DiscountDTO;
+import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.exception.NotFoundException;
+import com.bmxApp.manager.PropertyManager;
+import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.repository.ProductRepository;
@@ -32,13 +37,13 @@ public class ShopResearcher {
 	protected Document document;
 	private int tryCounter = 0;
 	private boolean initialized;
-	private Elements div, productName, productPrice, productURL, imageURL, pages;
+	private Elements div, productNameElements, productPriceElements, productUrlElements, imageUrlElements, pages;
 	private int productIndex = 0, indexSearchPage = 0;
 	private String category;
 	private String categoryEnum;
 	private String shopName;
 	private boolean partFound = false;
-	
+
 	private DiscountDTO discount = new DiscountDTO();
 
 	Document.OutputSettings outputSettings = new Document.OutputSettings();
@@ -51,27 +56,24 @@ public class ShopResearcher {
 	List<Product> existingProducts;
 
 	@Autowired
-	ProductRepository productDatabaseHandler;
+	ProductRepository productRepository;
 
 	double price = 0;
 	String productURLComplete;
-
 
 	/*
 	 * public ShopResearcher(String html, String shopName) { this.html = html;
 	 * this.shopName = shopName; }
 	 */
-	
-	
-	
+
 	public DiscountDTO getDiscount() {
 		return this.discount;
 	}
-	
+
 	public void setDiscount(DiscountDTO discount) {
 		this.discount = discount;
 	}
-	
+
 	public String getHTML() {
 		return this.html;
 	}
@@ -79,12 +81,15 @@ public class ShopResearcher {
 	public void setHTML(String html) {
 		this.html = html;
 	}
-	
+
 	public void startSearching(String html) {
 		this.setHTML(html);
 		this.setConnection();
+		System.out.println("AAA: " + PropertyManager.getInstance().URL_SEARCH_PAGE);
+		this.findPageUrl(this.getDocument().select(PropertyManager.getInstance().URL_SEARCH_PAGE), true);
+				//this.getDocument().select(PropertyReader.getInstance().getProperty("urlSearch")), true);
 	}
-	
+
 	public Document getDocument() {
 		return this.document;
 	}
@@ -103,8 +108,6 @@ public class ShopResearcher {
 			}
 		}
 	}
-
-
 
 	public String getShopName() {
 		return this.shopName;
@@ -126,30 +129,33 @@ public class ShopResearcher {
 		this.initialized = initialized;
 	}
 
-	private boolean findProductPage(Elements partPage, String category) {
-		
-		List<Element> productPage = partPage.stream().filter(element -> 
-			element.absUrl("href").contains(this.getCategory())
-		).collect(Collectors.toList());
-		
-		for (Element e : partPage) {
-			if (e.absUrl("href").contains(this.getCategory())) {
-				this.setHTML(e.absUrl("href"));
-				this.setConnection();
-				return true;
-			}
-		}
-		return false;
+	private String findPartUrl(Elements partUrls, String category) {
+
+		List<String> partUrlList = partUrls.stream().filter(element -> element.absUrl("href").contains(category))
+				.limit(1).map(Object::toString).collect(Collectors.toList());
+
+		if (partUrlList.size() == 0)
+			throw new NotFoundException();
+
+		return partUrlList.toString();
 	}
 
-	public void searchPage() {
-		Elements partPage = this.getDocument()
-				.select(PropertyReader.getInstance().getProperty("urlSearch"));
-		while (!partFound) {
-			if (findProductPage(partPage))
-				return;
-			partPage = this.getDocument().select(PropertyReader.getInstance().getProperty("urlSearchFrames"));
-		}
+	/*
+	 * public void searchPage() { Elements partPage =
+	 * this.getDocument().select(PropertyReader.getInstance().getProperty(
+	 * "urlSearch")); while (!partFound) { if (findProductPage(partPage)) return;
+	 * partPage =
+	 * this.getDocument().select(PropertyReader.getInstance().getProperty(
+	 * "urlSearchFrames")); } }
+	 */
+
+	public List<String> findPageUrl(Elements pageUrlElements, boolean allProductsDisplay) {
+
+		List<String> pageUrlList = pageUrlElements.stream().map(pageUrlElement -> pageUrlElement.attr("href"))
+				.distinct().collect(Collectors.toList());
+		return pageUrlList;
+		// if(allProductsDisplay) return pageUrlList;
+
 	}
 
 	// --- Get url to pages with products ---
@@ -200,15 +206,14 @@ public class ShopResearcher {
 
 	private void getProductsFromPage() {
 		div = this.getDocument().select(PropertyReader.getInstance().getProperty("div"));
-		productName = div.select(PropertyReader.getInstance().getProperty("productNameElement"));
-		productPrice = div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
-		productURL = div.select(PropertyReader.getInstance().getProperty("productURLElement"));
+		productNameElements = div.select(PropertyReader.getInstance().getProperty("productNameElement"));
+		productPriceElements = div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
+		productUrlElements = div.select(PropertyReader.getInstance().getProperty("productURLElement"));
 		// DLA MANYFEST DOC DLA INNYCH DIV
 		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase()))
-			imageURL = this.getDocument().select(PropertyReader.getInstance().getProperty("imageURLElement"));
+			imageUrlElements = this.getDocument().select(PropertyReader.getInstance().getProperty("imageURLElement"));
 		else
-			imageURL = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
-		System.out.println("imageURL: " + imageURL);
+			imageUrlElements = div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
 	}
 
 	private void searchNextPage() {
@@ -224,66 +229,61 @@ public class ShopResearcher {
 	private void formatDataStructure() {
 
 		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase())) {
-			price = Double.parseDouble(productPrice.get(productIndex).attr("content"));
+			price = Double.parseDouble(productPriceElements.get(productIndex).attr("content"));
 		} else {
 			try {
-				price = Double.parseDouble(productPrice.get(productIndex).text().replaceAll("[^\\d.]", ""));
+				price = Double.parseDouble(productPriceElements.get(productIndex).text().replaceAll("[^\\d.]", ""));
 			} catch (NumberFormatException ex) {
-				price = Double.parseDouble(productPrice.get(productIndex)
+				price = Double.parseDouble(productPriceElements.get(productIndex)
 						.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
 						.replaceAll("[^\\d.]", ""));
 			}
 		}
 		if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
-			productURLComplete = "https://avebmx.pl"
-					+ productURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+			productURLComplete = "https://avebmx.pl" + productUrlElements.get(productIndex)
+					.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
 		} else {
-			productURLComplete = productURL.get(productIndex)
+			productURLComplete = productUrlElements.get(productIndex)
 					.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
 		}
 
 	}
 
-	public void searchNewProducts() {
+	public void searchNewProducts(String shopName, String category) {
 
 		indexSearchPage = 0;
 		if (initialized) {
+
+			this.findPageUrl(this.getDocument().select(PropertyReader.getInstance().getProperty("numberOfPages")),
+					initialized).stream().forEach(null);
+			;
 
 			for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
 				this.searchNextPage();
 
 				this.getProductsFromPage();
 
-				for (productIndex = 0; productIndex < productName.size(); productIndex++) {
+				for (productIndex = 0; productIndex < productNameElements.size(); productIndex++) {
+
 					this.formatDataStructure();
 
-					products.add(new Product(productName.get(productIndex).text().replace("'", ""), this.getShopName(),
-							this.getCategory(), this.getCategoryEnum(), productURLComplete,
-							imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
-							price));
-				}
-				productDatabaseHandler.saveAll(products);
-			}
-		}
-	}
+					String productName = productNameElements.get(productIndex).text().replace("'", "");
 
-	public void searchPreviousProducts(String shopName, String category) {
-		existingProducts = productDatabaseHandler.findByCategoryAndShopName(category, shopName);
-		for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
-			this.searchNextPage();
-			this.getProductsFromPage();
-			for (productIndex = 0; productIndex < productName.size(); productIndex++) {
-				this.formatDataStructure();
-				Product product = new Product(productName.get(productIndex).text().replace("'", ""), this.getShopName(),
-						this.getCategory(), this.getCategoryEnum(), productURLComplete,
-						imageURL.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")),
-						price);
-				if (existingProducts.contains(product))
-					continue;
-				else {
+					ProductDTO productDTO = ProductDTO.builder().productName(productName).shopName(shopName)
+							.category(category).price(price).url(productURLComplete).imageUrl(imageUrlElements
+									.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")))
+							.build();
 
+					productRepository.save(ProductMapper.mapToProduct(productDTO));
+					/*
+					 * products.add(new Product(productName.get(productIndex).text().replace("'",
+					 * ""), this.getShopName(), this.getCategory(), this.getCategoryEnum(),
+					 * productURLComplete,
+					 * imageUrlElements.get(productIndex).attr(PropertyReader.getInstance().
+					 * getProperty("imageAttribute")), price));
+					 */
 				}
-				System.out.println(products.get(productIndex).toString());
+				// productDatabaseHandler.saveAll(products);
 			}
 		}
 	}
@@ -309,13 +309,13 @@ public class ShopResearcher {
 		throw new NullPointerException();
 	}
 
-	public String searchProduct(String html, String partName) {
+	public String searchProduct(String shopName, String html, String category) {
 		this.startSearching(html);
-		this.setCategory(partName);
+		this.setCategory(category);
 		// this.setConnection();
 		initialized = true;
-		//browserActivated = true;
-		this.searchNewProducts();
+		// browserActivated = true;
+		this.searchNewProducts(shopName, category);
 		return "";
 	}
 

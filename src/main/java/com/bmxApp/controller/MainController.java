@@ -45,21 +45,21 @@ public class MainController {
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
 		
-		DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
-		
-		if(!discount.isApplied()) {
-			mainControllerService.getProducts().clear();
+		//DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
+		mainControllerService.searchProducts(shopName, category);
+		//if(!discount.isApplied()) {
+		//	mainControllerService.getProducts().clear();
 			mainControllerService.setProductsSearching(shopName, category);
-			mainControllerService.setProducts(shopName, category);
-		}
-		discount.setApplied(false);
+		//	mainControllerService.setProducts(shopName, category);
+		//}
+		//discount.setApplied(false);
 		//shoppingCartService.setDiscountValue(discount);
 		model.addAttribute("products", mainControllerService.getProducts());
-		mainControllerService.setCurrentShop(shopName);
-		mainControllerService.setCategoryEnum(category);
+		//mainControllerService.setCurrentShop(shopName);
+		//mainControllerService.setCategoryEnum(category);
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
-		model.addAttribute("discount", discount);
+		//model.addAttribute("discount", discount);
 		return "products";
 	}
 

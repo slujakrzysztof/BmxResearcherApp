@@ -6,6 +6,8 @@ public final class PropertyManager {
 
 	private final PropertyReader propertyReader = PropertyReader.getInstance();
 	
+	public static PropertyManager propertyManager = new PropertyManager();
+	
 	public final String SHOP_NAME = propertyReader.getProperty("shopName");
 	public final String URL = propertyReader.getProperty("url");
 	public final String DESCRIPTION = propertyReader.getProperty("description");
@@ -21,5 +23,9 @@ public final class PropertyManager {
 	public final String PAGE_NUMBER = propertyReader.getProperty("pagesNumber");
 	public final String ALL_PRODUCTS_DISPLAY = propertyReader.getProperty("allProductsDisplay");
 
+	public static PropertyManager getInstance() {
+		return propertyManager;
+	}
+	
 }
 

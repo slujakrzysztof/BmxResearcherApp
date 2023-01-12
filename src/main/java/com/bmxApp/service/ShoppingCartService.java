@@ -80,13 +80,13 @@ public class ShoppingCartService {
 		} else
 
 		{
-			basketProduct = new BasketProduct();
+			/*basketProduct = new BasketProduct();
 			basketProduct.setQuantity(1);
 			basketProduct.setShopName(shopName);
-			basketProduct.setProduct(productDatabaseService.getProductById(productId));
+			basketProduct.setProduct(productDatabaseService.getProductById(productId));*/
 		}
 
-		basketProductDatabaseHandler.save(basketProduct);
+		//basketProductDatabaseHandler.save(basketProduct);
 	}
 
 	public int getQuantity(int basketProductId) {

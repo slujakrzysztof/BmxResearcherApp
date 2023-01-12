@@ -8,29 +8,22 @@ import java.util.Properties;
 
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Component
+@Setter
+@Getter
 public class PropertyReader {
+	
+	private final String LOCATION_PREFIX = "com/bmxApp/properties/";
+	private final String FILE_EXTENSION = ".properties";
 	
 	private String propertyFilename;
 	private static final PropertyReader propertyReader = new PropertyReader();
 	private Properties property = new Properties();
 	ClassLoader loader = Thread.currentThread().getContextClassLoader();  
 
-	public PropertyReader(){
-	    
-	}
-
-	public String getPropertyFilename() {
-	    return this.propertyFilename;
-	}
-
-	public void setPropertyFilename(String name){
-	    this.propertyFilename = name;
-	}
-
-	public String getFilename() {
-		return this.propertyFilename;
-	}
 	// 
 	public void saveProperty(String key, String newValue){
 	    FileOutputStream output;
@@ -44,6 +37,11 @@ public class PropertyReader {
 	    } catch(IOException ex2) {
 	        ex2.printStackTrace();
 	    }
+	}
+	
+	public void connectPropertyReader(String shopName) {
+		this.setPropertyFilename(shopName);
+		this.setConnection();
 	}
 
 	// Connecting with given file with data
