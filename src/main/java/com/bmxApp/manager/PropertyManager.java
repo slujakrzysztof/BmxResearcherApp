@@ -22,6 +22,7 @@ public final class PropertyManager {
 	public final String URL_SEARCH_PAGE = propertyReader.getProperty("urlSearchPage");
 	public final String PAGE_NUMBER = propertyReader.getProperty("pagesNumber");
 	public final String ALL_PRODUCTS_DISPLAY = propertyReader.getProperty("allProductsDisplay");
+	public final String DIV = propertyReader.getProperty("div");
 
 	public static PropertyManager getInstance() {
 		return propertyManager;

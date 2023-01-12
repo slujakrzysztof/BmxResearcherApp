@@ -49,7 +49,7 @@ public class MainController {
 		mainControllerService.searchProducts(shopName, category);
 		//if(!discount.isApplied()) {
 		//	mainControllerService.getProducts().clear();
-			mainControllerService.setProductsSearching(shopName, category);
+			//mainControllerService.setProductsSearching(shopName, category);
 		//	mainControllerService.setProducts(shopName, category);
 		//}
 		//discount.setApplied(false);

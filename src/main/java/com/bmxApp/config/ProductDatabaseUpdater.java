@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import com.bmxApp.enums.Part;
 import com.bmxApp.model.Product;
 import com.bmxApp.repository.ProductRepository;
-import com.bmxApp.researcher.ShopResearcher;
+import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.MainControllerService;
 
 @Configuration
@@ -22,7 +22,7 @@ public class ProductDatabaseUpdater {
 	ProductRepository productDatabaseHandler;
 	
 	@Autowired
-	ShopResearcher shopResearcher;
+	ShopResearcherService shopResearcher;
 	
 	@Autowired
 	MainControllerService mainControllerService;

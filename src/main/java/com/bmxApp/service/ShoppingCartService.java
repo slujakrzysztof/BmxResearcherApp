@@ -11,7 +11,7 @@ import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.repository.BasketProductRepository;
-import com.bmxApp.researcher.ShopResearcher;
+import com.bmxApp.researcher.ShopResearcherService;
 
 @Service
 public class ShoppingCartService {
@@ -28,7 +28,7 @@ public class ShoppingCartService {
 	//private Discount discountValue;
 	
 	@Autowired(required = false)
-	private ShopResearcher shopResearcher;
+	private ShopResearcherService shopResearcher;
 
 	public List<BasketProduct> getAllProducts() {
 		return IterableUtils.toList(basketProductDatabaseHandler.findAll());

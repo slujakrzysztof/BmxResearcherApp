@@ -17,7 +17,7 @@ import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.repository.ProductRepository;
-import com.bmxApp.researcher.ShopResearcher;
+import com.bmxApp.researcher.ShopResearcherService;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +47,7 @@ public class MainControllerService {
 	List<Product> products = new ArrayList<Product>();
 
 	@Autowired(required = false)
-	ShopResearcher shopResearcher;
+	ShopResearcherService shopResearcherService;
 
 	public List<Product> findByCategory(String category) {
 		return productDatabaseHandler.findByCategory(category);
@@ -79,10 +79,15 @@ public class MainControllerService {
 
 			System.out.println("CZESC: " + category);
 
-			shopResearcher.startSearching(html);
-			shopResearcher.setShopName(shopName);
+			shopResearcherService.setConnection(html);
+			String partUrl = shopResearcherService.findPartUrl(category);
+			shopResearcherService.setConnection(partUrl);
+			shopResearcherService.searchNewProducts(shopName, category, partUrl);
+			//shopResearcherService.findPartUrl(null, category)
+			//shopResearcher.startSearching(html);
+			//shopResearcher.setShopName(shopName);
 			// shopResearcher.setConnection();
-			shopResearcher.setCategory(category);
+			//shopResearcher.setCategory(category);
 
 			// shopResearcher.searchPage(); <-- W START SEARCHING
 			// shopResearcher.setPagesArray();
