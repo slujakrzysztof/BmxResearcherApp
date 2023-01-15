@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +28,13 @@ public class BasketProductRepositoryService {
 	}
 	
 	public float getTotalPriceForShop(String shopName) {
+		
 		return basketProductRepository.getTotalPriceForShop(shopName);
 	}
 
-	public float getTotalPriceForProduct(int id) {
-		return basketProductRepository.getTotalPriceForProduct(id);
+	public float getTotalPriceForBasketProduct(int id) {
+		
+		return basketProductRepository.getTotalPriceForBasketProduct(id);
 	}
 	
 	public LinkedList<BasketProductDTO> getBasketProductsByShopName(String shopName) {
@@ -64,7 +65,7 @@ public class BasketProductRepositoryService {
 		return basketProductDTOList;
 	}
 
-	public boolean isProductAdded(ProductDTO productDTO) {
+	public boolean isProductInDatabase(ProductDTO productDTO) {
 		
 		Optional<BasketProductDTO> dtoBasketProduct = Optional.ofNullable(this.getBasketProductByProduct(productDTO));
 		
@@ -101,4 +102,10 @@ public class BasketProductRepositoryService {
 	public void deleteBasketProducts() {
 		basketProductRepository.deleteAll();
 	}
+	
+	public void deleteBasketProductById(int id) {
+		basketProductRepository.deleteById(id);
+	}
+	
+
 }

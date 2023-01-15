@@ -50,6 +50,13 @@ public class ProductRepositoryService {
 		if(productList.isEmpty()) return false;
 		return true;
 	}
+	
+	public ProductDTO getProductById(int id) {
+		
+		Product product = productRepository.findById(id);
+		
+		return ProductMapper.mapToProductDTO(product);
+	}
 
 	/*
 	@Transactional
