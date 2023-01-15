@@ -1,29 +1,27 @@
 package com.bmxApp.mapper.product;
 
+import com.bmxApp.builder.product.ProductBuilder;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.model.Product;
 
 public class ProductMapper {
 
 	public static ProductDTO mapToProductDTO(Product product) {
-		return ProductDTO.builder()
-				.productName(product.getProductName())
-				.shopName(product.getShopName())
-				.category(product.getCategory())
-				.price(product.getPrice())
-				.url(product.getUrl())
-				.imageUrl(product.getImageUrl())
-				.build();
+		return ProductBuilder.buildProductDTO(product.getProductName(), 
+											  product.getShopName(), 
+											  product.getCategory(),
+											  product.getPrice(), 
+											  product.getUrl(), 
+											  product.getImageUrl());
+		
 	}
-	
+
 	public static Product mapToProduct(ProductDTO productDTO) {
-		return Product.builder()
-				.productName(productDTO.getProductName())
-				.shopName(productDTO.getShopName())
-				.category(productDTO.getCategory())
-				.price(productDTO.getPrice())
-				.url(productDTO.getUrl())
-				.imageUrl(productDTO.getImageUrl())
-				.build();
+		return ProductBuilder.buildProduct(productDTO.getProductName(), 
+										   productDTO.getShopName(), 
+										   productDTO.getCategory(),
+										   productDTO.getPrice(), 
+										   productDTO.getUrl(), 
+										   productDTO.getImageUrl());
 	}
 }
