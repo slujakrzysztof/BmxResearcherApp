@@ -17,7 +17,7 @@ import com.bmxApp.researcher.ShopResearcherService;
 public class ShoppingCartService {
 
 	@Autowired
-	private BasketProductDatabaseService basketProductDatabaseService;
+	private BasketProductRepositoryService basketProductDatabaseService;
 
 	@Autowired
 	private ProductRepositoryService productDatabaseService;

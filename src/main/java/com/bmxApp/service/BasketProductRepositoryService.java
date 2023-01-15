@@ -1,20 +1,23 @@
 package com.bmxApp.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.repository.BasketProductRepository;
 
 @Service
-public class BasketProductDatabaseService {
+public class BasketProductRepositoryService {
 
 	@Autowired
-	BasketProductRepository basketProductDatabaseHandler;
+	BasketProductRepository basketProductRepository;
 
 	public float getTotalPrice() {
 		if(this.getAllBasketProducts().isEmpty()) return 0f;
@@ -37,8 +40,14 @@ public class BasketProductDatabaseService {
 		return basketProductDatabaseHandler.findByProduct(product);
 	}
 
-	public List<BasketProduct> getAllBasketProducts() {
-		return IterableUtils.toList(basketProductDatabaseHandler.findAll());
+	public ArrayList<BasketProductDTO> getBasketProducts() {
+		
+		List<BasketProduct> basketProductList = basketProductRepository.findAll();
+		ArrayList<BasketProductDTO> basketProductDTOList = new ArrayList<>();
+		
+		basketProductList.forEach(basketProduct -> basketProductDTOList.add(BasketProductMapper.mapToBasketProductDTO(basketProduct)));
+		
+		return basketProductDTOList;
 	}
 
 	public boolean productAdded(Product product) {

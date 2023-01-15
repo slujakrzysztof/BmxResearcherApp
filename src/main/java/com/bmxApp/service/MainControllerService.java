@@ -2,6 +2,7 @@ package com.bmxApp.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.sound.midi.Soundbank;
@@ -10,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.manager.PropertyManager;
+import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.properties.PropertyReader;
@@ -32,11 +36,8 @@ public class MainControllerService {
 	@Autowired
 	ProductRepositoryService productRepositoryService;
 
-	// @Autowired
-	// ProductRepositoryService productDatabaseHandler;
-
 	@Autowired
-	BasketProductDatabaseService basketProductDatabaseService;
+	BasketProductRepositoryService basketProductRepositoryService;
 
 	private boolean partSearched = false;
 	private String categoryEnum;
@@ -49,16 +50,16 @@ public class MainControllerService {
 	@Autowired(required = false)
 	ShopResearcherService shopResearcherService;
 
-	public List<Product> findByCategory(String category) {
-		return productDatabaseHandler.findByCategory(category);
+	public ArrayList<ProductDTO> getSearchedProducts(String shopName, String category) {
+
+		return this.productRepositoryService.getSearchedProducts(shopName, category);
+
 	}
 
-	public List<Product> findByCategoryAndShopName(String category, String shopName) {
-		return productDatabaseHandler.findByCategoryAndShopName(category, shopName);
-	}
+	public ArrayList<BasketProductDTO> getBasketProducts() {
 
-	public List<BasketProduct> getBasketProducts() {
-		return basketProductDatabaseService.getAllBasketProducts();
+		return this.basketProductRepositoryService.getBasketProducts();
+
 	}
 
 	public void search(String category, String shopName, boolean partSelection) {
@@ -81,9 +82,7 @@ public class MainControllerService {
 			String partUrl = shopResearcherService.findPartUrl(category);
 			shopResearcherService.setConnection(partUrl);
 
-			if (productRepositoryService.isProductInDatabase(shopName, category))
-				shopResearcherService.searchProducts(shopName, category);
-			else
+			if (!productRepositoryService.isProductInDatabase(shopName, category))
 				shopResearcherService.searchNewProducts(shopName, category, partUrl);
 
 			// shopResearcherService.findPartUrl(null, category)
@@ -94,22 +93,22 @@ public class MainControllerService {
 
 			// shopResearcher.searchPage(); <-- W START SEARCHING
 			// shopResearcher.setPagesArray();
-			shopResearcher.startSearching(shopResearcher.getPagesArray().get(0));
+			// shopResearcher.startSearching(shopResearcher.getPagesArray().get(0));
 			// shopResearcher.setConnection();
 
-			shopResearcher.setInitialized(true);
-			if (!this.partPreviousSearched(shopName, category)) {
-				// shopResearcher.setProductUpdated(false);
-				shopResearcher.searchNewProducts(shopName, category);
+			// shopResearcher.setInitialized(true);
+			// if (!this.partPreviousSearched(shopName, category)) {
+			// shopResearcher.setProductUpdated(false);
+			// shopResearcher.searchNewProducts(shopName, category);
 
-			} else {
-				// shopResearcher.setProductUpdated(true);
-				// ---- NA RZECZ TESTÓW ----//
-				// shopResearcher.searchPreviousProducts(shopName, category);
-			}
+			// } else {
+			// shopResearcher.setProductUpdated(true);
+			// ---- NA RZECZ TESTÓW ----//
+			// shopResearcher.searchPreviousProducts(shopName, category);
+			// }
 
-			shopResearcher.setSpecificInformations(category);
-			this.setPartSearched(true);
+			// shopResearcher.setSpecificInformations(category);
+			// this.setPartSearched(true);
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
@@ -131,17 +130,15 @@ public class MainControllerService {
 	 * PropertyReader.getInstance().setConnection(); }
 	 */
 
-	public boolean wasShopUsed(String shopName) {
-		if (productDatabaseHandler.findByShopName(shopName).isEmpty())
-			return false;
-		return true;
-	}
-
-	public boolean partPreviousSearched(String shopName, String category) {
-		if (productDatabaseHandler.findByShopNameAndCategory(shopName, category).isEmpty())
-			return false;
-		return true;
-	}
+	/*
+	 * public boolean wasShopUsed(String shopName) { if
+	 * (productDatabaseHandler.findByShopName(shopName).isEmpty()) return false;
+	 * return true; }
+	 * 
+	 * public boolean partPreviousSearched(String shopName, String category) { if
+	 * (productDatabaseHandler.findByShopNameAndCategory(shopName,
+	 * category).isEmpty()) return false; return true; }
+	 */
 
 	public void applyDiscount(List<Product> products, double discountValue) {
 		for (int counter = 0; counter < products.size(); counter++) {
@@ -158,13 +155,12 @@ public class MainControllerService {
 		}
 	}
 
-	public void setProducts(String shopName, String category) {
-		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
-			products.addAll(this.findByCategory(category));
-		} else {
-			products.addAll(this.findByCategoryAndShopName(Part.fromString(category).getValue(shopName),
-					shopName.toLowerCase()));
-		}
-	}
+	/*
+	 * public void setProducts(String shopName, String category) { if
+	 * (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
+	 * products.addAll(this.findByCategory(category)); } else {
+	 * products.addAll(this.findByCategoryAndShopName(Part.fromString(category).
+	 * getValue(shopName), shopName.toLowerCase())); } }
+	 */
 
 }

@@ -54,9 +54,7 @@ public class MainController {
 		//}
 		//discount.setApplied(false);
 		//shoppingCartService.setDiscountValue(discount);
-		model.addAttribute("products", mainControllerService.getProducts());
-		//mainControllerService.setCurrentShop(shopName);
-		//mainControllerService.setCategoryEnum(category);
+		model.addAttribute("products", mainControllerService.getSearchedProducts(shopName, category));
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		//model.addAttribute("discount", discount);

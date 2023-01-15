@@ -2,6 +2,7 @@ package com.bmxApp.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,7 @@ import com.bmxApp.model.Product;
 import jakarta.transaction.Transactional;
 
 @Repository
-public interface BasketProductRepository extends CrudRepository<BasketProduct, Integer> {
+public interface BasketProductRepository extends JpaRepository<BasketProduct, Integer> {
 
 	List<BasketProduct> findByShopName(String shopName);
 

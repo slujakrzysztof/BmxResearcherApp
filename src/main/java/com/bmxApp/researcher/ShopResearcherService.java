@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.enums.Shop;
 import com.bmxApp.exception.NotFoundException;
 import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.mapper.product.ProductMapper;
@@ -263,48 +264,45 @@ public class ShopResearcherService {
 
 	private void formatDataStructure(String shopName, int i) {
 
-		
-		
-		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase())) {
+		if (shopName.equalsIgnoreCase(Shop.MANYFESTBMX.name())) {
 			price = Double.parseDouble(productPriceElements.get(i).attr("content"));
 		} else {
 			try {
 				price = Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", ""));
 			} catch (NumberFormatException ex) {
 				price = Double.parseDouble(productPriceElements.get(i)
-						.select(PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
-						.replaceAll("[^\\d.]", ""));
+						.select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT).text().replaceAll("[^\\d.]", ""));
+				// PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
 			}
 		}
-		if (this.getShopName().equals(com.bmxApp.enums.Shop.AVEBMX.name().toLowerCase())) {
-			productURLComplete = "https://avebmx.pl" + productUrlElements.get(i)
-					.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+		
+		if (shopName.equalsIgnoreCase(Shop.AVEBMX.name())) {
+			productURLComplete = "https://avebmx.pl"
+					+ productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE);
+							//PropertyReader.getInstance().getProperty("urlAtrribute"));
 		} else {
 			productURLComplete = productUrlElements.get(i)
-					.attr(PropertyReader.getInstance().getProperty("urlAtrribute"));
+					.attr(PropertyManager.getInstance().URL_ATTRIBUTE);
+							//PropertyReader.getInstance().getProperty("urlAtrribute"));
 		}
 
 	}
 
 	private LinkedList<ProductDTO> getFormattedDataProducts(String shopName) {
-		
+
 		LinkedList<ProductDTO> productList = new LinkedList<>();
-		
+
 		for (int i = 0; i < productNameElements.size(); i++) {
 			this.formatDataStructure(shopName, i);
 
 			String productName = productNameElements.get(productIndex).text().replace("'", "");
-			
-			productList.add(ProductDTO.builder()
-					   .productName(productName)
-					   .shopName(shopName)
-					   .category(category)
-					   .price(price)
-					   .url(productURLComplete)
-					   .imageUrl(imageUrlElements.get(productIndex).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE))
-					   .build());
+
+			productList.add(ProductDTO.builder().productName(productName).shopName(shopName).category(category)
+					.price(price).url(productURLComplete)
+					.imageUrl(imageUrlElements.get(productIndex).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE))
+					.build());
 		}
-		
+
 		return productList;
 	}
 
@@ -316,18 +314,16 @@ public class ShopResearcherService {
 		pagesList.stream().forEach(page -> {
 			this.setConnection(page);
 			this.getProductsFromPage();
-			this.getFormattedDataProducts(shopName).forEach(productDTO -> 
-				productsList.add(ProductMapper.mapToProduct(productDTO)
-			));
+			this.getFormattedDataProducts(shopName)
+					.forEach(productDTO -> productsList.add(ProductMapper.mapToProduct(productDTO)));
 		});
-		
-		productRepository.saveAll((Iterable<Product>)productsList);
+
+		productRepository.saveAll((Iterable<Product>) productsList);
 	}
-	
+
 	public void searchProducts(String shopName, String category) {
-		
+
 	}
-	
 
 	public String getDescription(String className) throws NullPointerException {
 		String[] separator = className.split(",");
@@ -350,28 +346,18 @@ public class ShopResearcherService {
 		throw new NullPointerException();
 	}
 
-	public String searchProduct(String shopName, String html, String category) {
-		this.startSearching(html);
-		this.setCategory(category);
-		// this.setConnection();
-		initialized = true;
-		// browserActivated = true;
-		this.searchNewProducts(shopName, category);
-		return "";
-	}
-
-	public ArrayList<Product> getProductsArray() {
-		return this.products;
-	}
-
-	public void setSpecificInformations(String category) {
-		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getCategory().equals(category))
-				specificProducts.add(products.get(i));
-		}
-	}
-
-	public void clearProductsArray() {
-		this.specificProducts.clear();
-	}
+	/*
+	 * public String searchProduct(String shopName, String html, String category) {
+	 * this.startSearching(html); this.setCategory(category); //
+	 * this.setConnection(); initialized = true; // browserActivated = true;
+	 * this.searchNewProducts(shopName, category); return ""; }
+	 * 
+	 * public ArrayList<Product> getProductsArray() { return this.products; }
+	 * 
+	 * /*public void setSpecificInformations(String category) { for (int i = 0; i <
+	 * products.size(); i++) { if (products.get(i).getCategory().equals(category))
+	 * specificProducts.add(products.get(i)); } }
+	 * 
+	 * public void clearProductsArray() { this.specificProducts.clear(); }
+	 */
 }
