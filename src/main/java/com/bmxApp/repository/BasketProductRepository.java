@@ -24,7 +24,7 @@ public interface BasketProductRepository extends JpaRepository<BasketProduct, In
 	public float getTotalPrice();
 	
 	@Query(value = "Select SUM(bt.quantity * pt.price) from BasketProduct bt inner join Product pt on bt.product = pt.id where bt.shopName=?1")
-	public float getTotalPriceByShopName(String shopName);
+	public float getTotalPriceForShop(String shopName);
 	
 	@Query(value = "Select quantity from BasketProduct where id = ?1")
 	public float getProductQuantity(int id);

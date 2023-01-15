@@ -1,14 +1,18 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
+import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.repository.BasketProductRepository;
@@ -20,24 +24,34 @@ public class BasketProductRepositoryService {
 	BasketProductRepository basketProductRepository;
 
 	public float getTotalPrice() {
-		if(this.getAllBasketProducts().isEmpty()) return 0f;
-		return basketProductDatabaseHandler.getTotalPrice();
+		if(this.getBasketProducts().isEmpty()) return 0f;
+		return basketProductRepository.getTotalPrice();
 	}
 	
-	public float getTotalPriceByShopName(String shopName) {
-		return basketProductDatabaseHandler.getTotalPriceByShopName(shopName);
+	public float getTotalPriceForShop(String shopName) {
+		return basketProductRepository.getTotalPriceForShop(shopName);
 	}
 
 	public float getTotalPriceForProduct(int id) {
-		return basketProductDatabaseHandler.getTotalPriceForProduct(id);
+		return basketProductRepository.getTotalPriceForProduct(id);
 	}
 	
-	public List<BasketProduct> getBasketProductsByShopName(String shopName){
-		return basketProductDatabaseHandler.findByShopName(shopName);
+	public LinkedList<BasketProductDTO> getBasketProductsByShopName(String shopName) {
+		
+		List<BasketProduct> basketProducts = basketProductRepository.findByShopName(shopName);
+		LinkedList<BasketProductDTO> dtoBasketProducts = new LinkedList<>();
+		
+		basketProducts.forEach(basketProduct -> dtoBasketProducts.add(BasketProductMapper.mapToBasketProductDTO(basketProduct)));
+		
+		return dtoBasketProducts;
 	}
 
-	public BasketProduct findByProduct(Product product) {
-		return basketProductDatabaseHandler.findByProduct(product);
+	public BasketProductDTO getBasketProductByProduct(ProductDTO productDTO) {
+		
+		Product product = ProductMapper.mapToProduct(productDTO);
+		BasketProduct basketProduct = basketProductRepository.findByProduct(product);
+		
+		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
 	}
 
 	public ArrayList<BasketProductDTO> getBasketProducts() {
@@ -50,29 +64,41 @@ public class BasketProductRepositoryService {
 		return basketProductDTOList;
 	}
 
-	public boolean productAdded(Product product) {
-		if (basketProductDatabaseHandler.findByProduct(product) != null)
+	public boolean isProductAdded(ProductDTO productDTO) {
+		
+		Optional<BasketProductDTO> dtoBasketProduct = Optional.ofNullable(this.getBasketProductByProduct(productDTO));
+		
+		if (dtoBasketProduct.isPresent())
 			return true;
 		return false;
 	}
 
-	public BasketProduct getProductByProductId(int productId) {
-		return basketProductDatabaseHandler.findByProductId(productId);
+	public BasketProductDTO getBasketProductByProductId(int productId) {
+		
+		BasketProduct basketProduct = basketProductRepository.findByProductId(productId);
+		
+		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
 	}
 
-	public BasketProduct getProductById(int id) {
-		return basketProductDatabaseHandler.findById(id);
+	public BasketProductDTO getBasketProductById(int id) {
+		
+		BasketProduct basketProduct = basketProductRepository.findById(id);
+		
+		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
 	}
 
-	public void insertOrUpdateBasketProduct(BasketProduct basketProduct) {
-		basketProductDatabaseHandler.save(basketProduct);
+	public void insertUpdateBasketProduct(BasketProductDTO basketProductDTO) {
+		
+		BasketProduct basketProduct = BasketProductMapper.mapToBasketProduct(basketProductDTO);
+		
+		basketProductRepository.save(basketProduct);
 	}
 
 	public int getQuantity(int productId) {
-		return (int) basketProductDatabaseHandler.getProductQuantity(productId);
+		return (int) basketProductRepository.getProductQuantity(productId);
 	}
 	
-	public void deleteProducts() {
-		basketProductDatabaseHandler.deleteAll();
+	public void deleteBasketProducts() {
+		basketProductRepository.deleteAll();
 	}
 }

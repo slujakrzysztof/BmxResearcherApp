@@ -51,6 +51,7 @@ public class ProductRepositoryService {
 		return true;
 	}
 
+	/*
 	@Transactional
 	public void insertOrUpdateProduct(Product product) {
 		productDatabaseHandler.save(product);
@@ -92,5 +93,5 @@ public class ProductRepositoryService {
 	public Product getProductByName(String productName, String shopName) {
 		return productDatabaseHandler.findByProductNameAndShopName(productName, shopName);
 	}
-
+*/
 }

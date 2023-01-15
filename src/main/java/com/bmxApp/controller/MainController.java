@@ -54,7 +54,7 @@ public class MainController {
 		//}
 		//discount.setApplied(false);
 		//shoppingCartService.setDiscountValue(discount);
-		model.addAttribute("products", mainControllerService.getSearchedProducts(shopName, category));
+		model.addAttribute("products", mainControllerService.getProductsWithDiscount(shopName, category));
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		//model.addAttribute("discount", discount);
@@ -81,7 +81,7 @@ public class MainController {
 		String category = Part.fromStringValue(mainControllerService.getProducts().get(0).getCategory()).toString();
 		DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
 		
-		mainControllerService.getProducts().clear();
+		//mainControllerService.getProducts().clear();
 		mainControllerService.setProducts(mainControllerService.getCurrentShop(), category);
 		mainControllerService.applyDiscount(mainControllerService.getProducts(),
 				(double) discount.getValue());

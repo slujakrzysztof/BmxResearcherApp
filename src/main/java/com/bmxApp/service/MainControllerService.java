@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
@@ -39,27 +40,38 @@ public class MainControllerService {
 	@Autowired
 	BasketProductRepositoryService basketProductRepositoryService;
 
-	private boolean partSearched = false;
-	private String categoryEnum;
-	private String currentShop;
+	//private boolean partSearched = false;
+	//private String categoryEnum;
+	//private String currentShop;
 
 	private String language = "polish";
 
-	List<Product> products = new ArrayList<Product>();
+	//List<Product> products = new ArrayList<Product>();
 
 	@Autowired(required = false)
 	ShopResearcherService shopResearcherService;
 
-	public ArrayList<ProductDTO> getSearchedProducts(String shopName, String category) {
+	public ArrayList<ProductDTO> getProducts(String shopName, String category) {
 
 		return this.productRepositoryService.getSearchedProducts(shopName, category);
-
+	}
+	
+	public ArrayList<ProductDTO> getProductsWithDiscount(String shopName, String category) {
+		
+		ArrayList<ProductDTO> productDTOList = this.getProducts(shopName, category);
+		DiscountDTO discountDTO = this.getShopResearcherService().getDiscount();
+		
+		productDTOList.forEach(productDTO -> {
+			double discountPrice = productDTO.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0);
+			productDTO.setPrice(discountPrice);	
+		});
+		
+		return productDTOList;
 	}
 
 	public ArrayList<BasketProductDTO> getBasketProducts() {
 
 		return this.basketProductRepositoryService.getBasketProducts();
-
 	}
 
 	public void search(String category, String shopName, boolean partSelection) {
