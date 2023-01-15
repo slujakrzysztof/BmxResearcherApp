@@ -30,10 +30,10 @@ import lombok.Setter;
 public class MainControllerService {
 
 	@Autowired
-	ProductDatabaseService databaseService;
+	ProductRepositoryService productRepositoryService;
 
-	@Autowired
-	ProductRepository productDatabaseHandler;
+	// @Autowired
+	// ProductRepositoryService productDatabaseHandler;
 
 	@Autowired
 	BasketProductDatabaseService basketProductDatabaseService;
@@ -64,16 +64,14 @@ public class MainControllerService {
 	public void search(String category, String shopName, boolean partSelection) {
 
 		String html;
-		
+
 		try {
 			PropertyReader.getInstance().connectPropertyReader(shopName);
-		
+
 			if (partSelection)
-				html = PropertyManager.getInstance().URL; 
-				//PropertyReader.getInstance().getProperty("url");
+				html = PropertyManager.getInstance().URL;
 			else
 				html = PropertyManager.getInstance().SAFETY_URL;
-				//html = PropertyReader.getInstance().getProperty("safetyURL");
 
 			System.out.println("htmmml: " + html);
 
@@ -82,12 +80,17 @@ public class MainControllerService {
 			shopResearcherService.setConnection(html);
 			String partUrl = shopResearcherService.findPartUrl(category);
 			shopResearcherService.setConnection(partUrl);
-			shopResearcherService.searchNewProducts(shopName, category, partUrl);
-			//shopResearcherService.findPartUrl(null, category)
-			//shopResearcher.startSearching(html);
-			//shopResearcher.setShopName(shopName);
+
+			if (productRepositoryService.isProductInDatabase(shopName, category))
+				shopResearcherService.searchProducts(shopName, category);
+			else
+				shopResearcherService.searchNewProducts(shopName, category, partUrl);
+
+			// shopResearcherService.findPartUrl(null, category)
+			// shopResearcher.startSearching(html);
+			// shopResearcher.setShopName(shopName);
 			// shopResearcher.setConnection();
-			//shopResearcher.setCategory(category);
+			// shopResearcher.setCategory(category);
 
 			// shopResearcher.searchPage(); <-- W START SEARCHING
 			// shopResearcher.setPagesArray();
@@ -118,19 +121,15 @@ public class MainControllerService {
 
 		Arrays.asList(Shop.values()).stream()
 				.forEach(shop -> this.search(category, shop.name().toLowerCase(), partSelection));
-
-		/*
-		 * for (Shop shop : Shop.getShops())
-		 * this.setResearcher(Part.fromString(category).getValue(shop.name().toLowerCase
-		 * ()), shop.name().toLowerCase(), category, partSelection);
-		 */
 	}
 
-	/*public void setPropertyReader(String filename) {
-		PropertyReader.getInstance().setPropertyFilename("com/bmxApp/properties/" + filename + ".properties");
-		System.out.println("Jestem tu: " + PropertyReader.getInstance().getFilename());
-		PropertyReader.getInstance().setConnection();
-	}*/
+	/*
+	 * public void setPropertyReader(String filename) {
+	 * PropertyReader.getInstance().setPropertyFilename("com/bmxApp/properties/" +
+	 * filename + ".properties"); System.out.println("Jestem tu: " +
+	 * PropertyReader.getInstance().getFilename());
+	 * PropertyReader.getInstance().setConnection(); }
+	 */
 
 	public boolean wasShopUsed(String shopName) {
 		if (productDatabaseHandler.findByShopName(shopName).isEmpty())

@@ -261,8 +261,10 @@ public class ShopResearcherService {
 	 * indexSearchPage++; } }
 	 */
 
-	private void formatDataStructure(int i) {
+	private void formatDataStructure(String shopName, int i) {
 
+		
+		
 		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase())) {
 			price = Double.parseDouble(productPriceElements.get(i).attr("content"));
 		} else {
@@ -284,12 +286,12 @@ public class ShopResearcherService {
 
 	}
 
-	private LinkedList<ProductDTO> getFormattedDataProducts() {
+	private LinkedList<ProductDTO> getFormattedDataProducts(String shopName) {
 		
 		LinkedList<ProductDTO> productList = new LinkedList<>();
 		
 		for (int i = 0; i < productNameElements.size(); i++) {
-			this.formatDataStructure(i);
+			this.formatDataStructure(shopName, i);
 
 			String productName = productNameElements.get(productIndex).text().replace("'", "");
 			
@@ -308,50 +310,24 @@ public class ShopResearcherService {
 
 	public void searchNewProducts(String shopName, String category, String url) {
 
-		ArrayList<String> pagesArray = (ArrayList<String>) this.findPagesInSpecificCategory(url);
+		ArrayList<String> pagesList = (ArrayList<String>) this.findPagesInSpecificCategory(url);
+		LinkedList<Product> productsList = new LinkedList<>();
 
-		pagesArray.stream().forEach(page -> {
+		pagesList.stream().forEach(page -> {
 			this.setConnection(page);
 			this.getProductsFromPage();
-			this.getFormattedDataProducts();
-			// --- > this.formatDataStructure();
-
+			this.getFormattedDataProducts(shopName).forEach(productDTO -> 
+				productsList.add(ProductMapper.mapToProduct(productDTO)
+			));
 		});
-
-		indexSearchPage = 0;
-		if (initialized) {
-
-			// this.findPageUrl(this.getDocument().select(PropertyReader.getInstance().getProperty("numberOfPages")),
-			// initialized).stream().forEach(null);
-			// ;
-
-			for (int searchCounter = 0; searchCounter < numberOfPages; searchCounter++) {
-				this.searchNextPage();
-
-				this.getProductsFromPage();
-
-				for (productIndex = 0; productIndex < productNameElements.size(); productIndex++) {
-
-
-
-					ProductDTO productDTO = ProductDTO.builder().productName(productName).shopName(shopName)
-							.category(category).price(price).url(productURLComplete).imageUrl(imageUrlElements
-									.get(productIndex).attr(PropertyReader.getInstance().getProperty("imageAttribute")))
-							.build();
-
-					productRepository.save(ProductMapper.mapToProduct(productDTO));
-					/*
-					 * products.add(new Product(productName.get(productIndex).text().replace("'",
-					 * ""), this.getShopName(), this.getCategory(), this.getCategoryEnum(),
-					 * productURLComplete,
-					 * imageUrlElements.get(productIndex).attr(PropertyReader.getInstance().
-					 * getProperty("imageAttribute")), price));
-					 */
-				}
-				// productDatabaseHandler.saveAll(products);
-			}
-		}
+		
+		productRepository.saveAll((Iterable<Product>)productsList);
 	}
+	
+	public void searchProducts(String shopName, String category) {
+		
+	}
+	
 
 	public String getDescription(String className) throws NullPointerException {
 		String[] separator = className.split(",");

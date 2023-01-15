@@ -20,7 +20,7 @@ public class ShoppingCartService {
 	private BasketProductDatabaseService basketProductDatabaseService;
 
 	@Autowired
-	private ProductDatabaseService productDatabaseService;
+	private ProductRepositoryService productDatabaseService;
 	
 	@Autowired
 	private  BasketProductRepository basketProductDatabaseHandler;

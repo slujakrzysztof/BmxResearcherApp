@@ -1,6 +1,7 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,14 +20,24 @@ import com.bmxApp.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class ProductDatabaseService {
+public class ProductRepositoryService {
 
 	@Autowired
-	ProductRepository productDatabaseHandler;
+	ProductRepository productRepository;
 
 	@Transactional
 	public List<Product> getAllProducts() {
 		return IterableUtils.toList(productDatabaseHandler.findAll());
+	}
+	
+	public List<Product> findProductsByShopNameAndCategory(String shopName, String category) {
+		return productRepository.findByShopNameAndCategory(shopName, category);
+	}
+	
+	public boolean isProductInDatabase(String shopName, String category) {
+		List<Product> productList = this.findProductsByShopNameAndCategory(shopName, category);
+		if(productList.isEmpty()) return false;
+		return true;
 	}
 
 	@Transactional
