@@ -82,6 +82,9 @@ public class MainControllerService {
 		try {
 			PropertyReader.getInstance().connectPropertyReader(shopName);
 
+			System.out.println("HTML : " + PropertyManager.getInstance().URL);
+			System.out.println("HTML : " + PropertyReader.getInstance().getProperty("url"));
+			
 			if (partSelection)
 				html = PropertyManager.getInstance().URL;
 			else
@@ -93,6 +96,7 @@ public class MainControllerService {
 
 			shopResearcherService.setConnection(html);
 			String partUrl = shopResearcherService.findPartUrl(category);
+			System.out.println("PART URL: " + partUrl);
 			shopResearcherService.setConnection(partUrl);
 
 			if (!productRepositoryService.isProductInDatabase(shopName, category))

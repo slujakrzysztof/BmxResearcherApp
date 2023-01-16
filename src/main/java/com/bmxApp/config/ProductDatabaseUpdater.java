@@ -30,7 +30,7 @@ public class ProductDatabaseUpdater {
 	@Scheduled(fixedDelay = 60000)
 	@Async
 	public void updateProductDatabase() {
-		shopResearcher.getProductsArray().clear();
+		//shopResearcher.getProductsArray().clear();
 		//shopResearcher.searchNewProducts();
 		Iterable<Product> actualProducts = productDatabaseHandler.findAll();
 	/*	Part[] parts = Part.values();

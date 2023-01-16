@@ -45,8 +45,6 @@ public class ShoppingCartService {
 		return this.getBasketProducts();
 
 	}
-	
-
 
 	public float getTotalPriceForBasketProduct(int id) {
 

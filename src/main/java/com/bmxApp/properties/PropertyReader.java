@@ -40,7 +40,9 @@ public class PropertyReader {
 	}
 	
 	public void connectPropertyReader(String shopName) {
-		this.setPropertyFilename(shopName);
+		
+		String filename = LOCATION_PREFIX + shopName + FILE_EXTENSION;
+		this.setPropertyFilename(filename);
 		this.setConnection();
 	}
 

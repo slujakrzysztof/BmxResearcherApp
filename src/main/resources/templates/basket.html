@@ -78,7 +78,8 @@
 																th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product}, ${basketProduct})"></div>
 														</div>
 														<div class="col-md-3 price">
-															<span>[[${totalPriceByProduct.get(basketProduct.id)}]]</span>
+															<!--  <span>[[${totalPriceByProduct.get(basketProduct.id)}]]</span>-->
+															<span>[[${basketProduct.product.price}]]</span>
 														</div>
 													</div>
 												</div>

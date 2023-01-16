@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bmxApp.builder.product.ProductBuilder;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
@@ -34,23 +35,18 @@ import com.bmxApp.repository.ProductRepository;
 public class ShopResearcherService {
 
 	final int MAX_TRIES = 20;
-	private int numberOfPages;
 	private String html;
 	protected Document document;
 	private int tryCounter = 0;
-	private boolean initialized;
 	private Elements div, productNameElements, productPriceElements, productUrlElements, imageUrlElements, pages;
-	private int productIndex = 0, indexSearchPage = 0;
 	private String category;
-	private String categoryEnum;
 	private String shopName;
-	private boolean partFound = false;
 
 	private DiscountDTO discount = new DiscountDTO();
 
 	Document.OutputSettings outputSettings = new Document.OutputSettings();
 
-	ArrayList<com.bmxApp.model.Product> products = new ArrayList<>();
+	ArrayList<Product> products = new ArrayList<>();
 	ArrayList<Product> specificProducts = new ArrayList<>();
 	List<String> pagesArray = new ArrayList<>();
 	ArrayList<String> pagesArrayAve = new ArrayList<>();
@@ -133,135 +129,62 @@ public class ShopResearcherService {
 		return this.category;
 	}
 
-	public void setInitialized(boolean initialized) {
-		this.initialized = initialized;
-	}
-
 	public String findPartUrl(String category) {
 
 		String propertyName = PropertyManager.getInstance().URL_SEARCH_PAGE;
 		Elements partUrls = this.getDocument().select(propertyName);
+		String categoryShop = PropertyReader.getInstance().getProperty(category.toLowerCase());
 
-		List<String> partUrlList = partUrls.stream().filter(element -> element.absUrl("href").contains(category))
-				.limit(1).map(Object::toString).collect(Collectors.toList());
+		List<Element> partUrlList = partUrls.stream().filter(
+				element -> element.absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE).contains(categoryShop))
+				.limit(1).collect(Collectors.toList());
 
 		if (partUrlList.size() == 0)
 			throw new NotFoundException();
 
-		return partUrlList.toString();
+		return partUrlList.get(0).absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE);
 	}
 
-	/*
-	 * public void searchPage() { Elements partPage =
-	 * this.getDocument().select(PropertyReader.getInstance().getProperty(
-	 * "urlSearch")); while (!partFound) { if (findProductPage(partPage)) return;
-	 * partPage =
-	 * this.getDocument().select(PropertyReader.getInstance().getProperty(
-	 * "urlSearchFrames")); } }
-	 */
+	private List<String> findPagesInCategory(String partUrl) {
 
-	private List<String> findPagesInSpecificCategory(String partUrl) {
+		List<String> pageUrlList = new ArrayList<String>();
 
-		String propertyName = PropertyManager.getInstance().PAGE_NUMBER;
-		boolean allProductsDisplay = Boolean.valueOf(PropertyManager.getInstance().ALL_PRODUCTS_DISPLAY);
-		Elements pageUrlElements = this.getDocument().select(propertyName);
-		long listSize = pageUrlElements.size();
+		try {
 
-		List<String> pageUrlList = pageUrlElements.stream().map(pageUrlElement -> pageUrlElement.attr("href"))
-				.distinct().collect(Collectors.toList());
-		;
+			String propertyName = PropertyManager.getInstance().PAGE_NUMBER;
+			boolean allProductsDisplay = Boolean.valueOf(PropertyManager.getInstance().ALL_PRODUCTS_DISPLAY);
+			Elements pageUrlElements = this.getDocument().select(propertyName);
+			long listSize = pageUrlElements.size();
 
-		if (allProductsDisplay)
-			return pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList());
-		else if (pageUrlList.isEmpty())
+			pageUrlList = pageUrlElements.stream().map(pageUrlElement -> pageUrlElement.attr("href")).distinct()
+					.toList();
+
+			if (allProductsDisplay)
+				return pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList());
+			else if (pageUrlList.isEmpty())
+				pageUrlList.add(partUrl);
+
+		} catch (ValidationException ex) {
 			pageUrlList.add(partUrl);
+		}
 
 		return pageUrlList;
 	}
 
-	// --- Get url to pages with products ---
-	public void setPagesArray() {
-		pagesArray.clear();
-		try {
-			pages = this.getDocument().select(PropertyReader.getInstance().getProperty("numberOfPages"));
-			int pageNumber = 0;
-
-			if (Boolean.valueOf(PropertyReader.getInstance().getProperty("allProductsDisplay"))) {
-				pagesArray.add(pages.get(pages.size() - 1).attr("href"));
-			} else {
-				for (Element page : pages) {
-					System.out.println("STROONY 111: " + page);
-					System.out.println("STRONY: " + pages.attr("href"));
-					try {
-						pageNumber = Integer.parseInt(page.text());
-					} catch (NumberFormatException ex) {
-						continue;
-					}
-					pagesArray.add(pages.attr("href").substring(0, pages.attr("href").length() - 1) + pageNumber);
-				}
-				pagesArray = pagesArray.stream().distinct().collect(Collectors.toList());
-			}
-
-		} catch (ValidationException validationException) {
-			pagesArray.add(this.html);
-		}
-		numberOfPages = pagesArray.size();
-		if (numberOfPages == 0) {
-			pagesArray.add(this.html);
-			numberOfPages = pagesArray.size();
-		}
-		productIndex = 0;
-	}
-
-	public List<String> getPagesArray() {
-		return pagesArray;
-	}
-
-	public String getCategoryEnum() {
-		return categoryEnum;
-	}
-
-	public void setCategoryEnum(String categoryEnum) {
-		this.categoryEnum = categoryEnum;
-	}
-
-	private void getProductsFromPage() {
+	private void getProductsFromPage(String shopName) {
 
 		div = this.getDocument().select(PropertyManager.getInstance().DIV);// PropertyReader.getInstance().getProperty("div"));
 		productNameElements = div.select(PropertyManager.getInstance().PRODUCT_NAME);
 		productPriceElements = div.select(PropertyManager.getInstance().PRODUCT_PRICE);
 		productUrlElements = div.select(PropertyManager.getInstance().PRODUCT_URL);
 		// DLA MANYFEST DOC DLA INNYCH DIV
-		if (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().toLowerCase()))
+		if (shopName.equals(Shop.MANYFESTBMX.name().toLowerCase()))
 			imageUrlElements = this.getDocument().select(PropertyManager.getInstance().IMAGE_URL);
 		else
 			imageUrlElements = div.select(PropertyManager.getInstance().IMAGE_URL);
-
-		/*
-		 * div =
-		 * this.getDocument().select(PropertyReader.getInstance().getProperty("div"));
-		 * productNameElements =
-		 * div.select(PropertyReader.getInstance().getProperty("productNameElement"));
-		 * productPriceElements =
-		 * div.select(PropertyReader.getInstance().getProperty("productPriceElement"));
-		 * productUrlElements =
-		 * div.select(PropertyReader.getInstance().getProperty("productURLElement")); //
-		 * DLA MANYFEST DOC DLA INNYCH DIV if
-		 * (this.getShopName().equals(com.bmxApp.enums.Shop.MANYFESTBMX.name().
-		 * toLowerCase())) imageUrlElements =
-		 * this.getDocument().select(PropertyReader.getInstance().getProperty(
-		 * "imageURLElement")); else imageUrlElements =
-		 * div.select(PropertyReader.getInstance().getProperty("imageURLElement"));
-		 */
+		
 	}
-
-	/*
-	 * private void searchNextPage() { if (numberOfPages > 1) {
-	 * this.startSearching(pagesArray.get(indexSearchPage)); if (indexSearchPage ==
-	 * pagesArray.size() - 1) indexSearchPage = pagesArray.size() - 1; else
-	 * indexSearchPage++; } }
-	 */
-
+	
 	private void formatDataStructure(String shopName, int i) {
 
 		if (shopName.equalsIgnoreCase(Shop.MANYFESTBMX.name())) {
@@ -275,32 +198,34 @@ public class ShopResearcherService {
 				// PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
 			}
 		}
-		
+
 		if (shopName.equalsIgnoreCase(Shop.AVEBMX.name())) {
 			productURLComplete = "https://avebmx.pl"
 					+ productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE);
-							//PropertyReader.getInstance().getProperty("urlAtrribute"));
+			// PropertyReader.getInstance().getProperty("urlAtrribute"));
 		} else {
-			productURLComplete = productUrlElements.get(i)
-					.attr(PropertyManager.getInstance().URL_ATTRIBUTE);
-							//PropertyReader.getInstance().getProperty("urlAtrribute"));
+			productURLComplete = productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE);
+			// PropertyReader.getInstance().getProperty("urlAtrribute"));
 		}
 
 	}
 
-	private LinkedList<ProductDTO> getFormattedDataProducts(String shopName) {
+	private LinkedList<ProductDTO> getFormattedDataProducts(String shopName, String category) {
 
 		LinkedList<ProductDTO> productList = new LinkedList<>();
 
 		for (int i = 0; i < productNameElements.size(); i++) {
 			this.formatDataStructure(shopName, i);
 
-			String productName = productNameElements.get(productIndex).text().replace("'", "");
+			String productName = productNameElements.get(i).text().replace("'", "");
 
-			productList.add(ProductDTO.builder().productName(productName).shopName(shopName).category(category)
-					.price(price).url(productURLComplete)
-					.imageUrl(imageUrlElements.get(productIndex).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE))
-					.build());
+			productList.add(ProductBuilder.buildProductDTO(
+					productName, 
+					shopName, 
+					category, 
+					price, 
+					productURLComplete, 
+					imageUrlElements.get(i).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE)));
 		}
 
 		return productList;
@@ -308,21 +233,18 @@ public class ShopResearcherService {
 
 	public void searchNewProducts(String shopName, String category, String url) {
 
-		ArrayList<String> pagesList = (ArrayList<String>) this.findPagesInSpecificCategory(url);
+		ArrayList<String> pagesList = (ArrayList<String>) this.findPagesInCategory(url);
 		LinkedList<Product> productsList = new LinkedList<>();
-
+		System.out.println("SEARCH CATEGORY : " + category);
+		
 		pagesList.stream().forEach(page -> {
 			this.setConnection(page);
-			this.getProductsFromPage();
-			this.getFormattedDataProducts(shopName)
-					.forEach(productDTO -> productsList.add(ProductMapper.mapToProduct(productDTO)));
-		});
-
+			this.getProductsFromPage(shopName);
+			this.getFormattedDataProducts(shopName, category)
+					.forEach(dtoProduct -> productsList.add(ProductMapper.mapToProduct(dtoProduct)));
+		});		
+		
 		productRepository.saveAll((Iterable<Product>) productsList);
-	}
-
-	public void searchProducts(String shopName, String category) {
-
 	}
 
 	public String getDescription(String className) throws NullPointerException {
@@ -345,19 +267,4 @@ public class ShopResearcherService {
 		}
 		throw new NullPointerException();
 	}
-
-	/*
-	 * public String searchProduct(String shopName, String html, String category) {
-	 * this.startSearching(html); this.setCategory(category); //
-	 * this.setConnection(); initialized = true; // browserActivated = true;
-	 * this.searchNewProducts(shopName, category); return ""; }
-	 * 
-	 * public ArrayList<Product> getProductsArray() { return this.products; }
-	 * 
-	 * /*public void setSpecificInformations(String category) { for (int i = 0; i <
-	 * products.size(); i++) { if (products.get(i).getCategory().equals(category))
-	 * specificProducts.add(products.get(i)); } }
-	 * 
-	 * public void clearProductsArray() { this.specificProducts.clear(); }
-	 */
 }
