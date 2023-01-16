@@ -32,7 +32,7 @@ public class ProductDatabaseUpdater {
 	public void updateProductDatabase() {
 		//shopResearcher.getProductsArray().clear();
 		//shopResearcher.searchNewProducts();
-		Iterable<Product> actualProducts = productDatabaseHandler.findAll();
+		//Iterable<Product> actualProducts = productDatabaseHandler.findAll();
 	/*	Part[] parts = Part.values();
 		for(int counter = 0; counter < parts.length; counter++)
 		mainControllerService.setResearcherAllShops(parts[counter].name(), true);*/

@@ -45,6 +45,7 @@ public class MainController {
 	public String searchProducts(Model model, @RequestParam("category") String category,
 			@RequestParam("shop") String shopName) {
 		
+		DiscountDTO discount = mainControllerService.getShopResearcherService().getDiscount();
 		//DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
 		mainControllerService.searchProducts(shopName, category);
 		mainControllerService.setCategory(category);
@@ -59,7 +60,7 @@ public class MainController {
 		model.addAttribute("products", mainControllerService.getProductsWithDiscount(shopName, category));
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
-		//model.addAttribute("discount", discount);
+		model.addAttribute("discount", discount);
 		return "products";
 	}
 

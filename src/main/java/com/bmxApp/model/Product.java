@@ -13,11 +13,15 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "ProductTable")
-@Data
-@Builder
+@Setter
+@Getter
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Product {
 
@@ -37,4 +41,18 @@ public class Product {
 	@Column(name = "imageUrl", length = 255)
 	private String imageUrl;
 
+	public Product(String productName, 
+				   String shopName, 
+				   String category, 
+				   double price, 
+				   String url, 
+				   String imageUrl) {
+		
+		this.productName = productName;
+		this.shopName = shopName;
+		this.category = category;
+		this.price = price;
+		this.url = url;
+		this.imageUrl = imageUrl;
+	}
 }

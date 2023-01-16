@@ -10,11 +10,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "BasketTable")
-@Data
-@Builder
+@NoArgsConstructor
+@Setter
+@Getter
 public class BasketProduct {
 
 	@Id
@@ -30,4 +34,10 @@ public class BasketProduct {
 
 	@Column(name = "shopName")
 	private String shopName;
+	
+	public BasketProduct(Product product, int quantity, String shopName) {
+		this.product = product;
+		this.quantity = quantity;
+		this.shopName = shopName;
+	}
 }

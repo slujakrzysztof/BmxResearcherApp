@@ -93,7 +93,7 @@ public class ShoppingCartService {
 			dtoBasketProduct = basketProductRepositoryService.getBasketProductByProduct(dtoProduct);
 			dtoBasketProduct.setQuantity(dtoBasketProduct.getQuantity() + 1);
 		} else {
-			dtoBasketProduct = BasketProductBuilder.buildBasketProduct(dtoProduct, 1, shopName);
+			dtoBasketProduct = BasketProductBuilder.buildBasketProductDTO(dtoProduct, 1, shopName);
 		}
 
 		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct);

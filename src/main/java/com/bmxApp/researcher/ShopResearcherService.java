@@ -157,12 +157,19 @@ public class ShopResearcherService {
 			long listSize = pageUrlElements.size();
 
 			pageUrlList = pageUrlElements.stream().map(pageUrlElement -> pageUrlElement.attr("href")).distinct()
-					.toList();
+					.collect(Collectors.toList());
 
+			System.out.println("PAGE URL LIST : " + pageUrlList);
+			
 			if (allProductsDisplay)
 				return pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList());
 			else if (pageUrlList.isEmpty())
 				pageUrlList.add(partUrl);
+			else if(pageUrlList.get(0).isBlank()) {
+				System.out.println("JESTEM TU" + partUrl);
+				pageUrlList.set(0, partUrl);
+				System.out.println("PAGE URL LIST 2: " + pageUrlList);			}
+				
 
 		} catch (ValidationException ex) {
 			pageUrlList.add(partUrl);

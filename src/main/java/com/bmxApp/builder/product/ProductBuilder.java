@@ -21,13 +21,12 @@ public class ProductBuilder {
 	public static Product buildProduct(String productName, String shopName, String category, double price,
 			String url, String imageUrl) {
 		
-			return Product.builder()
-						  .productName(productName)
-						  .shopName(shopName)
-						  .category(category)
-						  .price(price)
-						  .url(url)
-						  .imageUrl(imageUrl)
-						  .build();
+			return new Product(
+						  productName,
+						  shopName,
+						  category,
+						  price,
+						  url,
+						  imageUrl);
 	}
 }
