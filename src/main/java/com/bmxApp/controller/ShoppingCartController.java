@@ -21,72 +21,58 @@ import com.bmxApp.service.ShoppingCartService;
 @Controller
 public class ShoppingCartController {
 
-	List<BasketProduct> basketProducts;
-	Map<Integer, String> basketProductsPrices = new TreeMap<>();
+	//List<BasketProduct> basketProducts;
+	//Map<Integer, String> basketProductsPrices = new TreeMap<>();
 
 	@Autowired
 	private ShoppingCartService shoppingCartService;
 
 	@GetMapping({ "/cart", "/cart/{shop}" })
-	public String showShoppingCart(@PathVariable(required = false) String shop, Model model) {
+	public String showShoppingCart(@PathVariable(required = false) String shopName, Model model) {
 
-		if (shop == null)
-			basketProducts = shoppingCartService.getAllProducts();
-		else
-			basketProducts = shoppingCartService.getBasketProductsByShopName(shop);
-
-		for (BasketProduct bProduct : basketProducts) {
+		/*for (BasketProduct bProduct : basketProducts) {
 			basketProductsPrices.put(bProduct.getId(),
 					shoppingCartService.formatPrice(shoppingCartService.getTotalPriceForProduct(bProduct.getId())));
 			System.out.println(basketProductsPrices.toString());
-		}
+		}*/
 
 		model.addAttribute("shopModel", new ShopModelDTO());
-		model.addAttribute("totalPriceByProduct", basketProductsPrices);
-		model.addAttribute("totalPrice", shoppingCartService.formatPrice(shoppingCartService.getTotalPrice(shop)));
-		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shop));
-		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shop));
-		model.addAttribute("basketProducts", basketProducts);
+		//model.addAttribute("totalPriceByProduct", basketProductsPrices);
+		model.addAttribute("totalPrice", shoppingCartService.formatPrice(shoppingCartService.getTotalPriceForShop(shopName)));
+		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shopName));
+		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shopName));
+		model.addAttribute("basketProducts", shoppingCartService.getBasketProductsInCart(shopName));
 		return "basket";
 	}
 
-	@GetMapping({ "/cart1" })
-	public String showShoppingCart() {
-		return "NewFile";
-	}
-
 	@PostMapping("/quantityChangedPlus")
-	public String changeQuantityPlus(@ModelAttribute("basketProductId") BasketProduct basketProduct, Model model,
+	public String changeQuantityPlus(@ModelAttribute("basketProduct") BasketProduct basketProduct, Model model,
 			BindingResult bindingResult) {
 
-		int quantity = shoppingCartService.getQuantity(basketProduct.getId()) + 1;
-		shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
+		shoppingCartService.changeQuantity(basketProduct, 1);
 
 		return "redirect:/cart";
 	}
 
 	@PostMapping("/deleteProducts")
 	public String deleteBasketProducts() {
-		shoppingCartService.removeProducts();
+		
+		shoppingCartService.deleteBasketProducts();
 		return "basket";
 	}
 
 	@PostMapping("/quantityChangedMinus")
-	public String changeQuantityMinus(@ModelAttribute("basketProductId") BasketProduct basketProduct, Model model,
+	public String changeQuantityMinus(@ModelAttribute("basketProduct") BasketProduct basketProduct, Model model,
 			BindingResult bindingResult) {
-
-		int quantity = shoppingCartService.getQuantity(basketProduct.getId()) - 1;
-		if (quantity == 0)
-			shoppingCartService.removeBasketProduct(basketProduct.getId());
-		else
-			shoppingCartService.changeQuantity(basketProduct.getId(), quantity);
-
+		
+		shoppingCartService.changeQuantity(basketProduct, -1);
 		return "redirect:/cart";
 	}
 
 	@GetMapping("/removeProduct/{page}/{id}")
 	public String removeBasketProduct(@PathVariable String page, @PathVariable Integer id) {
-		shoppingCartService.removeBasketProduct(id);
+		
+		shoppingCartService.deleteBasketProductById(id);
 		return "redirect:/" + page;
 	}
 

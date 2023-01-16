@@ -1,9 +1,12 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import com.bmxApp.builder.basketProduct.BasketProductBuilder;
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
 import com.bmxApp.repository.BasketProductRepository;
@@ -30,17 +34,26 @@ public class ShoppingCartService {
 	@Autowired(required = false)
 	private ShopResearcherService shopResearcher;
 
-	public ArrayList<BasketProductDTO> getBasketProducts() {
+	public LinkedList<BasketProductDTO> getBasketProducts() {
 
 		return basketProductRepositoryService.getBasketProducts();
 	}
+	
+	public LinkedList<BasketProductDTO> getBasketProductsInCart(String shopName) {
+		
+		if(Optional.ofNullable(shopName).isPresent()) return this.getBasketProductsByShopName(shopName);
+		return this.getBasketProducts();
 
-	public float getTotalPriceForProduct(int id) {
+	}
+	
+
+
+	public float getTotalPriceForBasketProduct(int id) {
 
 		return basketProductRepositoryService.getTotalPriceForBasketProduct(id);
 	}
 
-	public void deleteBasketProduct(int id) {
+	public void deleteBasketProductById(int id) {
 
 		basketProductRepositoryService.deleteBasketProductById(id);
 	}
@@ -92,13 +105,21 @@ public class ShoppingCartService {
 		return basketProductRepositoryService.getQuantity(basketProductId);
 	}
 
-	public void changeQuantity(int id, int value) {
-		BasketProductDTO dtoBasketProduct = basketProductRepositoryService.getBasketProductById(id);
-		dtoBasketProduct.setQuantity(value);
+	public void changeQuantity(BasketProduct basketProduct, int value) {
+		
+		BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+		int productQuantity = dtoBasketProduct.getQuantity() + value;
+		
+		if(productQuantity <= 0) {
+			this.deleteBasketProductById(basketProduct.getId());
+			return;
+		}
+		
+		dtoBasketProduct.setQuantity(productQuantity);
 		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct);
 	}
 
-	public String formatPrice(float price) {
+	public String formatPrice(double price) {
 		return String.format(Locale.US, "%.2f", price);
 	}
 

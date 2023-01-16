@@ -55,10 +55,10 @@ public class BasketProductRepositoryService {
 		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
 	}
 
-	public ArrayList<BasketProductDTO> getBasketProducts() {
+	public LinkedList<BasketProductDTO> getBasketProducts() {
 		
 		List<BasketProduct> basketProductList = basketProductRepository.findAll();
-		ArrayList<BasketProductDTO> basketProductDTOList = new ArrayList<>();
+		LinkedList<BasketProductDTO> basketProductDTOList = new LinkedList<>();
 		
 		basketProductList.forEach(basketProduct -> basketProductDTOList.add(BasketProductMapper.mapToBasketProductDTO(basketProduct)));
 		

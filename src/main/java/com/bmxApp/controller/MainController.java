@@ -35,9 +35,9 @@ public class MainController {
 	@Autowired
 	private ShoppingCartService shoppingCartService;
 
-	static List<String> shopList = null;
+	//static List<String> shopList = null;
 
-	private boolean discountApplied = false;
+	//private boolean discountApplied = false;
 
 	//private Discount discountValue = new Discount();
 

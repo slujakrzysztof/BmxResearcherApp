@@ -70,7 +70,7 @@ public class MainControllerService {
 		return productDTOList;
 	}
 
-	public ArrayList<BasketProductDTO> getBasketProducts() {
+	public LinkedList<BasketProductDTO> getBasketProducts() {
 
 		return this.basketProductRepositoryService.getBasketProducts();
 	}
