@@ -47,6 +47,8 @@ public class MainController {
 		
 		//DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
 		mainControllerService.searchProducts(shopName, category);
+		mainControllerService.setCategory(category);
+		mainControllerService.setCurrentShop(shopName);
 		//if(!discount.isApplied()) {
 		//	mainControllerService.getProducts().clear();
 			//mainControllerService.setProductsSearching(shopName, category);
@@ -64,13 +66,15 @@ public class MainController {
 	@PostMapping("/addProduct")
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
 			BindingResult bindingResult) {
-		shoppingCartService.addProductToBasket(product.getId(), product.getShopName());
-		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category="
+		
+		shoppingCartService.addProductToCart(product.getId(), product.getShopName());
+		return "redirect:/search?shop=" + product.getShopName() + "&category="
 				+ Part.fromStringValue(product.getCategory()).toString();
 	}
 
 	@GetMapping("/main")
 	public String showMainPage(Model model) {
+		
 		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("basketProducts", mainControllerService.getBasketProducts());
 		return "main";
@@ -78,23 +82,18 @@ public class MainController {
 
 	@GetMapping("/applyDiscount")
 	public String applyDiscount(@ModelAttribute("discountValue") DiscountDTO discountValue, Model model) {
-		String category = Part.fromStringValue(mainControllerService.getProducts().get(0).getCategory()).toString();
-		DiscountDTO discount = mainControllerService.getShopResearcher().getDiscount();
+		
+		//String category = Part.fromStringValue(mainControllerService.getProducts().get(0).getCategory()).toString();
+		DiscountDTO discount = mainControllerService.getShopResearcherService().getDiscount();
+		discount.setValue(discountValue.getValue());
 		
 		//mainControllerService.getProducts().clear();
-		mainControllerService.setProducts(mainControllerService.getCurrentShop(), category);
-		mainControllerService.applyDiscount(mainControllerService.getProducts(),
-				(double) discount.getValue());
-		this.setDiscountApplied(true);
-		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category=" + category;
+		//mainControllerService.setProducts(mainControllerService.getCurrentShop(), category);
+		//mainControllerService.applyDiscount(mainControllerService.getProducts(),
+			//	(double) discount.getValue());
+		//this.setDiscountApplied(true);
+		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category=" + mainControllerService.getCategory();
 	}
 
-	private boolean isDiscountApplied() {
-		return discountApplied;
-	}
-
-	private void setDiscountApplied(boolean discountApplied) {
-		this.discountApplied = discountApplied;
-	}
 
 }

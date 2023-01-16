@@ -42,7 +42,8 @@ public class MainControllerService {
 
 	//private boolean partSearched = false;
 	//private String categoryEnum;
-	//private String currentShop;
+	private String currentShop;
+	private String category;
 
 	private String language = "polish";
 
