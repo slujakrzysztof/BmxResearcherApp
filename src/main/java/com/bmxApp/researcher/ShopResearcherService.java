@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
@@ -19,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.bmxApp.builder.product.ProductBuilder;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
@@ -38,7 +34,7 @@ public class ShopResearcherService {
 	private String html;
 	protected Document document;
 	private int tryCounter = 0;
-	private Elements div, productNameElements, productPriceElements, productUrlElements, imageUrlElements, pages;
+	private Elements div, productNameElements, productPriceElements, productUrlElements, imageUrlElements;
 	private String category;
 	private String shopName;
 
@@ -225,14 +221,15 @@ public class ShopResearcherService {
 			this.formatDataStructure(shopName, i);
 
 			String productName = productNameElements.get(i).text().replace("'", "");
-
-			productList.add(ProductBuilder.buildProductDTO(
-					productName, 
-					shopName, 
-					category, 
-					price, 
-					productURLComplete, 
-					imageUrlElements.get(i).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE)));
+			
+			productList.add(ProductDTO.builder()
+					  .productName(productName)
+					  .shopName(shopName)
+					  .category(category)
+					  .price(price)
+					  .url(productURLComplete)
+					  .imageUrl(imageUrlElements.get(i).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE))
+					  .build());
 		}
 
 		return productList;

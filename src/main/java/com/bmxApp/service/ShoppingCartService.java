@@ -1,25 +1,16 @@
 package com.bmxApp.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bmxApp.builder.basketProduct.BasketProductBuilder;
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
-import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.Product;
-import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
 
 @Service
@@ -93,7 +84,11 @@ public class ShoppingCartService {
 			dtoBasketProduct = basketProductRepositoryService.getBasketProductByProduct(dtoProduct);
 			dtoBasketProduct.setQuantity(dtoBasketProduct.getQuantity() + 1);
 		} else {
-			dtoBasketProduct = BasketProductBuilder.buildBasketProductDTO(dtoProduct, 1, shopName);
+			dtoBasketProduct = BasketProductDTO.builder()
+											   .productDTO(dtoProduct)
+											   .quantity(1)
+											   .shopName(shopName)
+											   .build();
 		}
 
 		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct);
