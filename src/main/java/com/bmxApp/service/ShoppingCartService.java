@@ -74,11 +74,11 @@ public class ShoppingCartService {
 		return basketProductRepositoryService.isProductInDatabase(productDTO);
 	}
 
-	public void addProductToCart(Integer productId, String shopName) {
+	public void addProductToCart(String productName, String shopName) {
 
 		BasketProductDTO dtoBasketProduct;
 
-		ProductDTO dtoProduct = productRepositoryService.getProductById(productId);
+		ProductDTO dtoProduct = productRepositoryService.getProductByProductNameAndShopName(productName, shopName);
 
 		if (this.isProductInDatabase(dtoProduct)) {
 			dtoBasketProduct = basketProductRepositoryService.getBasketProductByProduct(dtoProduct);

@@ -41,6 +41,13 @@ public class ProductRepositoryService {
 		return productDTOList;
 	}
 	
+	public ProductDTO getProductByProductNameAndShopName(String productName, String shopName) {
+		
+		Product product = productRepository.findByProductNameAndShopName(productName, shopName);
+		
+		return ProductMapper.mapToProductDTO(product);
+	}
+	
 	public List<Product> findProductsByShopNameAndCategory(String shopName, String category) {
 		return productRepository.findByShopNameAndCategory(shopName, category);
 	}

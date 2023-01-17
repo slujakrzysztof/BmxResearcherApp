@@ -57,6 +57,7 @@ public class MainController {
 		//}
 		//discount.setApplied(false);
 		//shoppingCartService.setDiscountValue(discount);
+		System.out.println("PROOOOOOOOOODUCTS: " + mainControllerService.getProductsWithDiscount(shopName, category));
 		model.addAttribute("products", mainControllerService.getProductsWithDiscount(shopName, category));
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
@@ -68,7 +69,7 @@ public class MainController {
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
 			BindingResult bindingResult) {
 		
-		shoppingCartService.addProductToCart(product.getId(), product.getShopName());
+		shoppingCartService.addProductToCart(product.getProductName(), product.getShopName());
 		return "redirect:/search?shop=" + product.getShopName() + "&category="
 				+ Part.fromStringValue(product.getCategory()).toString();
 	}

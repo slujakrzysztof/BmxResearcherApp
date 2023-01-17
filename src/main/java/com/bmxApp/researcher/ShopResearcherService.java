@@ -55,10 +55,6 @@ public class ShopResearcherService {
 	double price = 0;
 	String productURLComplete;
 
-	/*
-	 * public ShopResearcher(String html, String shopName) { this.html = html;
-	 * this.shopName = shopName; }
-	 */
 
 	public DiscountDTO getDiscount() {
 		return this.discount;
@@ -75,20 +71,6 @@ public class ShopResearcherService {
 	public void setHTML(String html) {
 		this.html = html;
 	}
-
-	public void connectToShopResearcher(String html) {
-
-	}
-
-	/*
-	 * public void startSearching(String html) { this.setHTML(html);
-	 * this.setConnection(); System.out.println("AAA: " +
-	 * PropertyManager.getInstance().URL_SEARCH_PAGE);
-	 * this.findPageUrl(this.getDocument().select(PropertyManager.getInstance().
-	 * URL_SEARCH_PAGE), true);
-	 * //this.getDocument().select(PropertyReader.getInstance().getProperty(
-	 * "urlSearch")), true); }
-	 */
 
 	public Document getDocument() {
 		return this.document;
@@ -127,18 +109,18 @@ public class ShopResearcherService {
 
 	public String findPartUrl(String category) {
 
-		String propertyName = PropertyManager.getInstance().URL_SEARCH_PAGE;
+		String propertyName = PropertyManager.getInstance().URL_SEARCH_PAGE();
 		Elements partUrls = this.getDocument().select(propertyName);
 		String categoryShop = PropertyReader.getInstance().getProperty(category.toLowerCase());
 
 		List<Element> partUrlList = partUrls.stream().filter(
-				element -> element.absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE).contains(categoryShop))
+				element -> element.absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE()).contains(categoryShop))
 				.limit(1).collect(Collectors.toList());
 
 		if (partUrlList.size() == 0)
 			throw new NotFoundException();
 
-		return partUrlList.get(0).absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE);
+		return partUrlList.get(0).absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE());
 	}
 
 	private List<String> findPagesInCategory(String partUrl) {
@@ -147,18 +129,22 @@ public class ShopResearcherService {
 
 		try {
 
-			String propertyName = PropertyManager.getInstance().PAGE_NUMBER;
-			boolean allProductsDisplay = Boolean.valueOf(PropertyManager.getInstance().ALL_PRODUCTS_DISPLAY);
+			String propertyName = PropertyManager.getInstance().PAGE_NUMBER();
+			boolean allProductsDisplay = Boolean.valueOf(PropertyManager.getInstance().ALL_PRODUCTS_DISPLAY());
 			Elements pageUrlElements = this.getDocument().select(propertyName);
-			long listSize = pageUrlElements.size();
 
-			pageUrlList = pageUrlElements.stream().map(pageUrlElement -> pageUrlElement.attr("href")).distinct()
+			pageUrlList = pageUrlElements.stream().map(pageUrlElement -> pageUrlElement.attr("href"))
+					.map(pageUrlElement -> pageUrlElement = pageUrlElement.replaceAll("\\s", "")).distinct()
 					.collect(Collectors.toList());
 
+			long listSize = pageUrlList.size();
+			
 			System.out.println("PAGE URL LIST : " + pageUrlList);
 			
-			if (allProductsDisplay)
-				return pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList());
+			if (allProductsDisplay) {
+				System.out.println("HAHAH: " + pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList()));
+				pageUrlList = pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList());
+			}
 			else if (pageUrlList.isEmpty())
 				pageUrlList.add(partUrl);
 			else if(pageUrlList.get(0).isBlank()) {
@@ -176,15 +162,21 @@ public class ShopResearcherService {
 
 	private void getProductsFromPage(String shopName) {
 
-		div = this.getDocument().select(PropertyManager.getInstance().DIV);// PropertyReader.getInstance().getProperty("div"));
-		productNameElements = div.select(PropertyManager.getInstance().PRODUCT_NAME);
-		productPriceElements = div.select(PropertyManager.getInstance().PRODUCT_PRICE);
-		productUrlElements = div.select(PropertyManager.getInstance().PRODUCT_URL);
+		div = this.getDocument().select(PropertyManager.getInstance().DIV());// PropertyReader.getInstance().getProperty("div"));
+		productNameElements = div.select(PropertyManager.getInstance().PRODUCT_NAME());
+		productPriceElements = div.select(PropertyManager.getInstance().PRODUCT_PRICE());
+		productUrlElements = div.select(PropertyManager.getInstance().PRODUCT_URL());
 		// DLA MANYFEST DOC DLA INNYCH DIV
 		if (shopName.equals(Shop.MANYFESTBMX.name().toLowerCase()))
-			imageUrlElements = this.getDocument().select(PropertyManager.getInstance().IMAGE_URL);
+			imageUrlElements = this.getDocument().select(PropertyManager.getInstance().IMAGE_URL());
 		else
-			imageUrlElements = div.select(PropertyManager.getInstance().IMAGE_URL);
+			imageUrlElements = div.select(PropertyManager.getInstance().IMAGE_URL());
+		
+		System.out.println("DIIIIIIIV: "  + div);
+		System.out.println("NAAAAAAAAMES : " + productNameElements);
+		System.out.println("PRIIIIIICES : " + productPriceElements);
+		System.out.println("URRRRRRRRL : " + productUrlElements);
+		System.out.println("IMG URRRRRRRRL : " + imageUrlElements);
 		
 	}
 	
@@ -197,17 +189,17 @@ public class ShopResearcherService {
 				price = Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", ""));
 			} catch (NumberFormatException ex) {
 				price = Double.parseDouble(productPriceElements.get(i)
-						.select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT).text().replaceAll("[^\\d.]", ""));
+						.select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT()).text().replaceAll("[^\\d.]", ""));
 				// PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
 			}
 		}
 
 		if (shopName.equalsIgnoreCase(Shop.AVEBMX.name())) {
 			productURLComplete = "https://avebmx.pl"
-					+ productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE);
+					+ productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE());
 			// PropertyReader.getInstance().getProperty("urlAtrribute"));
 		} else {
-			productURLComplete = productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE);
+			productURLComplete = productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE());
 			// PropertyReader.getInstance().getProperty("urlAtrribute"));
 		}
 
@@ -228,7 +220,7 @@ public class ShopResearcherService {
 					  .category(category)
 					  .price(price)
 					  .url(productURLComplete)
-					  .imageUrl(imageUrlElements.get(i).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE))
+					  .imageUrl(imageUrlElements.get(i).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE()))
 					  .build());
 		}
 
@@ -271,4 +263,5 @@ public class ShopResearcherService {
 		}
 		throw new NullPointerException();
 	}
+	
 }

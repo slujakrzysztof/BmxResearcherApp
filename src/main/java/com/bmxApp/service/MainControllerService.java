@@ -82,13 +82,13 @@ public class MainControllerService {
 		try {
 			PropertyReader.getInstance().connectPropertyReader(shopName);
 
-			System.out.println("HTML : " + PropertyManager.getInstance().URL);
+			System.out.println("HTML : " + PropertyManager.getInstance().URL());
 			System.out.println("HTML : " + PropertyReader.getInstance().getProperty("url"));
 			
 			if (partSelection)
-				html = PropertyManager.getInstance().URL;
+				html = PropertyManager.getInstance().URL();
 			else
-				html = PropertyManager.getInstance().SAFETY_URL;
+				html = PropertyManager.getInstance().SAFETY_URL();
 
 			System.out.println("htmmml: " + html);
 

@@ -82,12 +82,12 @@
 			<tbody>
 				<tr th:each="product : ${products}">
 					<td th:text="${product.productName}" />
-					<td th:text="${ProductFormatter.formatProductPrice(product.price)}" />
+					<td th:text="${product.price}" />
 					<td class="w-25"><img th:src="${product.imageUrl}"
 						alt="${product.imageUrl}" class="img-fluid" width=200 height=200 /></td>
 					<td><form action="#" th:action="@{addProduct}" method="post"
 							th:object="${product}">
-							<input type="hidden" th:attr="name='id'" th:value="${product.id}" />
+							<input type="hidden" th:attr="name='productName'" th:value="${product.productName}" />
 							<input type="hidden" th:attr="name='shopName'"
 								th:value="${product.shopName}" /> <input type="hidden"
 								th:attr="name='category'" th:value="${product.category}" />
