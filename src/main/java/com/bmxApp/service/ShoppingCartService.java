@@ -11,6 +11,7 @@ import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.BasketProduct;
+import com.bmxApp.model.Product;
 import com.bmxApp.researcher.ShopResearcherService;
 
 @Service
@@ -25,30 +26,43 @@ public class ShoppingCartService {
 	@Autowired(required = false)
 	private ShopResearcherService shopResearcher;
 
-	public LinkedList<BasketProductDTO> getBasketProducts() {
+	public LinkedList<BasketProductDTO> getBasketProductsDTO() {
 
+		return basketProductRepositoryService.getBasketProductsDTO();
+	}
+	
+	public LinkedList<BasketProduct> getBasketProducts() {
 		return basketProductRepositoryService.getBasketProducts();
 	}
 	
-	public LinkedList<BasketProductDTO> getBasketProductsInCart(String shopName) {
+	public LinkedList<BasketProduct> getBasketProductsInCart(String shopName) {
 		
 		if(Optional.ofNullable(shopName).isPresent()) return this.getBasketProductsByShopName(shopName);
 		return this.getBasketProducts();
-
 	}
+	
 
 	public float getTotalPriceForBasketProduct(int id) {
 
 		return basketProductRepositoryService.getTotalPriceForBasketProduct(id);
 	}
 
-	public void deleteBasketProductById(int id) {
+	public void deleteBasketProductByProduct(Product product) {
 
+		basketProductRepositoryService.deleteBasketProductByProduct(product);
+	}
+	
+	public void deleteBasketProductById(int id) {
+		
 		basketProductRepositoryService.deleteBasketProductById(id);
 	}
 
-	public LinkedList<BasketProductDTO> getBasketProductsByShopName(String shopName) {
+	public LinkedList<BasketProductDTO> getBasketProductsDTOByShopName(String shopName) {
 
+		return basketProductRepositoryService.getBasketProductsDTOByShopName(shopName);
+	}
+	
+	public LinkedList<BasketProduct> getBasketProductsByShopName(String shopName) {
 		return basketProductRepositoryService.getBasketProductsByShopName(shopName);
 	}
 
@@ -70,20 +84,23 @@ public class ShoppingCartService {
 		basketProductRepositoryService.deleteBasketProducts();
 	}
 
-	public boolean isProductInDatabase(ProductDTO productDTO) {
-		return basketProductRepositoryService.isProductInDatabase(productDTO);
+	public boolean isProductInCart(int productId) {
+		return basketProductRepositoryService.isProductInDatabase(productId);
 	}
 
-	public void addProductToCart(String productName, String shopName) {
+	public void addProductToCart(String productName, String shopName, int productId) {
 
 		BasketProductDTO dtoBasketProduct;
 
 		ProductDTO dtoProduct = productRepositoryService.getProductByProductNameAndShopName(productName, shopName);
+		
+		Product product = productRepositoryService.getProduct(dtoProduct);
 
-		if (this.isProductInDatabase(dtoProduct)) {
-			dtoBasketProduct = basketProductRepositoryService.getBasketProductByProduct(dtoProduct);
+		if (this.isProductInCart(productId)) {
+			dtoBasketProduct = basketProductRepositoryService.getBasketProductByProductId(productId);
 			dtoBasketProduct.setQuantity(dtoBasketProduct.getQuantity() + 1);
 		} else {
+			System.out.println("I'm here");
 			dtoBasketProduct = BasketProductDTO.builder()
 											   .productDTO(dtoProduct)
 											   .quantity(1)
@@ -91,7 +108,7 @@ public class ShoppingCartService {
 											   .build();
 		}
 
-		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct);
+		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct, product);
 	}
 
 	public int getQuantity(int basketProductId) {
@@ -101,6 +118,9 @@ public class ShoppingCartService {
 	public void changeQuantity(BasketProduct basketProduct, int value) {
 		
 		BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+		
+		Product product = basketProduct.getProduct();
+		
 		int productQuantity = dtoBasketProduct.getQuantity() + value;
 		
 		if(productQuantity <= 0) {
@@ -109,7 +129,7 @@ public class ShoppingCartService {
 		}
 		
 		dtoBasketProduct.setQuantity(productQuantity);
-		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct);
+		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct, product);
 	}
 
 	public String formatPrice(double price) {

@@ -27,6 +27,10 @@ public class BasketProductRepositoryService {
 		return basketProductRepository.getTotalPrice();
 	}
 	
+	public LinkedList<BasketProduct> getBasketProducts() {
+		return (LinkedList<BasketProduct>) basketProductRepository.findAll();
+	}
+	
 	public float getTotalPriceForShop(String shopName) {
 		
 		return basketProductRepository.getTotalPriceForShop(shopName);
@@ -37,7 +41,7 @@ public class BasketProductRepositoryService {
 		return basketProductRepository.getTotalPriceForBasketProduct(id);
 	}
 	
-	public LinkedList<BasketProductDTO> getBasketProductsByShopName(String shopName) {
+	public LinkedList<BasketProductDTO> getBasketProductsDTOByShopName(String shopName) {
 		
 		List<BasketProduct> basketProducts = basketProductRepository.findByShopName(shopName);
 		LinkedList<BasketProductDTO> dtoBasketProducts = new LinkedList<>();
@@ -46,16 +50,12 @@ public class BasketProductRepositoryService {
 		
 		return dtoBasketProducts;
 	}
-
-	public BasketProductDTO getBasketProductByProduct(ProductDTO productDTO) {
-		
-		Product product = ProductMapper.mapToProduct(productDTO);
-		BasketProduct basketProduct = basketProductRepository.findByProduct(product);
-		
-		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
+	
+	public LinkedList<BasketProduct> getBasketProductsByShopName(String shopName) {
+		return (LinkedList<BasketProduct>) basketProductRepository.findByShopName(shopName);
 	}
 
-	public LinkedList<BasketProductDTO> getBasketProducts() {
+	public LinkedList<BasketProductDTO> getBasketProductsDTO() {
 		
 		List<BasketProduct> basketProductList = basketProductRepository.findAll();
 		LinkedList<BasketProductDTO> basketProductDTOList = new LinkedList<>();
@@ -65,9 +65,11 @@ public class BasketProductRepositoryService {
 		return basketProductDTOList;
 	}
 
-	public boolean isProductInDatabase(ProductDTO productDTO) {
+	public boolean isProductInDatabase(int productId) {
 		
-		Optional<BasketProductDTO> dtoBasketProduct = Optional.ofNullable(this.getBasketProductByProduct(productDTO));
+		Optional<BasketProductDTO> dtoBasketProduct = Optional.ofNullable(this.getBasketProductByProductId(productId));
+		
+		System.out.println("DBAAAAAAAAAAAAAASKET : " + dtoBasketProduct);
 		
 		if (dtoBasketProduct.isPresent())
 			return true;
@@ -76,9 +78,10 @@ public class BasketProductRepositoryService {
 
 	public BasketProductDTO getBasketProductByProductId(int productId) {
 		
-		BasketProduct basketProduct = basketProductRepository.findByProductId(productId);
+		Optional<BasketProduct> basketProduct = Optional.ofNullable(basketProductRepository.findByProductId(productId));
 		
-		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
+		if(basketProduct.isEmpty()) return null;
+		return BasketProductMapper.mapToBasketProductDTO(basketProduct.get());
 	}
 
 	public BasketProductDTO getBasketProductById(int id) {
@@ -88,9 +91,9 @@ public class BasketProductRepositoryService {
 		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
 	}
 
-	public void insertUpdateBasketProduct(BasketProductDTO basketProductDTO) {
+	public void insertUpdateBasketProduct(BasketProductDTO basketProductDTO, Product product) {
 		
-		BasketProduct basketProduct = BasketProductMapper.mapToBasketProduct(basketProductDTO);
+		BasketProduct basketProduct = BasketProductMapper.mapToBasketProduct(basketProductDTO, product);
 		
 		basketProductRepository.save(basketProduct);
 	}
@@ -107,7 +110,8 @@ public class BasketProductRepositoryService {
 		basketProductRepository.deleteById(id);
 	}
 	
+	public void deleteBasketProductByProduct(Product product) {
+		basketProductRepository.deleteByProduct(product);
+	}
 	
-	
-
 }

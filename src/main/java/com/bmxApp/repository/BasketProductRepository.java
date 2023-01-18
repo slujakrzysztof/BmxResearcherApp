@@ -29,11 +29,12 @@ public interface BasketProductRepository extends JpaRepository<BasketProduct, In
 	@Query(value = "Select quantity from BasketProduct where id = ?1")
 	public float getProductQuantity(int id);
 	
+	public float deleteByProduct(Product product);
+	
 	public BasketProduct findByProduct(Product product);
 	
 	BasketProduct findByProductId(int productId);
 	
 	BasketProduct findById(int id);
-	
 
 }

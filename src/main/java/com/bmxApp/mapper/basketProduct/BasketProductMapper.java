@@ -3,6 +3,7 @@ package com.bmxApp.mapper.basketProduct;
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.BasketProduct;
+import com.bmxApp.model.Product;
 
 public class BasketProductMapper {
 
@@ -15,11 +16,11 @@ public class BasketProductMapper {
 				   .build();
 	}
 	
-	public static BasketProduct mapToBasketProduct(BasketProductDTO basketProductDTO) {
+	public static BasketProduct mapToBasketProduct(BasketProductDTO basketProductDTO, Product product) {
 		
 		BasketProduct basketProduct = new BasketProduct();
 		
-		basketProduct.setProduct(ProductMapper.mapToProduct(basketProductDTO.getProductDTO()));
+		basketProduct.setProduct(product);
 		basketProduct.setQuantity(basketProductDTO.getQuantity());
 		basketProduct.setShopName(basketProductDTO.getShopName());
 		

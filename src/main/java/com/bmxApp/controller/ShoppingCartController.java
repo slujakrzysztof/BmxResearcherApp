@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.dto.shopModel.ShopModelDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.model.BasketProduct;
+import com.bmxApp.model.Product;
+import com.bmxApp.service.ProductRepositoryService;
 import com.bmxApp.service.ShoppingCartService;
 
 @Controller
@@ -26,6 +29,9 @@ public class ShoppingCartController {
 
 	@Autowired
 	private ShoppingCartService shoppingCartService;
+	
+	@Autowired
+	private ProductRepositoryService productRepositoryService;
 
 	@GetMapping({ "/cart", "/cart/{shop}" })
 	public String showShoppingCart(@PathVariable(required = false) String shopName, Model model) {
@@ -70,7 +76,7 @@ public class ShoppingCartController {
 	}
 
 	@GetMapping("/removeProduct/{page}/{id}")
-	public String removeBasketProduct(@PathVariable String page, @PathVariable Integer id) {
+	public String removeBasketProduct(@PathVariable String page, @PathVariable int id) {
 		
 		shoppingCartService.deleteBasketProductById(id);
 		return "redirect:/" + page;

@@ -65,47 +65,10 @@ public class ProductRepositoryService {
 		return ProductMapper.mapToProductDTO(product);
 	}
 
-	/*
-	@Transactional
-	public void insertOrUpdateProduct(Product product) {
-		productDatabaseHandler.save(product);
+	public Product getProduct(ProductDTO dtoProduct) {
+		
+		Product product = productRepository.findByProductNameAndShopName(dtoProduct.getProductName(), dtoProduct.getShopName());
+		
+		return product;
 	}
-
-	public Product getProductById(int id) {
-		return productDatabaseHandler.findById(id);
-	}
-
-	@Transactional
-	public void insertAllProducts(Iterable<Product> products) {
-		productDatabaseHandler.saveAll(products);
-	}
-
-	@Transactional
-	public void deleteProduct(Product product) {
-		productDatabaseHandler.delete(product);
-	}
-
-	@Transactional
-	public void deleteAllProducts() {
-		productDatabaseHandler.deleteAll();
-	}
-
-	@Transactional
-	public boolean wasPartSearchedPrevious(String shopName, String category) {
-		if (productDatabaseHandler.findByShopNameAndCategory(shopName, category).isEmpty())
-			return false;
-		return true;
-	}
-
-	public boolean wasShopUsed(String shopName) {
-		if (productDatabaseHandler.findByShopName(shopName).isEmpty())
-			return false;
-		return true;
-	}
-
-	@Transactional
-	public Product getProductByName(String productName, String shopName) {
-		return productDatabaseHandler.findByProductNameAndShopName(productName, shopName);
-	}
-*/
 }

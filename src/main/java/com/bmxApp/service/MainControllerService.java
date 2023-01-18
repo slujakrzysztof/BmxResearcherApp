@@ -72,7 +72,7 @@ public class MainControllerService {
 
 	public LinkedList<BasketProductDTO> getBasketProducts() {
 
-		return this.basketProductRepositoryService.getBasketProducts();
+		return this.basketProductRepositoryService.getBasketProductsDTO();
 	}
 
 	public void search(String category, String shopName, boolean partSelection) {

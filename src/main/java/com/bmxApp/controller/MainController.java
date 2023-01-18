@@ -69,9 +69,9 @@ public class MainController {
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
 			BindingResult bindingResult) {
 		
-		shoppingCartService.addProductToCart(product.getProductName(), product.getShopName());
+		shoppingCartService.addProductToCart(product.getProductName(), product.getShopName(), product.getId());
 		return "redirect:/search?shop=" + product.getShopName() + "&category="
-				+ Part.fromStringValue(product.getCategory()).toString();
+				+ product.getCategory();
 	}
 
 	@GetMapping("/main")
