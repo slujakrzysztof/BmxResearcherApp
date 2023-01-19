@@ -43,11 +43,11 @@
 
 		<div class="cart-items-container">
 			<div class="cart-item" th:each="basketProduct : ${basketProducts}">
-				<a th:href="@{/removeProduct/main/{id}(id=${basketProduct.id})}">
+				<a th:href="@{/removeProduct/main/{productId}(productId=${basketProduct.productId})}">
 					<span class="fas fa-times"></span>
 				</a>
 				<div class="content">
-					<h3>[[${basketProduct.productDTO.productName}]] |
+					<h3>[[${basketProduct.productName}]] |
 						[[${basketProduct.shopName}]]</h3>
 				</div>
 			</div>

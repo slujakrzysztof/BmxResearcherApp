@@ -10,7 +10,8 @@ public class BasketProductMapper {
 	public static BasketProductDTO mapToBasketProductDTO(BasketProduct basketProduct) {
 		
 		return BasketProductDTO.builder()
-				   .productDTO(ProductMapper.mapToProductDTO(basketProduct.getProduct()))
+				   .productId(basketProduct.getProduct().getId())
+				   .productName(basketProduct.getProduct().getProductName())
 				   .quantity(basketProduct.getQuantity())
 				   .shopName(basketProduct.getShopName())
 				   .build();

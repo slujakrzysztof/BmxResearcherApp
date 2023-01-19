@@ -17,6 +17,7 @@ import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.manager.PropertyManager;
+import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.BasketProduct;
 import com.bmxApp.model.Product;
@@ -52,27 +53,38 @@ public class MainControllerService {
 	@Autowired(required = false)
 	ShopResearcherService shopResearcherService;
 
-	public ArrayList<ProductDTO> getProducts(String shopName, String category) {
+	public ArrayList<Product> getProducts(String shopName, String category) {
 
 		return this.productRepositoryService.getSearchedProducts(shopName, category);
 	}
 	
 	public ArrayList<ProductDTO> getProductsWithDiscount(String shopName, String category) {
 		
-		ArrayList<ProductDTO> productDTOList = this.getProducts(shopName, category);
+		ArrayList<Product> productList = this.getProducts(shopName, category);
 		DiscountDTO discountDTO = this.getShopResearcherService().getDiscount();
+		ArrayList<ProductDTO> productDTOList = new ArrayList<>();
 		
-		productDTOList.forEach(productDTO -> {
-			double discountPrice = productDTO.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0);
-			productDTO.setPrice(discountPrice);	
+		productList.forEach(product -> {
+			
+			ProductDTO dtoProduct = ProductMapper.mapToProductDTO(product);
+			dtoProduct.setPrice(product.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0));
+			productDTOList.add(dtoProduct);
 		});
 		
 		return productDTOList;
 	}
 
-	public LinkedList<BasketProductDTO> getBasketProducts() {
+	public ArrayList<BasketProductDTO> getBasketProducts() {
 
-		return this.basketProductRepositoryService.getBasketProductsDTO();
+		ArrayList<BasketProduct> basketProductsList = this.basketProductRepositoryService.getBasketProducts(); 
+		ArrayList<BasketProductDTO> basketProductsDtoList = new ArrayList<>();
+		
+		basketProductsList.forEach(basketProduct -> {
+			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+			basketProductsDtoList.add(dtoBasketProduct);
+		});
+		
+		return basketProductsDtoList;
 	}
 
 	public void search(String category, String shopName, boolean partSelection) {

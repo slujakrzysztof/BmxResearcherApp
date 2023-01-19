@@ -27,8 +27,8 @@ public class BasketProductRepositoryService {
 		return basketProductRepository.getTotalPrice();
 	}
 	
-	public LinkedList<BasketProduct> getBasketProducts() {
-		return (LinkedList<BasketProduct>) basketProductRepository.findAll();
+	public ArrayList<BasketProduct> getBasketProducts() {
+		return (ArrayList<BasketProduct>) basketProductRepository.findAll();
 	}
 	
 	public float getTotalPriceForShop(String shopName) {
@@ -41,7 +41,7 @@ public class BasketProductRepositoryService {
 		return basketProductRepository.getTotalPriceForBasketProduct(id);
 	}
 	
-	public LinkedList<BasketProductDTO> getBasketProductsDTOByShopName(String shopName) {
+	/*public LinkedList<BasketProductDTO> getBasketProductsDTOByShopName(String shopName) {
 		
 		List<BasketProduct> basketProducts = basketProductRepository.findByShopName(shopName);
 		LinkedList<BasketProductDTO> dtoBasketProducts = new LinkedList<>();
@@ -49,13 +49,13 @@ public class BasketProductRepositoryService {
 		basketProducts.forEach(basketProduct -> dtoBasketProducts.add(BasketProductMapper.mapToBasketProductDTO(basketProduct)));
 		
 		return dtoBasketProducts;
-	}
+	}*/
 	
 	public LinkedList<BasketProduct> getBasketProductsByShopName(String shopName) {
 		return (LinkedList<BasketProduct>) basketProductRepository.findByShopName(shopName);
 	}
 
-	public LinkedList<BasketProductDTO> getBasketProductsDTO() {
+	/*public LinkedList<BasketProductDTO> getBasketProductsDTO() {
 		
 		List<BasketProduct> basketProductList = basketProductRepository.findAll();
 		LinkedList<BasketProductDTO> basketProductDTOList = new LinkedList<>();
@@ -63,37 +63,53 @@ public class BasketProductRepositoryService {
 		basketProductList.forEach(basketProduct -> basketProductDTOList.add(BasketProductMapper.mapToBasketProductDTO(basketProduct)));
 		
 		return basketProductDTOList;
-	}
+	}*/
 
-	public boolean isProductInDatabase(int productId) {
+	public boolean isProductInDatabase(Product product) {
 		
-		Optional<BasketProductDTO> dtoBasketProduct = Optional.ofNullable(this.getBasketProductByProductId(productId));
+		Optional<BasketProduct> basketProduct = Optional.ofNullable(this.getBasketProductByProduct(product));
 		
-		System.out.println("DBAAAAAAAAAAAAAASKET : " + dtoBasketProduct);
+		System.out.println("DBAAAAAAAAAAAAAASKET : " + basketProduct);
 		
-		if (dtoBasketProduct.isPresent())
+		if (basketProduct.isPresent())
 			return true;
 		return false;
 	}
+	
+	public BasketProduct getBasketProductById(int id) {
+		
+		Optional<BasketProduct> basketProduct = Optional.ofNullable(basketProductRepository.findById(id));
+		
+		if(basketProduct.isEmpty()) return null;
+		return basketProduct.get();
+	}
+	
+	public BasketProduct getBasketProductByProduct(Product product) {
+		
+		Optional<BasketProduct> basketProduct = Optional.ofNullable(basketProductRepository.findByProduct(product));
+		
+		if(basketProduct.isEmpty()) return null;
+		return basketProduct.get();
+	}
 
-	public BasketProductDTO getBasketProductByProductId(int productId) {
+	/*public BasketProductDTO getBasketProductByProductId(int productId) {
 		
 		Optional<BasketProduct> basketProduct = Optional.ofNullable(basketProductRepository.findByProductId(productId));
 		
 		if(basketProduct.isEmpty()) return null;
 		return BasketProductMapper.mapToBasketProductDTO(basketProduct.get());
-	}
+	}*/
 
-	public BasketProductDTO getBasketProductById(int id) {
+	/*public BasketProductDTO getBasketProductById(int id) {
 		
 		BasketProduct basketProduct = basketProductRepository.findById(id);
 		
 		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
-	}
+	}*/
 
-	public void insertUpdateBasketProduct(BasketProductDTO basketProductDTO, Product product) {
+	public void insertUpdateBasketProduct(BasketProduct basketProduct) {
 		
-		BasketProduct basketProduct = BasketProductMapper.mapToBasketProduct(basketProductDTO, product);
+		//BasketProduct basketProduct = BasketProductMapper.mapToBasketProduct(basketProduct);
 		
 		basketProductRepository.save(basketProduct);
 	}

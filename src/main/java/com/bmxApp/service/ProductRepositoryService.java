@@ -28,47 +28,50 @@ public class ProductRepositoryService {
 	ProductRepository productRepository;
 
 	@Transactional
-	public ArrayList<ProductDTO> getSearchedProducts(String shopName, String category) {
+	public ArrayList<Product> getSearchedProducts(String shopName, String category) {
 		
-		List<Product> productList;
-		ArrayList<ProductDTO> productDTOList = new ArrayList<>();
+		List<Product> productList = productRepository.findByShopNameAndCategory(shopName, category);
+		//ArrayList<ProductDTO> productDTOList = new ArrayList<>();
 		
-		productList = productRepository.findByShopNameAndCategory(shopName, category);
-		productList.forEach(product -> 
+		/*productList.forEach(product -> 
 			productDTOList.add(ProductMapper.mapToProductDTO(product))
-		);
+		);*/
 		
-		return productDTOList;
+		return (ArrayList<Product>) productList;
 	}
 	
-	public ProductDTO getProductByProductNameAndShopName(String productName, String shopName) {
+	public Product getProductByProductNameAndShopName(String productName, String shopName) {
 		
 		Product product = productRepository.findByProductNameAndShopName(productName, shopName);
 		
-		return ProductMapper.mapToProductDTO(product);
+		return product;
+				//ProductMapper.mapToProductDTO(product);
 	}
 	
-	public List<Product> findProductsByShopNameAndCategory(String shopName, String category) {
+	public List<Product> getProductsByShopNameAndCategory(String shopName, String category) {
+		
 		return productRepository.findByShopNameAndCategory(shopName, category);
 	}
 	
 	public boolean isProductInDatabase(String shopName, String category) {
-		List<Product> productList = this.findProductsByShopNameAndCategory(shopName, category);
+		
+		List<Product> productList = this.getProductsByShopNameAndCategory(shopName, category);
 		if(productList.isEmpty()) return false;
 		return true;
 	}
 	
-	public ProductDTO getProductById(int id) {
+	public Product getProductById(int id) {
 		
 		Product product = productRepository.findById(id);
 		
-		return ProductMapper.mapToProductDTO(product);
+		return product;
+				//ProductMapper.mapToProductDTO(product);
 	}
 
-	public Product getProduct(ProductDTO dtoProduct) {
+	/*public Product getProduct(ProductDTO dtoProduct) {
 		
 		Product product = productRepository.findByProductNameAndShopName(dtoProduct.getProductName(), dtoProduct.getShopName());
 		
 		return product;
-	}
+	}*/
 }

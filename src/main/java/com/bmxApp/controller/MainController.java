@@ -69,13 +69,15 @@ public class MainController {
 	public String addProductToBasket(@ModelAttribute("product") Product product, Model model,
 			BindingResult bindingResult) {
 		
-		shoppingCartService.addProductToCart(product.getProductName(), product.getShopName(), product.getId());
+		shoppingCartService.addProductToCart(product.getProductName(), product.getShopName());
 		return "redirect:/search?shop=" + product.getShopName() + "&category="
 				+ product.getCategory();
 	}
 
 	@GetMapping("/main")
 	public String showMainPage(Model model) {
+		
+		System.out.println("BAAAAAAAAASKET: " + mainControllerService.getBasketProducts());
 		
 		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("basketProducts", mainControllerService.getBasketProducts());

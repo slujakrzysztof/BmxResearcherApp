@@ -1,8 +1,11 @@
 package com.bmxApp.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,21 +29,38 @@ public class ShoppingCartService {
 	@Autowired(required = false)
 	private ShopResearcherService shopResearcher;
 
-	public LinkedList<BasketProductDTO> getBasketProductsDTO() {
+	public ArrayList<BasketProduct> getBasketProducts() {
 
-		return basketProductRepositoryService.getBasketProductsDTO();
-	}
-	
-	public LinkedList<BasketProduct> getBasketProducts() {
 		return basketProductRepositoryService.getBasketProducts();
 	}
-	
-	public LinkedList<BasketProduct> getBasketProductsInCart(String shopName) {
+
+	public LinkedList<BasketProductDTO> getBasketProductsInCart(String shopName) {
 		
-		if(Optional.ofNullable(shopName).isPresent()) return this.getBasketProductsByShopName(shopName);
-		return this.getBasketProducts();
+		ArrayList<BasketProduct> basketProducts = this.getBasketProducts();
+		LinkedList<BasketProductDTO> dtoBasketProducts = new LinkedList<>();
+		
+		basketProducts.forEach(basketProduct -> {
+			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+			dtoBasketProducts.add(dtoBasketProduct);
+		});
+		
+		if(Optional.ofNullable(shopName).isPresent())  {	
+			
+			List<BasketProductDTO> dtoBasketProductsByShopName = dtoBasketProducts.stream().
+					filter(basketProduct -> basketProduct.getShopName().equals(shopName)).collect(Collectors.toList());
+			
+			return (LinkedList<BasketProductDTO>) dtoBasketProductsByShopName;
+		}
+		return dtoBasketProducts;
 	}
 	
+	public void deleteBasketProductByProductId(int productId) {
+		
+		Product product = productRepositoryService.getProductById(productId);
+		int id = basketProductRepositoryService.getBasketProductByProduct(product).getId();
+		
+		basketProductRepositoryService.deleteBasketProductById(id);
+	}
 
 	public float getTotalPriceForBasketProduct(int id) {
 
@@ -51,18 +71,14 @@ public class ShoppingCartService {
 
 		basketProductRepositoryService.deleteBasketProductByProduct(product);
 	}
-	
+
 	public void deleteBasketProductById(int id) {
-		
+
 		basketProductRepositoryService.deleteBasketProductById(id);
 	}
 
-	public LinkedList<BasketProductDTO> getBasketProductsDTOByShopName(String shopName) {
-
-		return basketProductRepositoryService.getBasketProductsDTOByShopName(shopName);
-	}
-	
 	public LinkedList<BasketProduct> getBasketProductsByShopName(String shopName) {
+
 		return basketProductRepositoryService.getBasketProductsByShopName(shopName);
 	}
 
@@ -84,16 +100,29 @@ public class ShoppingCartService {
 		basketProductRepositoryService.deleteBasketProducts();
 	}
 
-	public boolean isProductInCart(int productId) {
-		return basketProductRepositoryService.isProductInDatabase(productId);
+	public boolean isProductInCart(Product product) {
+		
+		return basketProductRepositoryService.isProductInDatabase(product);
 	}
 
-	public void addProductToCart(String productName, String shopName, int productId) {
+	public void addProductToCart(String productName, String shopName) {
 
-		BasketProductDTO dtoBasketProduct;
+		Product product = productRepositoryService.getProductByProductNameAndShopName(productName, shopName);
+		BasketProduct basketProduct;
+		
+		if (this.isProductInCart(product)) {
+			basketProduct = basketProductRepositoryService.getBasketProductByProduct(product);
+			basketProduct.setQuantity(basketProduct.getQuantity() + 1);
+		} else {
+			basketProduct = new BasketProduct(product, 1, shopName);
+		}
+		
+		basketProductRepositoryService.insertUpdateBasketProduct(basketProduct);
+		
+		/*BasketProductDTO dtoBasketProduct;
 
 		ProductDTO dtoProduct = productRepositoryService.getProductByProductNameAndShopName(productName, shopName);
-		
+
 		Product product = productRepositoryService.getProduct(dtoProduct);
 
 		if (this.isProductInCart(productId)) {
@@ -101,14 +130,10 @@ public class ShoppingCartService {
 			dtoBasketProduct.setQuantity(dtoBasketProduct.getQuantity() + 1);
 		} else {
 			System.out.println("I'm here");
-			dtoBasketProduct = BasketProductDTO.builder()
-											   .productDTO(dtoProduct)
-											   .quantity(1)
-											   .shopName(shopName)
-											   .build();
+			dtoBasketProduct = BasketProductDTO.builder().productDTO(dtoProduct).quantity(1).shopName(shopName).build();
 		}
 
-		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct, product);
+		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct, product);*/
 	}
 
 	public int getQuantity(int basketProductId) {
@@ -116,20 +141,31 @@ public class ShoppingCartService {
 	}
 
 	public void changeQuantity(BasketProduct basketProduct, int value) {
+
+		BasketProduct bProduct = basketProduct;
 		
-		BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+		bProduct.setQuantity(basketProduct.getQuantity() + value);
 		
-		Product product = basketProduct.getProduct();
-		
-		int productQuantity = dtoBasketProduct.getQuantity() + value;
-		
-		if(productQuantity <= 0) {
-			this.deleteBasketProductById(basketProduct.getId());
+		if(bProduct.getQuantity() <= 0) {
+			this.deleteBasketProductById(bProduct.getId());
 			return;
 		}
 		
+		basketProductRepositoryService.insertUpdateBasketProduct(bProduct);
+		
+		/*BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+
+		Product product = basketProduct.getProduct();
+
+		int productQuantity = dtoBasketProduct.getQuantity() + value;
+
+		if (productQuantity <= 0) {
+			this.deleteBasketProductById(basketProduct.getId());
+			return;
+		}
+
 		dtoBasketProduct.setQuantity(productQuantity);
-		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct, product);
+		basketProductRepositoryService.insertUpdateBasketProduct(dtoBasketProduct, product);*/
 	}
 
 	public String formatPrice(double price) {
