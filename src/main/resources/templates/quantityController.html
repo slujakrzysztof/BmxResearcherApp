@@ -9,8 +9,8 @@
 				<li class="page-item">
 					<form action="#" th:action="@{/quantityChangedMinus}"
 						th:object="${basketProductId}" method="post">
-						<input type="hidden" th:attr="name='id'"
-							th:value="${basketProductId.id}" />
+						<input type="hidden" th:attr="name='productId'"
+							th:value="${basketProductId.productId}" />
 						<button type="submit" value="submit">
 							<b>-</b>
 						</button>
@@ -22,8 +22,8 @@
 				<li class="page-item">
 					<form action="#" th:action="@{/quantityChangedPlus}"
 						th:object="${basketProductId}" method="post">
-						<input type="hidden" th:attr="name='id'"
-							th:value="${basketProductId.id}" />
+						<input type="hidden" th:attr="name='productId'"
+							th:value="${basketProductId.productId}" />
 						<button type="submit" value="submit">
 							<b>+</b>
 						</button>

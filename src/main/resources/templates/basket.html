@@ -25,7 +25,7 @@
 						<th:block
 							th:each="shopModel : ${T(com.bmxApp.enums.Shop).getShops()}">
 							<li class="nav-item"><a class="nav-link" aria-current="page"
-								th:href="@{/cart/{shop}(shop=${shopModel})}"
+								th:href="@{/cart/{shopName}(shopName=${shopModel.name()})}"
 								th:value="${shopModel}" th:text="${shopModel}"></a></li>
 						</th:block>
 					</ul>
@@ -35,37 +35,37 @@
 						<div class="col-md-12 col-lg-8">
 							<div class="items">
 								<th:block th:each="basketProduct : ${basketProducts}">
-									<div class="product"
-										th:with="product = ${basketProduct.product}">
+									  <div class="dtoProduct"
+										th:with="dtoProduct = ${basketProduct.dtoProduct}">
 										<div class="row">
 											<div class="col-md-3">
 												<img class="img-fluid mx-auto d-block image"
-													th:src="@{${product.imageUrl}}">
+													th:src="@{${dtoProduct.imageUrl}}">
 											</div>
 											<div class="col-md-8">
 												<div class="info">
 													<div class="row">
 														<div class="col-md-5 product-name">
 															<div class="product-name">
-																<a th:href="@{${product.url}}">[[${product.productName}]]</a>
+																<a th:href="@{${dtoProduct.url}}">[[${basketProduct.dtoProduct.productName}]]</a>
 																<div class="product-info">
 																	<div>
-																		[[#{singlePrice}]] <span class="value">[[${product.formatPrice()}]]</span>
+																		[[#{singlePrice}]] <span class="value">[[${dtoProduct.price}]]</span>
 																	</div>
 																	<div>
-																		[[#{shopName}]] <span class="value">[[${product.shopName}]]</span>
+																		[[#{shopName}]] <span class="value">[[${basketProduct.shopName}]]</span>
 																	</div>
 																	<div>
 																		<a class="fas fa-trash icon-dark"
-																			th:href="@{/removeProduct/cart/{id}(id=${basketProduct.id})}"></a>
+																			th:href="@{/removeProduct/cart/{productId}(productId=${basketProduct.productId})}"></a>
 																	</div>
 																	<div>
 																		<form th:object="${shopModel}" th:action="@{/search}"
 																			method="get">
 																			<input type="hidden" name="shop"
-																				th:value="${product.shopName}"> <input
+																				th:value="${dtoProduct.shopName}"> <input
 																				type="hidden" name="category"
-																				th:value="${product.categoryEnum}">
+																				th:value="${dtoProduct.category}">
 																			<button type="submit" value="submit"
 																				class="btn btn-info">[[#{selectProducts}]]</button>
 																		</form>
@@ -75,17 +75,16 @@
 														</div>
 														<div class="col-md-4 quantity">
 															<div class="quantityController"
-																th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.product}, ${basketProduct})"></div>
+																th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.dtoProduct}, ${basketProduct})"></div>
 														</div>
 														<div class="col-md-3 price">
-															<!--  <span>[[${totalPriceByProduct.get(basketProduct.id)}]]</span>-->
-															<span>[[${basketProduct.product.price}]]</span>
+															<span>[[${basketProduct.dtoProduct.price}]]</span>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									 </div>
 								</th:block>
 								<div class="noProduct">
 									<div th:if="${#lists.isEmpty(basketProducts)}">

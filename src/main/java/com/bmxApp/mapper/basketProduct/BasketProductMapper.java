@@ -11,9 +11,9 @@ public class BasketProductMapper {
 		
 		return BasketProductDTO.builder()
 				   .productId(basketProduct.getProduct().getId())
-				   .productName(basketProduct.getProduct().getProductName())
 				   .quantity(basketProduct.getQuantity())
 				   .shopName(basketProduct.getShopName())
+				   .dtoProduct(ProductMapper.mapToProductDTO(basketProduct.getProduct()))
 				   .build();
 	}
 	

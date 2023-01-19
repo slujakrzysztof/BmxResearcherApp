@@ -51,8 +51,8 @@ public class BasketProductRepositoryService {
 		return dtoBasketProducts;
 	}*/
 	
-	public LinkedList<BasketProduct> getBasketProductsByShopName(String shopName) {
-		return (LinkedList<BasketProduct>) basketProductRepository.findByShopName(shopName);
+	public ArrayList<BasketProduct> getBasketProductsByShopName(String shopName) {
+		return (ArrayList<BasketProduct>) basketProductRepository.findByShopName(shopName);
 	}
 
 	/*public LinkedList<BasketProductDTO> getBasketProductsDTO() {
