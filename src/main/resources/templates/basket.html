@@ -35,7 +35,7 @@
 						<div class="col-md-12 col-lg-8">
 							<div class="items">
 								<th:block th:each="basketProduct : ${basketProducts}">
-									  <div class="dtoProduct"
+									<div class="dtoProduct"
 										th:with="dtoProduct = ${basketProduct.dtoProduct}">
 										<div class="row">
 											<div class="col-md-3">
@@ -75,16 +75,16 @@
 														</div>
 														<div class="col-md-4 quantity">
 															<div class="quantityController"
-																th:replace="quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct.dtoProduct}, ${basketProduct})"></div>
+																th:replace="~{quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct})}"></div>
 														</div>
 														<div class="col-md-3 price">
-															<span>[[${basketProduct.dtoProduct.price}]]</span>
+															<span>[[${totalPriceForBasketProduct.get(basketProduct.productId)}]]</span>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									 </div>
+									</div>
 								</th:block>
 								<div class="noProduct">
 									<div th:if="${#lists.isEmpty(basketProducts)}">

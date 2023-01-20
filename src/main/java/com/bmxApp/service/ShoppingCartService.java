@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -99,6 +100,11 @@ public class ShoppingCartService {
 		else if (shopName == null)
 			return this.getTotalPrice();
 		return basketProductRepositoryService.getTotalPriceForShop(shopName);
+	}
+	
+	public Map<Integer, Float> getTotalPriceForEachBasketProduct() {
+		
+		return basketProductRepositoryService.getTotalPriceForEachBasketProduct();
 	}
 
 	public void deleteBasketProducts() {

@@ -17,8 +17,8 @@ public interface BasketProductRepository extends JpaRepository<BasketProduct, In
 
 	List<BasketProduct> findByShopName(String shopName);
 
-	@Query(value = "Select (bt.quantity * pt.price) from BasketProduct bt inner join Product pt on bt.product = pt.id where bt.id=?1")
-	public float getTotalPriceForBasketProduct(int id);
+	@Query(value = "Select (bt.quantity * pt.price) from BasketProduct bt inner join Product pt on bt.product = pt.id where pt.id=?1")
+	public float getTotalPriceForBasketProduct(int productId);
 
 	@Query(value = "Select SUM(bt.quantity * pt.price) from BasketProduct bt inner join Product pt on bt.product = pt.id")
 	public float getTotalPrice();

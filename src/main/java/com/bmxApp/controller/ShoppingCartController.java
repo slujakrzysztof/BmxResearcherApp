@@ -26,6 +26,7 @@ public class ShoppingCartController {
 		
 		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("totalPrice", shoppingCartService.formatPrice(shoppingCartService.getTotalPriceForShop(shopName)));
+		model.addAttribute("totalPriceForBasketProduct", shoppingCartService.getTotalPriceForEachBasketProduct());
 		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shopName));
 		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shopName));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProductsInCart(shopName));
@@ -33,15 +34,17 @@ public class ShoppingCartController {
 	}
 
 	@PostMapping("/quantityChangedPlus")
-	public String changeQuantityPlus(@ModelAttribute("basketProduct") BasketProductDTO basketProduct, Model model,
+	public String changeQuantityPlus(@ModelAttribute("dtoBasketProduct") BasketProductDTO dtoBasketProduct, Model model,
 			BindingResult bindingResult) {
 
-		shoppingCartService.changeQuantity(basketProduct, 1);
+		//System.out.println("BPROD : " + dtoBasketProduct.getProductId());
+		
+		shoppingCartService.changeQuantity(dtoBasketProduct, 1);
 
 		return "redirect:/cart";
 	}
 
-	@PostMapping("/deleteProducts")
+	@PostMapping({"/deleteProducts", "/cart/deleteProducts"})
 	public String deleteBasketProducts() {
 		
 		shoppingCartService.deleteBasketProducts();

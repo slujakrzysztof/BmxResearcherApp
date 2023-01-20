@@ -1,8 +1,10 @@
 package com.bmxApp.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +92,21 @@ public class BasketProductRepositoryService {
 		
 		if(basketProduct.isEmpty()) return null;
 		return basketProduct.get();
+	}
+	
+	public Map<Integer, Float> getTotalPriceForEachBasketProduct() {
+		
+		ArrayList<BasketProduct> basketProducts = this.getBasketProducts();
+		Map<Integer, Float> basketProductsPrices = new HashMap<>();
+		
+		basketProducts.forEach(basketProduct -> {
+			
+			int productId = basketProduct.getProduct().getId();
+			float totalPrice = basketProductRepository.getTotalPriceForBasketProduct(productId);
+			basketProductsPrices.put(productId, totalPrice);
+		});
+		
+		return basketProductsPrices;
 	}
 
 	/*public BasketProductDTO getBasketProductByProductId(int productId) {

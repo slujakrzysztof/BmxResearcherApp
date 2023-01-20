@@ -3,27 +3,27 @@
 
 <body>
 	<div
-		th:fragment="quantityController(quantityValue, productId, basketProductId)">
+		th:fragment="quantityController(quantity, dtoBasketProduct)">
 		<nav>
 			<ul class="pagination">
 				<li class="page-item">
 					<form action="#" th:action="@{/quantityChangedMinus}"
-						th:object="${basketProductId}" method="post">
+						th:object="${dtoBasketProduct}" method="post">
 						<input type="hidden" th:attr="name='productId'"
-							th:value="${basketProductId.productId}" />
+							th:value="${dtoBasketProduct.productId}" />
 						<button type="submit" value="submit">
 							<b>-</b>
 						</button>
 					</form>
 				</li>
 				<li class="page-item"><input type="text"
-					th:value="${quantityValue}" class="form-control text-center"
-					style="max-width: 55px" th:id="'quantity' + ${productId}" /></li>
+					th:value="${quantity}" class="form-control text-center"
+					style="max-width: 55px" th:id="'quantity' + ${dtoBasketProduct.dtoProduct}" /></li>
 				<li class="page-item">
 					<form action="#" th:action="@{/quantityChangedPlus}"
-						th:object="${basketProductId}" method="post">
+						th:object="${dtoBasketProduct}" method="post">
 						<input type="hidden" th:attr="name='productId'"
-							th:value="${basketProductId.productId}" />
+							th:value="${dtoBasketProduct.productId}" />
 						<button type="submit" value="submit">
 							<b>+</b>
 						</button>
