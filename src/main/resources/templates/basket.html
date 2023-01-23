@@ -12,7 +12,20 @@
 <link rel="stylesheet" th:href="@{/basket.css}">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<link
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
 </head>
+<style>
+input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-outer-spin-button
+	{
+	opacity: 1;
+	margin-left: -14px;
+	-webkit-appearance: none;
+	margin: 0;
+	-moz-appearance: textfield !important;
+}
+</style>
 <body>
 	<main class="page">
 		<section class="shopping-cart dark">
@@ -74,8 +87,20 @@
 															</div>
 														</div>
 														<div class="col-md-4 quantity">
-															<div class="quantityController"
-																th:replace="~{quantityController :: quantityController(${basketProduct.quantity}, ${basketProduct})}"></div>
+															<div class="input-group quantity-wrapper">
+
+																<span class="input-group-btn"> <a
+																	th:href="@{/quantityChangedMinus/{productId}(productId=${basketProduct.productId})}"
+																	class="btn btn-info">-</a>
+																</span> <input type="number" name="quantityController"
+																	class="form-control input-number quantity-style"
+																	th:value="${basketProduct.quantity}" min="0"> <span
+																	class="input-group-btn"> <a
+																	th:href="@{/quantityChangedPlus/{productId}(productId=${basketProduct.productId})}"
+																	class="btn btn-info">+</a>
+																</span>
+
+															</div>
 														</div>
 														<div class="col-md-3 price">
 															<span>[[${totalPriceForBasketProduct.get(basketProduct.productId)}]]</span>

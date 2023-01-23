@@ -22,7 +22,7 @@ import com.bmxApp.enums.Shop;
 import com.bmxApp.exception.NotFoundException;
 import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.mapper.product.ProductMapper;
-import com.bmxApp.model.Product;
+import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.repository.ProductRepository;
 

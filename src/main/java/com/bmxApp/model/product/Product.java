@@ -1,4 +1,4 @@
-package com.bmxApp.model;
+package com.bmxApp.model.product;
 
 import java.util.Locale;
 

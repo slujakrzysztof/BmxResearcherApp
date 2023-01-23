@@ -33,13 +33,10 @@ public class ShoppingCartController {
 		return "basket";
 	}
 
-	@PostMapping("/quantityChangedPlus")
-	public String changeQuantityPlus(@ModelAttribute("dtoBasketProduct") BasketProductDTO dtoBasketProduct, Model model,
-			BindingResult bindingResult) {
-
-		//System.out.println("BPROD : " + dtoBasketProduct.getProductId());
+	@GetMapping("/quantityChangedPlus/{productId}")
+	public String changeQuantityPlus(@PathVariable String productId) {
 		
-		shoppingCartService.changeQuantity(dtoBasketProduct, 1);
+		shoppingCartService.changeQuantity(Integer.parseInt(productId), 1);
 
 		return "redirect:/cart";
 	}
@@ -51,11 +48,10 @@ public class ShoppingCartController {
 		return "basket";
 	}
 
-	@PostMapping("/quantityChangedMinus")
-	public String changeQuantityMinus(@ModelAttribute("basketProduct") BasketProductDTO basketProduct, Model model,
-			BindingResult bindingResult) {
+	@GetMapping("/quantityChangedMinus/{productId}")
+	public String changeQuantityMinus(@PathVariable String productId) {
 		
-		shoppingCartService.changeQuantity(basketProduct, -1);
+		shoppingCartService.changeQuantity(Integer.parseInt(productId), -1);
 		return "redirect:/cart";
 	}
 

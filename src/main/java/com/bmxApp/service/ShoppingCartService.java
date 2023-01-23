@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
-import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.Product;
+import com.bmxApp.model.basketProduct.BasketProduct;
+import com.bmxApp.model.product.Product;
 import com.bmxApp.researcher.ShopResearcherService;
 
 @Service
@@ -135,19 +135,20 @@ public class ShoppingCartService {
 		return basketProductRepositoryService.getQuantity(basketProductId);
 	}
 
-	public void changeQuantity(BasketProductDTO basketProduct, int value) {
+	public void changeQuantity(int productId, int value) {
 
-		Product product = productRepositoryService.getProductById(basketProduct.getProductId());
-		BasketProduct bProduct = basketProductRepositoryService.getBasketProductByProduct(product);
 		
-		bProduct.setQuantity(basketProduct.getQuantity() + value);
+		Product product = productRepositoryService.getProductById(productId);
+		BasketProduct basketProduct = basketProductRepositoryService.getBasketProductByProduct(product);
 		
-		if(bProduct.getQuantity() <= 0) {
-			this.deleteBasketProductById(bProduct.getId());
+		basketProduct.setQuantity(basketProduct.getQuantity() + value);
+		
+		if(basketProduct.getQuantity() <= 0) {
+			this.deleteBasketProductById(basketProduct.getId());
 			return;
 		}
 		
-		basketProductRepositoryService.insertUpdateBasketProduct(bProduct);
+		basketProductRepositoryService.insertUpdateBasketProduct(basketProduct);
 	}
 
 	public String formatPrice(double price) {

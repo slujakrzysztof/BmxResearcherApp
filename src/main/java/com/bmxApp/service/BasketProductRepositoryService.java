@@ -14,8 +14,8 @@ import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.mapper.product.ProductMapper;
-import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.Product;
+import com.bmxApp.model.basketProduct.BasketProduct;
+import com.bmxApp.model.product.Product;
 import com.bmxApp.repository.BasketProductRepository;
 
 @Service

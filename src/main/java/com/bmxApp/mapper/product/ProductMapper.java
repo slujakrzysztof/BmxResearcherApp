@@ -3,7 +3,7 @@ package com.bmxApp.mapper.product;
 import java.math.BigDecimal;
 
 import com.bmxApp.dto.product.ProductDTO;
-import com.bmxApp.model.Product;
+import com.bmxApp.model.product.Product;
 
 public class ProductMapper {
 

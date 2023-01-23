@@ -2,8 +2,8 @@ package com.bmxApp.mapper.basketProduct;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.mapper.product.ProductMapper;
-import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.Product;
+import com.bmxApp.model.basketProduct.BasketProduct;
+import com.bmxApp.model.product.Product;
 
 public class BasketProductMapper {
 

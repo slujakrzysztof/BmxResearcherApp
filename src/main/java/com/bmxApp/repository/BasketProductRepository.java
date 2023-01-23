@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.Product;
+import com.bmxApp.model.basketProduct.BasketProduct;
+import com.bmxApp.model.product.Product;
 
 import jakarta.transaction.Transactional;
 

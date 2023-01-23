@@ -14,8 +14,8 @@ import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.mapper.product.ProductMapper;
-import com.bmxApp.model.BasketProduct;
-import com.bmxApp.model.Product;
+import com.bmxApp.model.basketProduct.BasketProduct;
+import com.bmxApp.model.product.Product;
 import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.repository.ProductRepository;
 
