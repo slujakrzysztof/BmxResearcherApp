@@ -109,17 +109,25 @@ public class ShopResearcherService {
 
 	public String findPartUrl(String category) {
 
-		String propertyName = PropertyManager.getInstance().URL_SEARCH_PAGE();
-		Elements partUrls = this.getDocument().select(propertyName);
+		String[] propertyNames = {PropertyManager.getInstance().URL_SEARCH_PAGE(), 
+									PropertyManager.getInstance().URL_SEARCH_FRAMES()};
 		String categoryShop = PropertyReader.getInstance().getProperty(category.toLowerCase());
+		List<Element> partUrlList = new ArrayList<>();
+		Elements partUrls;
 
-		List<Element> partUrlList = partUrls.stream().filter(
-				element -> element.absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE()).contains(categoryShop))
-				.limit(1).collect(Collectors.toList());
-
-		if (partUrlList.size() == 0)
-			throw new NotFoundException();
-
+		
+		for(int counter = 0; counter < propertyNames.length; counter++){
+			
+			partUrls = this.getDocument().select(propertyNames[counter]);
+			
+			partUrlList = partUrls.stream().filter(
+					element -> element.absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE()).contains(categoryShop))
+					.limit(1).collect(Collectors.toList());
+			
+			if(partUrlList.size() > 0) break;
+			else if(partUrlList.size() <= 0 && counter == 1) throw new NotFoundException();
+		}
+			
 		return partUrlList.get(0).absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE());
 	}
 

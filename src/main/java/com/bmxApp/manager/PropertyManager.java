@@ -93,6 +93,10 @@ public final class PropertyManager {
 		return "href";
 	}
 	
+	public String URL_SEARCH_FRAMES(){
+		return PropertyReader.getInstance().getProperty("urlSearchFrames");
+	}
+	
 	public static PropertyManager getInstance() {
 		return propertyManager;
 	}

@@ -38,6 +38,7 @@ public class ProductDatabaseUpdater {
 	@Async
 	public void updateProductDatabase() {
 		
+		/*
 		EnumSet<Shop> shops = Shop.getShops();
 		List<Part> parts = Arrays.asList(Part.values());
 		
@@ -58,7 +59,7 @@ public class ProductDatabaseUpdater {
 				shopResearcherService.searchNewProducts(shopName, category, partUrl);
 			});
 		});
-		
+		*/
 	}
 	
 }
