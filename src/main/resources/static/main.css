@@ -1,7 +1,8 @@
 :root { 
 	--main-color: #5ff3f3; 
 	--black: #13131a; 
-	--bg: #010103; 
+	--bg: #010103;
+	/*--bg: 	#FFFFFF;*/ 
 	--border: .1rem solid rgba(255, 255, 255, .3);
 }
 

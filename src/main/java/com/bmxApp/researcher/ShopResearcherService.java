@@ -31,9 +31,9 @@ import com.bmxApp.repository.ProductRepository;
 public class ShopResearcherService {
 
 	final int MAX_TRIES = 20;
+	
 	private String html;
 	protected Document document;
-	private int tryCounter = 0;
 	private Elements div, productNameElements, productPriceElements, productUrlElements, imageUrlElements;
 	private String category;
 	private String shopName;
@@ -77,6 +77,8 @@ public class ShopResearcherService {
 	}
 
 	public void setConnection(String html) {
+		int tryCounter = 0;
+		
 		while (tryCounter < MAX_TRIES) {
 			try {
 				document = Jsoup.connect(html).timeout(6000).userAgent(

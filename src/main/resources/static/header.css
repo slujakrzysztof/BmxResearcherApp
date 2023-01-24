@@ -94,14 +94,16 @@
 	top: -200%;
 	right: -100%;
 	height: calc(100vh - 9.5rem);
-	width: 80rem;
+	width: 10rem;
 	background: rgb(177, 177, 177);
 	padding: 0 1.5rem;
 }
 
 .header .discount-container.active{
-	right: 40%;
+	right: 10%;
 	top: 110%;
+	height: calc(100vh - 9.5rem);
+	width: 10rem;
 	background: rgb(177, 177, 177);
 }
 
