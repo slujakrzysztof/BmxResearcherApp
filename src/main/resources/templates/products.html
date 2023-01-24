@@ -10,6 +10,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" th:href="@{/header.css}">
 <link rel="stylesheet" th:href="@{/products.css}">
+<link rel="stylesheet" th:href="@{/navigation.css}">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
 	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
@@ -17,10 +18,40 @@
 </head>
 <body>
 
+	<nav class="nav-area">
+		<ul>
+			<li><a href="#">home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Services</a>
+				<ul>
+					<li><a href="#">Web Design</a></li>
+					<li><a href="#">Web Development</a></li>
+					<li><a href="#">Email Marketing</a></li>
+					<li><a href="#">Graphics Design</a>
+						<ul>
+							<li><a href="#">Logo Design</a></li>
+							<li><a href="#">Card Design</a></li>
+							<li><a href="#">Poster Design</a></li>
+							<li><a href="#">Template Design</a>
+								<ul>
+									<li><a href="#">Web Template</a></li>
+									<li><a href="#">Email Template</a></li>
+									<li><a href="#">News Template</a></li>
+									<li><a href="#">Bio Template</a></li>
+									<li><a href="#">Wedding Template</a></li>
+								</ul></li>
+							<li><a href="#">Brochure Design</a></li>
+						</ul></li>
+					<li><a href="#">SEO</a></li>
+				</ul></li>
+			<li><a href="#">Portfolio</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+	</nav>
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+	<!--<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">Start Bootstrap</a>
+			<a class="navbar-brand" th:href="@{/main}">Start Bootstrap</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
 				aria-controls="navbarResponsive" aria-expanded="false"
@@ -32,20 +63,18 @@
 					<li class="nav-item"><a class="fas fa-shopping-cart"
 						id="cart-btn" href="#"></a></li>
 					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-					<li class="cart-items-container">
-						<div class="cart-item" th:each="basketProduct : ${basketProducts}">
-							<a th:href="@{/removeProduct/main/{id}(id=${basketProduct.id})}">
-								<span class="fas fa-times"></span>
-							</a>
-							<div class="content">
-								<h3>[[${basketProduct.product.productName}]] |
-									[[${basketProduct.shopName}]]</h3>
+					<li>
+						<div class="dropdown">
+							<button class="dropbtn">
+								Dropdown <i class="fa fa-caret-down"></i>
+							</button>
+							<div class="dropdown-content">
+								<a href="#">Link 1</a> <a href="#">Link 2</a> <a href="#">Link
+									3</a>
 							</div>
-						</div> <a class="btn btn-primary" th:href="@{/cart}" role="button"
-						th:text="#{basket}"></a>
+						</div>
 					</li>
-					
-					<!--  <li class="discount-container">
+					  <li class="discount-container">
 						<form role="form" th:object="${discountValue}"
 							th:action="@{/applyDiscount}" method="get">
 							<label for="customRange1" class="form-label">[[#{discountLabel}]]</label>
@@ -55,9 +84,9 @@
 							<button type="submit">ENTER</button>
 						</form>
 					</li>-->
-				</ul>
-			</div>
-		</div>
+	</ul>
+	</div>
+	</div>
 	</nav>
 
 	<section class="products" id="productsPage">
