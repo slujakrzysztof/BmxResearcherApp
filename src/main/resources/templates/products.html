@@ -20,73 +20,27 @@
 
 	<nav class="nav-area">
 		<ul>
-			<li><a href="#">home</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Services</a>
+			<li><a th:href="@{/main}">[[#{mainPage}]]</a></li>
+			<li><a style="color: White;">[[#{discountText}]]</a>
 				<ul>
-					<li><a href="#">Web Design</a></li>
-					<li><a href="#">Web Development</a></li>
-					<li><a href="#">Email Marketing</a></li>
-					<li><a href="#">Graphics Design</a>
-						<ul>
-							<li><a href="#">Logo Design</a></li>
-							<li><a href="#">Card Design</a></li>
-							<li><a href="#">Poster Design</a></li>
-							<li><a href="#">Template Design</a>
-								<ul>
-									<li><a href="#">Web Template</a></li>
-									<li><a href="#">Email Template</a></li>
-									<li><a href="#">News Template</a></li>
-									<li><a href="#">Bio Template</a></li>
-									<li><a href="#">Wedding Template</a></li>
-								</ul></li>
-							<li><a href="#">Brochure Design</a></li>
-						</ul></li>
-					<li><a href="#">SEO</a></li>
-				</ul></li>
-			<li><a href="#">Portfolio</a></li>
-			<li><a href="#">Contact</a></li>
-		</ul>
-	</nav>
-
-	<!--<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-		<div class="container">
-			<a class="navbar-brand" th:href="@{/main}">Start Bootstrap</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
-				aria-controls="navbarResponsive" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarResponsive">
-				<ul class="navbar-nav ms-auto">
-					<li class="nav-item"><a class="fas fa-shopping-cart"
-						id="cart-btn" href="#"></a></li>
-					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-					<li>
-						<div class="dropdown">
-							<button class="dropbtn">
-								Dropdown <i class="fa fa-caret-down"></i>
-							</button>
-							<div class="dropdown-content">
-								<a href="#">Link 1</a> <a href="#">Link 2</a> <a href="#">Link
-									3</a>
-							</div>
+					<li class="discount-container">
+						<div>
+							<form role="form" th:object="${discount}"
+								th:action="@{/applyDiscount}" method="get">
+								<label for="customRange1" class="form-label">[[#{discountLabel}]]</label>
+								<input class="form-control-lg" type="number" min="0" max="100"
+									step="1" th:placeholder="#{discountText}"
+									th:field="*{value}" />
+								<button type="submit">ENTER</button>
+							</form>
+							<form th:action="@{/resetDiscount}" method="get">
+								<button type="submit">RESET</button>
+							</form>
 						</div>
 					</li>
-					  <li class="discount-container">
-						<form role="form" th:object="${discountValue}"
-							th:action="@{/applyDiscount}" method="get">
-							<label for="customRange1" class="form-label">[[#{discountLabel}]]</label>
-							<input class="form-control-lg" type="number" min="0" max="100"
-								step="1" th:placeholder="#{discountText}"
-								th:field="*{discountValue}" />
-							<button type="submit">ENTER</button>
-						</form>
-					</li>-->
-	</ul>
-	</div>
-	</div>
+				</ul></li>
+			<li><a href="#">[[#{contact}]]</a></li>
+		</ul>
 	</nav>
 
 	<section class="products" id="productsPage">
@@ -97,6 +51,10 @@
 		<div id="info_container_2">
 			<p class="h5 infoText" th:text="#{partName}"></p>
 			<p class="h5 infoText" id="category" th:text="#{${category}}"></p>
+		</div>
+		<div id="info_container_3">
+			<p class="h5 infoText" th:text="#{discountApplied}"></p>
+			<p class="h5 infoText" id="category" th:text="${discountValue}"></p>
 		</div>
 		<div id="product_container">
 			<table class="table table-bordered">

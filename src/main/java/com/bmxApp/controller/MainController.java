@@ -44,6 +44,8 @@ public class MainController {
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discount", discount);
+		model.addAttribute("discountValue", discount.getValue());
+		mainControllerService.resetDiscount();
 		return "products";
 	}
 
@@ -58,21 +60,24 @@ public class MainController {
 
 	@GetMapping("/main")
 	public String showMainPage(Model model) {
-		
-		System.out.println("BAAAAAAAAASKET: " + mainControllerService.getBasketProducts());
-		
+				
 		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("basketProducts", mainControllerService.getBasketProducts());
 		return "main";
 	}
 
 	@GetMapping("/applyDiscount")
-	public String applyDiscount(@ModelAttribute("discountValue") DiscountDTO discountValue, Model model) {
-		
-		System.out.println("JESTEM DISCOUNT" + discountValue);
+	public String applyDiscount(@ModelAttribute("value") int value, Model model) {
 
-		DiscountDTO discount = mainControllerService.getShopResearcherService().getDiscount();
-		discount.setValue(discountValue.getValue());
+		mainControllerService.setDiscount(value);
+		
+		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category=" + mainControllerService.getCategory();
+	}
+	
+	@GetMapping("/resetDiscount")
+	public String applyDiscount(Model model) {
+
+		mainControllerService.resetDiscount();
 		
 		return "redirect:/search?shop=" + mainControllerService.getCurrentShop() + "&category=" + mainControllerService.getCategory();
 	}

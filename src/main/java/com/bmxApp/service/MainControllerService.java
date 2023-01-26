@@ -130,6 +130,16 @@ public class MainControllerService {
 			System.out.println("CENA: " + products.get(counter).getPrice());
 		}
 	}
+	
+	public void setDiscount(int value) {
+		
+		shopResearcherService.getDiscount().setValue(value);
+	}
+	
+	public void resetDiscount() {
+		
+		shopResearcherService.getDiscount().setValue(0);
+	}
 
 	public void searchProducts(String shopName, String category) {
 		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
