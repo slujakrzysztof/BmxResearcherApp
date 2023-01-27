@@ -39,6 +39,27 @@
 					</li>
 				</ul></li>
 			<li><a href="#">[[#{contact}]]</a></li>
+			<li><a th:href="@{/cart}">[[#{purchaseBasket}]]</a>
+				<ul>
+					<li class="cart-container">
+						<div>
+							<div class="cart-item"
+								th:each="basketProduct : ${basketProducts}">
+								<a
+									th:href="@{/removeProduct/main/{productId}(productId=${basketProduct.productId})}">
+									<span class="fas fa-times"></span>
+								</a>
+								<div class="content">
+									<h3>[[${basketProduct.dtoProduct.productName}]] |
+										[[${basketProduct.shopName}]]</h3>
+								</div>
+							</div>
+							<a class="btn btn-primary" th:href="@{/cart}" role="button"
+								th:text="#{basket}"></a>
+						</div>
+					</li>
+
+				</ul></li>
 		</ul>
 	</nav>
 

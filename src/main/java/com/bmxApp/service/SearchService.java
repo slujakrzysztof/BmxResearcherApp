@@ -15,6 +15,7 @@ import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcherService;
+import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 
 import lombok.Getter;
 import lombok.Setter;

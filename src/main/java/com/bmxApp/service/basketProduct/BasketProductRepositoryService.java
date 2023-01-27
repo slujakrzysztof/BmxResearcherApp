@@ -1,4 +1,4 @@
-package com.bmxApp.service;
+package com.bmxApp.service.basketProduct;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,36 +43,14 @@ public class BasketProductRepositoryService {
 		return basketProductRepository.getTotalPriceForBasketProduct(id);
 	}
 	
-	/*public LinkedList<BasketProductDTO> getBasketProductsDTOByShopName(String shopName) {
-		
-		List<BasketProduct> basketProducts = basketProductRepository.findByShopName(shopName);
-		LinkedList<BasketProductDTO> dtoBasketProducts = new LinkedList<>();
-		
-		basketProducts.forEach(basketProduct -> dtoBasketProducts.add(BasketProductMapper.mapToBasketProductDTO(basketProduct)));
-		
-		return dtoBasketProducts;
-	}*/
-	
 	public ArrayList<BasketProduct> getBasketProductsByShopName(String shopName) {
 		return (ArrayList<BasketProduct>) basketProductRepository.findByShopName(shopName);
 	}
 
-	/*public LinkedList<BasketProductDTO> getBasketProductsDTO() {
-		
-		List<BasketProduct> basketProductList = basketProductRepository.findAll();
-		LinkedList<BasketProductDTO> basketProductDTOList = new LinkedList<>();
-		
-		basketProductList.forEach(basketProduct -> basketProductDTOList.add(BasketProductMapper.mapToBasketProductDTO(basketProduct)));
-		
-		return basketProductDTOList;
-	}*/
-
 	public boolean isProductInDatabase(Product product) {
 		
 		Optional<BasketProduct> basketProduct = Optional.ofNullable(this.getBasketProductByProduct(product));
-		
-		System.out.println("DBAAAAAAAAAAAAAASKET : " + basketProduct);
-		
+				
 		if (basketProduct.isPresent())
 			return true;
 		return false;
@@ -109,25 +87,8 @@ public class BasketProductRepositoryService {
 		return basketProductsPrices;
 	}
 
-	/*public BasketProductDTO getBasketProductByProductId(int productId) {
-		
-		Optional<BasketProduct> basketProduct = Optional.ofNullable(basketProductRepository.findByProductId(productId));
-		
-		if(basketProduct.isEmpty()) return null;
-		return BasketProductMapper.mapToBasketProductDTO(basketProduct.get());
-	}*/
-
-	/*public BasketProductDTO getBasketProductById(int id) {
-		
-		BasketProduct basketProduct = basketProductRepository.findById(id);
-		
-		return BasketProductMapper.mapToBasketProductDTO(basketProduct);
-	}*/
-
 	public void insertUpdateBasketProduct(BasketProduct basketProduct) {
-		
-		//BasketProduct basketProduct = BasketProductMapper.mapToBasketProduct(basketProduct);
-		
+				
 		basketProductRepository.save(basketProduct);
 	}
 
@@ -145,6 +106,19 @@ public class BasketProductRepositoryService {
 	
 	public void deleteBasketProductByProduct(Product product) {
 		basketProductRepository.deleteByProduct(product);
+	}
+	
+	public ArrayList<BasketProductDTO> getBasketProductsDTO() {
+		
+		ArrayList<BasketProduct> basketProductsList = this.getBasketProducts(); 
+		ArrayList<BasketProductDTO> basketProductsDtoList = new ArrayList<>();
+		
+		basketProductsList.forEach(basketProduct -> {
+			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+			basketProductsDtoList.add(dtoBasketProduct);
+		});
+		
+		return basketProductsDtoList;
 	}
 	
 }

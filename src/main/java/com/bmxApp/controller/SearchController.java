@@ -14,6 +14,7 @@ import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.service.SearchService;
 import com.bmxApp.service.ShoppingCartService;
+import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 
 @Controller
 public class SearchController {
@@ -23,6 +24,9 @@ public class SearchController {
 	
 	@Autowired
 	private ShoppingCartService shoppingCartService;
+	
+	@Autowired
+	private BasketProductRepositoryService basketProductRepositoryService;
 	
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
@@ -35,6 +39,7 @@ public class SearchController {
 		searchService.setCurrentShop(shopName);
 
 		model.addAttribute("products", searchService.getProductsWithDiscount(shopName, category));
+		model.addAttribute("basketProducts", basketProductRepositoryService.getBasketProductsDTO());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discount", discount);
