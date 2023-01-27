@@ -41,8 +41,7 @@ public class MainControllerService {
 	@Autowired
 	BasketProductRepositoryService basketProductRepositoryService;
 
-	private String currentShop;
-	private String category;
+
 
 	private String language = "polish";
 
@@ -50,27 +49,6 @@ public class MainControllerService {
 
 	@Autowired(required = false)
 	ShopResearcherService shopResearcherService;
-
-	public ArrayList<Product> getProducts(String shopName, String category) {
-
-		return this.productRepositoryService.getSearchedProducts(shopName, category);
-	}
-	
-	public ArrayList<ProductDTO> getProductsWithDiscount(String shopName, String category) {
-		
-		ArrayList<Product> productList = this.getProducts(shopName, category);
-		DiscountDTO discountDTO = this.getShopResearcherService().getDiscount();
-		ArrayList<ProductDTO> productDTOList = new ArrayList<>();
-		
-		productList.forEach(product -> {
-			
-			ProductDTO dtoProduct = ProductMapper.mapToProductDTO(product);
-			dtoProduct.setPrice(product.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0));
-			productDTOList.add(dtoProduct);
-		});
-		
-		return productDTOList;
-	}
 
 	public ArrayList<BasketProductDTO> getBasketProducts() {
 
@@ -83,70 +61,6 @@ public class MainControllerService {
 		});
 		
 		return basketProductsDtoList;
-	}
-
-	public void search(String category, String shopName, boolean partSelection) {
-
-		String html;
-
-		try {
-			PropertyReader.getInstance().connectPropertyReader(shopName);
-
-			System.out.println("HTML : " + PropertyManager.getInstance().URL());
-			System.out.println("HTML : " + PropertyReader.getInstance().getProperty("url"));
-			
-			if (partSelection)
-				html = PropertyManager.getInstance().URL();
-			else
-				html = PropertyManager.getInstance().SAFETY_URL();
-
-			System.out.println("htmmml: " + html);
-
-			System.out.println("CZESC: " + category);
-
-			shopResearcherService.setConnection(html);
-			String partUrl = shopResearcherService.findPartUrl(category);
-			System.out.println("PART URL: " + partUrl);
-			shopResearcherService.setConnection(partUrl);
-
-			if (!productRepositoryService.isProductInDatabase(shopName, category))
-				shopResearcherService.searchNewProducts(shopName, category, partUrl);
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	// Iterate all available shops to get products
-	public void searchAllShops(String category, boolean partSelection) {
-
-		Arrays.asList(Shop.values()).stream()
-				.forEach(shop -> this.search(category, shop.name().toLowerCase(), partSelection));
-	}
-
-
-	public void applyDiscount(List<Product> products, double discountValue) {
-		for (int counter = 0; counter < products.size(); counter++) {
-			products.get(counter).setPrice(products.get(counter).getPrice() * ((100.0 - discountValue) / 100.0));
-			System.out.println("CENA: " + products.get(counter).getPrice());
-		}
-	}
-	
-	public void setDiscount(int value) {
-		
-		shopResearcherService.getDiscount().setValue(value);
-	}
-	
-	public void resetDiscount() {
-		
-		shopResearcherService.getDiscount().setValue(0);
-	}
-
-	public void searchProducts(String shopName, String category) {
-		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
-			this.searchAllShops(category, true);
-		} else {
-			this.search(category, shopName.toLowerCase(), true);
-		}
 	}
 
 }

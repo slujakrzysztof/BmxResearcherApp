@@ -118,7 +118,9 @@ public class ShoppingCartService {
 
 	public void addProductToCart(String productName, String shopName) {
 
+		System.out.println("HHAA");
 		Product product = productRepositoryService.getProductByProductNameAndShopName(productName, shopName);
+		System.out.println("HHAA");
 		BasketProduct basketProduct;
 		
 		if (this.isProductInCart(product)) {

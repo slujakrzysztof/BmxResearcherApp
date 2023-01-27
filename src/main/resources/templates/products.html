@@ -29,8 +29,7 @@
 								th:action="@{/applyDiscount}" method="get">
 								<label for="customRange1" class="form-label">[[#{discountLabel}]]</label>
 								<input class="form-control-lg" type="number" min="0" max="100"
-									step="1" th:placeholder="#{discountText}"
-									th:field="*{value}" />
+									step="1" th:placeholder="#{discountText}" th:field="*{value}" />
 								<button type="submit">ENTER</button>
 							</form>
 							<form th:action="@{/resetDiscount}" method="get">
@@ -69,17 +68,23 @@
 				</thead>
 				<tbody>
 					<tr th:each="product : ${products}">
-						<td th:text="${product.productName}" />
-						<td th:text="${product.price}" />
-						<td class="w-25"><img th:src="${product.imageUrl}"
-							alt="${product.imageUrl}" class="img-fluid" width=200 height=200 /></td>
-						<td><form action="#" th:action="@{addProduct}" method="post"
+						<td th:text="${product.getProductName()}" />
+						<td th:text="${product.getPrice()}" />
+						<td class="w-25"><img th:src="${product.getImageUrl()}"
+							alt="${product.getImageUrl()}" class="img-fluid" width=200
+							height=200 /></td>
+						<td><form th:action="@{addProduct}" method="post"
 								th:object="${product}">
 								<input type="hidden" th:attr="name='productName'"
-									th:value="${product.productName}" /> <input type="hidden"
-									th:attr="name='shopName'" th:value="${product.shopName}" /> <input
-									type="hidden" th:attr="name='category'"
-									th:value="${product.category}" />
+									th:value="${product .getProductName()}" /> <input
+									type="hidden" th:attr="name='shopName'"
+									th:value="${product.getShopName()}" /> <input type="hidden"
+									th:attr="name='category'" th:value="${product.getCategory()}" />
+								<input type="hidden" th:attr="name='price'"
+									th:value="${product.getPrice()}" /> <input type="hidden"
+									th:attr="name='url'" th:value="${product.getUrl()}" /> <input
+									type="hidden" th:attr="name='imageUrl'"
+									th:value="${product.getImageUrl()}" />
 								<button type="submit" value="submit" th:text="#{addBasket}"></button>
 							</form></td>
 					</tr>
