@@ -1,4 +1,4 @@
-package com.bmxApp.service;
+package com.bmxApp.service.search;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +16,7 @@ import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
+import com.bmxApp.service.product.ProductRepositoryService;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -91,7 +92,7 @@ public class SearchService {
 			String partUrl = shopResearcherService.findPartUrl(category);
 			shopResearcherService.setConnection(partUrl);
 
-			if (!productRepositoryService.isProductInDatabase(shopName, category))
+			if (!productRepositoryService.areCategoryAndShopNameInDatabase(shopName, category))
 				shopResearcherService.searchNewProducts(shopName, category, partUrl);
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

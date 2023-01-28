@@ -1,4 +1,4 @@
-package com.bmxApp.service;
+package com.bmxApp.service.comparison;
 
 import org.springframework.stereotype.Service;
 

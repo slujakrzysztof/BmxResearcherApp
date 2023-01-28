@@ -1,4 +1,4 @@
-package com.bmxApp.service;
+package com.bmxApp.service.product;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,49 +29,74 @@ public class ProductRepositoryService {
 
 	@Transactional
 	public ArrayList<Product> getSearchedProducts(String shopName, String category) {
-		
+
 		List<Product> productList = productRepository.findByShopNameAndCategory(shopName, category);
-		//ArrayList<ProductDTO> productDTOList = new ArrayList<>();
-		
-		/*productList.forEach(product -> 
-			productDTOList.add(ProductMapper.mapToProductDTO(product))
-		);*/
-		
+		// ArrayList<ProductDTO> productDTOList = new ArrayList<>();
+
+		/*
+		 * productList.forEach(product ->
+		 * productDTOList.add(ProductMapper.mapToProductDTO(product)) );
+		 */
+
 		return (ArrayList<Product>) productList;
 	}
-	
+
 	public Product getProductByProductNameAndShopName(String productName, String shopName) {
-		
+
 		Product product = productRepository.findByProductNameAndShopName(productName, shopName);
-		
+
 		return product;
-				//ProductMapper.mapToProductDTO(product);
-	}
-	
-	public List<Product> getProductsByShopNameAndCategory(String shopName, String category) {
-		
-		return productRepository.findByShopNameAndCategory(shopName, category);
-	}
-	
-	public boolean isProductInDatabase(String shopName, String category) {
-		
-		List<Product> productList = this.getProductsByShopNameAndCategory(shopName, category);
-		if(productList.isEmpty()) return false;
-		return true;
-	}
-	
-	public Product getProductById(int id) {
-		
-		Product product = productRepository.findById(id);
-		
-		return product;
-				//ProductMapper.mapToProductDTO(product);
+		// ProductMapper.mapToProductDTO(product);
 	}
 
-	/*public Product getProduct(ProductDTO dtoProduct) {
+	public List<Product> getProductsByShopNameAndCategory(String shopName, String category) {
+
+		return productRepository.findByShopNameAndCategory(shopName, category);
+	}
+
+	public boolean areCategoryAndShopNameInDatabase(String shopName, String category) {
+
+		List<Product> productList = this.getProductsByShopNameAndCategory(shopName, category);
+		if (productList.isEmpty())
+			return false;
+		return true;
+	}
+
+	public Product getProductById(int id) {
+
+		Product product = productRepository.findById(id);
+
+		return product;
+		// ProductMapper.mapToProductDTO(product);
+	}
+
+	public boolean isProductInDatabase(ProductDTO dtoProduct) {
+
+		String productName = dtoProduct.getProductName();
+		String shopName = dtoProduct.getShopName();
+		Optional<Product> product = Optional.ofNullable(this.getProductByProductNameAndShopName(productName, shopName));
+		
+		if (product.isPresent() && dtoProduct.equals(ProductMapper.mapToProductDTO(product.get())))
+			return true;
+		return false;
+	}
+	
+	public void insertUpdateProduct(ProductDTO dtoProduct) {
 		
 		Product product = productRepository.findByProductNameAndShopName(dtoProduct.getProductName(), dtoProduct.getShopName());
 		
-		return product;
-	}*/
+		if(product == null) product = ProductMapper.mapToProduct(dtoProduct);
+		
+		productRepository.save(product);
+	}
+
+	/*
+	 * public Product getProduct(ProductDTO dtoProduct) {
+	 * 
+	 * Product product =
+	 * productRepository.findByProductNameAndShopName(dtoProduct.getProductName(),
+	 * dtoProduct.getShopName());
+	 * 
+	 * return product; }
+	 */
 }

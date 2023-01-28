@@ -1,4 +1,4 @@
-package com.bmxApp.service;
+package com.bmxApp.service.database;
 
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
