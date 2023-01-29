@@ -3,6 +3,7 @@ package com.bmxApp.service.search;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,13 +53,17 @@ public class SearchService {
 		productList.forEach(product -> {
 
 			ProductDTO dtoProduct = ProductMapper.mapToProductDTO(product);
-			dtoProduct.setPrice(product.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0));
+			double price = Double.parseDouble(this.formatPrice(product.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0)));
+			dtoProduct.setPrice(price);
 			productDTOList.add(dtoProduct);
 		});
 
 		return productDTOList;
 	}
 	
+	public String formatPrice(double price) {
+		return String.format(Locale.US, "%.2f", price);
+	}
 
 	public void applyDiscount(List<Product> products, double discountValue) {
 		
