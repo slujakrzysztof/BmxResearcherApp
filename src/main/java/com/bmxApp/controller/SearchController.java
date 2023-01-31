@@ -64,12 +64,8 @@ public class SearchController {
 	public String addProductToBasket(@ModelAttribute("product") ProductDTO dtoProduct, Model model,
 			BindingResult bindingResult) {
 		
-		System.out.println("DODAMO");
-		
 		shoppingCartService.addProductToCart(dtoProduct.getProductName(), dtoProduct.getShopName());
-		
-		System.out.println("DODAMO");
-		
+
 		return "redirect:/search?shop=" + dtoProduct.getShopName() + "&category="
 				+ dtoProduct.getCategory();
 	}

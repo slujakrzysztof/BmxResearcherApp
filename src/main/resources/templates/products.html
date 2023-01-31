@@ -8,9 +8,9 @@
 	rel="stylesheet"
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 	crossorigin="anonymous">
-<link rel="stylesheet" th:href="@{/header.css}">
-<link rel="stylesheet" th:href="@{/products.css}">
 <link rel="stylesheet" th:href="@{/navigation.css}">
+<link rel="stylesheet" th:href="@{/products.css}">
+
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
 	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
@@ -18,7 +18,7 @@
 </head>
 <body>
 
-	<nav class="nav-area">
+	<!--  <nav class="nav-area">
 		<ul>
 			<li><a th:href="@{/main}">[[#{mainPage}]]</a></li>
 			<li><a style="color: White;">[[#{discountText}]]</a>
@@ -40,21 +40,49 @@
 				</ul></li>
 			<li><a href="#">[[#{contact}]]</a></li>
 		</ul>
-	</nav>
 
+	</nav>-->
+	<header>
+
+		<div class="shopping-cart">
+			<div class="shopping-cart-icon">
+				<i class="fa-solid fa-cart-shopping fa-2x"></i>
+			</div>
+			<div class="shopping-cart-container">
+				<div class="shopping-cart-wrapper">
+					<div class="shopping-cart-item"
+						th:each="basketProduct : ${basketProducts}">
+						<img th:src="${basketProduct.getImageUrl()}" />
+						<div class="details">
+							<h2>[[${basketProduct.getProductName()}]]</h2>
+							<h2>[[${basketProduct.getShopName()}]]</h2>
+							<span class="price">[[${basketProduct.getPrice()}]]</span>
+						</div>
+
+					</div>
+				</div>
+				<div class="totalPrice">000</div>
+				<div class="shopping-cart-button">BUTTON</div>
+			</div>
+		</div>
+
+	</header>
+
+
+
+	<div id="info_container_1">
+		<p class="h5 infoText" th:text="#{shopName}"></p>
+		<p class="h5 infoText" id="shopName" th:text="${shopName}"></p>
+	</div>
+	<div id="info_container_2">
+		<p class="h5 infoText" th:text="#{partName}"></p>
+		<p class="h5 infoText" id="category" th:text="#{${category}}"></p>
+	</div>
+	<div id="info_container_3">
+		<p class="h5 infoText" th:text="#{discountApplied}"></p>
+		<p class="h5 infoText" id="category" th:text="${discountValue}"></p>
+	</div>
 	<section class="products" id="productsPage">
-		<div id="info_container_1">
-			<p class="h5 infoText" th:text="#{shopName}"></p>
-			<p class="h5 infoText" id="shopName" th:text="${shopName}"></p>
-		</div>
-		<div id="info_container_2">
-			<p class="h5 infoText" th:text="#{partName}"></p>
-			<p class="h5 infoText" id="category" th:text="#{${category}}"></p>
-		</div>
-		<div id="info_container_3">
-			<p class="h5 infoText" th:text="#{discountApplied}"></p>
-			<p class="h5 infoText" id="category" th:text="${discountValue}"></p>
-		</div>
 		<div id="product_container">
 			<table class="table table-bordered">
 				<thead>
