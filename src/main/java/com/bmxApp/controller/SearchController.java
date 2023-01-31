@@ -12,15 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.model.product.Product;
-import com.bmxApp.service.SearchService;
-import com.bmxApp.service.ShoppingCartService;
+import com.bmxApp.service.cart.ShoppingCartService;
+import com.bmxApp.service.search.SearchService;
 
 @Controller
 public class SearchController {
 
 	@Autowired
 	private SearchService searchService;
-	
 	@Autowired
 	private ShoppingCartService shoppingCartService;
 	
@@ -35,6 +34,8 @@ public class SearchController {
 		searchService.setCurrentShop(shopName);
 
 		model.addAttribute("products", searchService.getProductsWithDiscount(shopName, category));
+		model.addAttribute("basketProducts", searchService.getBasketProducts());
+		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discount", discount);

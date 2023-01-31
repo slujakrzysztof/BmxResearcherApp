@@ -11,7 +11,7 @@ import org.springframework.validation.BindingResult;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.shopModel.ShopModelDTO;
-import com.bmxApp.service.ShoppingCartService;
+import com.bmxApp.service.cart.ShoppingCartService;
 
 @Controller
 public class ShoppingCartController {

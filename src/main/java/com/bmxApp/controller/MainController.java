@@ -14,8 +14,8 @@ import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.shopModel.ShopModelDTO;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
-import com.bmxApp.service.MainControllerService;
-import com.bmxApp.service.ShoppingCartService;
+import com.bmxApp.service.cart.ShoppingCartService;
+import com.bmxApp.service.main.MainControllerService;
 
 @Controller
 @RequestMapping({ "/", "/main" })

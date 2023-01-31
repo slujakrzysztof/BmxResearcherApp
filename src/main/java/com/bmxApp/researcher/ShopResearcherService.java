@@ -170,7 +170,7 @@ public class ShopResearcherService {
 		return pageUrlList;
 	}
 
-	private void getProductsFromPage(String shopName) {
+	public void getProductsFromPage(String shopName) {
 
 		div = this.getDocument().select(PropertyManager.getInstance().DIV());// PropertyReader.getInstance().getProperty("div"));
 		productNameElements = div.select(PropertyManager.getInstance().PRODUCT_NAME());
@@ -215,7 +215,7 @@ public class ShopResearcherService {
 
 	}
 
-	private LinkedList<ProductDTO> getFormattedDataProducts(String shopName, String category) {
+	public LinkedList<ProductDTO> getFormattedDataProducts(String shopName, String category) {
 
 		LinkedList<ProductDTO> productList = new LinkedList<>();
 

@@ -1,20 +1,26 @@
-package com.bmxApp.service;
+package com.bmxApp.service.search;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.manager.PropertyManager;
+import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.mapper.product.ProductMapper;
+import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcherService;
+import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
+import com.bmxApp.service.product.ProductRepositoryService;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -50,13 +56,17 @@ public class SearchService {
 		productList.forEach(product -> {
 
 			ProductDTO dtoProduct = ProductMapper.mapToProductDTO(product);
-			dtoProduct.setPrice(product.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0));
+			double price = Double.parseDouble(this.formatPrice(product.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0)));
+			dtoProduct.setPrice(price);
 			productDTOList.add(dtoProduct);
 		});
 
 		return productDTOList;
 	}
 	
+	public String formatPrice(double price) {
+		return String.format(Locale.US, "%.2f", price);
+	}
 
 	public void applyDiscount(List<Product> products, double discountValue) {
 		
@@ -90,7 +100,7 @@ public class SearchService {
 			String partUrl = shopResearcherService.findPartUrl(category);
 			shopResearcherService.setConnection(partUrl);
 
-			if (!productRepositoryService.isProductInDatabase(shopName, category))
+			if (!productRepositoryService.areCategoryAndShopNameInDatabase(shopName, category))
 				shopResearcherService.searchNewProducts(shopName, category, partUrl);
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
@@ -102,6 +112,27 @@ public class SearchService {
 
 		Arrays.asList(Shop.values()).stream()
 				.forEach(shop -> this.search(category, shop.name().toLowerCase(), partSelection));
+	}
+	
+	public ArrayList<BasketProductDTO> getBasketProducts() {
+		
+		ArrayList<BasketProduct> basketProducts = basketProductRepositoryService.getBasketProducts();
+		ArrayList<BasketProductDTO> dtoBasketProducts = new ArrayList<>();
+		
+		basketProducts.forEach(basketProduct -> {
+			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
+			dtoBasketProducts.add(dtoBasketProduct);
+		});
+		
+		return dtoBasketProducts;
+	}
+	
+	public int getBasketAmount() {
+		return this.getBasketProducts().size();
+	}
+	
+	public double getBasketTotalPrice() {
+		return this.basketProductRepositoryService.getTotalPrice();
 	}
 
 	public void searchProducts(String shopName, String category) {

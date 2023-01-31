@@ -4,6 +4,8 @@ import java.util.EnumSet;
 
 public enum Shop {
 
+	//---!!!--- KEEP ALLSHOPS ALWAYS AS THE LAST ELEMENT ---!!!---
+	
 	BMXLIFE, 
 	AVEBMX, 
 	MANYFESTBMX, 

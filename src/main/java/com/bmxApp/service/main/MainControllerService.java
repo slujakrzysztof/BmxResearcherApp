@@ -1,4 +1,4 @@
-package com.bmxApp.service;
+package com.bmxApp.service.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +24,7 @@ import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.repository.ProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
+import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,31 +37,14 @@ import lombok.Setter;
 public class MainControllerService {
 
 	@Autowired
-	ProductRepositoryService productRepositoryService;
-
-	@Autowired
 	BasketProductRepositoryService basketProductRepositoryService;
-
-
 
 	private String language = "polish";
 
-	//List<Product> products = new ArrayList<Product>();
-
-	@Autowired(required = false)
-	ShopResearcherService shopResearcherService;
 
 	public ArrayList<BasketProductDTO> getBasketProducts() {
 
-		ArrayList<BasketProduct> basketProductsList = this.basketProductRepositoryService.getBasketProducts(); 
-		ArrayList<BasketProductDTO> basketProductsDtoList = new ArrayList<>();
-		
-		basketProductsList.forEach(basketProduct -> {
-			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
-			basketProductsDtoList.add(dtoBasketProduct);
-		});
-		
-		return basketProductsDtoList;
+		return basketProductRepositoryService.getBasketProductsDTO();
 	}
 
 }

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Constants;
 
-import com.bmxApp.service.MainControllerService;
+import com.bmxApp.service.main.MainControllerService;
 
 public enum Part {
 	GRIPS("gripy"), BARS("kierownice"), BARENDS("barendy"), STEMS("wsporniki"), HEADS("stery"), FRAMES("ramy"),

@@ -1,4 +1,4 @@
-package com.bmxApp.service;
+package com.bmxApp.service.database;
 
 import org.hibernate.boot.Metadata;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
