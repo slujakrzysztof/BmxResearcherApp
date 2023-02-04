@@ -30,12 +30,14 @@
 						<img th:src="${basketProduct.getDtoProduct().getImageUrl()}" />
 						<div class="details">
 							<p1>[[${basketProduct.getDtoProduct().getProductName()}]]</p1>
-							<br>
+							<br> <br>
 							<p1>[[${basketProduct.getShopName()}]]</p1>
 							<span class="price">[[${basketProduct.getDtoProduct().getPrice()}]]</span>
 						</div>
 						<div class="trash">
-							<i class="fa-solid fa-trash-can"></i>
+							<a th:href="@{/removeProduct/{shopName}/{category}/{productId}(shopName=${basketProduct.shopName}, category=${category}, productId=${basketProduct.productId})}">
+								<i class="fa-solid fa-trash-can"></i>
+							</a>
 						</div>
 					</div>
 				</div>

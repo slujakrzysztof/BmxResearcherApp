@@ -55,11 +55,11 @@ public class ShoppingCartController {
 		return "redirect:/cart";
 	}
 
-	@GetMapping("/removeProduct/{page}/{productId}")
-	public String removeBasketProduct(@PathVariable String page, @PathVariable String productId) {
+	@GetMapping("/removeProduct/{shopName}/{category}/{productId}")
+	public String removeBasketProduct(@PathVariable String shopName, @PathVariable String category, @PathVariable String productId) {
 		
 		shoppingCartService.deleteBasketProductByProductId(Integer.parseInt(productId));
-		return "redirect:/" + page;
+		return "redirect:/" + shoppingCartService.getPage(shopName,category);
 	}
 
 }

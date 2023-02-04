@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
@@ -252,6 +253,7 @@ public class ShopResearcherService {
 		
 		productRepository.saveAll((Iterable<Product>) productsList);
 	}
+	
 
 	public String getDescription(String className) throws NullPointerException {
 		String[] separator = className.split(",");

@@ -170,4 +170,11 @@ public class ShoppingCartService {
 		float price = this.getTotalPriceForShop(shopName) - Float.parseFloat(this.getTotalDiscount(shopName));
 		return formatPrice(price);
 	}
+	
+	public String getPage(String shopName, String category) {
+		Optional<String> shop = Optional.ofNullable(shopName);
+		if(shop.isEmpty()) return "main";
+		return "search?shop=" + shopName.toUpperCase() + "&category=" + category;
+	}
+
 }

@@ -70,4 +70,5 @@ public class SearchController {
 		return "redirect:/search?shop=" + dtoProduct.getShopName() + "&category="
 				+ dtoProduct.getCategory();
 	}
+	
 }
