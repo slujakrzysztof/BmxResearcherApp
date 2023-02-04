@@ -47,6 +47,13 @@ public class ShoppingCartController {
 		shoppingCartService.deleteBasketProducts();
 		return "basket";
 	}
+	
+	@GetMapping("/removeDropdownProducts/{shopName}/{category}")
+	public String removeDropdownProducts(@PathVariable String shopName, @PathVariable String category) {
+		
+		shoppingCartService.deleteBasketProducts();
+		return "redirect:/" + shoppingCartService.getPage(shopName, category);
+	}
 
 	@GetMapping("/quantityChangedMinus/{productId}")
 	public String changeQuantityMinus(@PathVariable String productId) {

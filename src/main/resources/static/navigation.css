@@ -43,7 +43,7 @@ h1 {
 	padding: 5%;
 }
 
-.shopping-cart-button {
+.shopping-cart-button, .delete-cart-button {
 	width: 95%;
 	text-align: center;
 	cursor: pointer;
@@ -107,4 +107,8 @@ h1 {
 	text-align: center;
 	position: relative;
 	top:-20px;
+}
+
+a{
+  text-decoration: none;
 }

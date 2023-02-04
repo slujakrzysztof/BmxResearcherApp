@@ -35,13 +35,20 @@
 							<span class="price">[[${basketProduct.getDtoProduct().getPrice()}]]</span>
 						</div>
 						<div class="trash">
-							<a th:href="@{/removeProduct/{shopName}/{category}/{productId}(shopName=${basketProduct.shopName}, category=${category}, productId=${basketProduct.productId})}">
+							<a
+								th:href="@{/removeProduct/{shopName}/{category}/{productId}(shopName=${shopName}, category=${category}, productId=${basketProduct.productId})}">
 								<i class="fa-solid fa-trash-can"></i>
 							</a>
 						</div>
 					</div>
 				</div>
 				<div class="totalPrice">[[${basketTotalPrice}]]</div>
+				<div class="delete-cart-button">
+					<a
+						th:href="@{/removeDropdownProducts/{shopName}/{category} (shopName=${shopName}, category=${category})}">
+						[[#{deleteButton}]]
+					</a>
+				</div>
 				<div class="shopping-cart-button">BUTTON</div>
 			</div>
 		</div>
