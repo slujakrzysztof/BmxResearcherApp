@@ -43,13 +43,17 @@
 					</div>
 				</div>
 				<div class="totalPrice">[[${basketTotalPrice}]]</div>
-				<div class="delete-cart-button">
-					<a
-						th:href="@{/removeDropdownProducts/{shopName}/{category} (shopName=${shopName}, category=${category})}">
-						[[#{deleteButton}]]
-					</a>
+				<form th:action="@{/removeDropdownCartProducts}" th:method="delete">
+					<div class="delete-cart-button">
+						<input type="hidden" name="values"
+							th:value="${shopName}" /> <input type="hidden"
+							name="values" th:value="${category}" />
+						<button class="btn">[[#{deleteButton}]]</button>
+					</div>
+				</form>
+				<div class="shopping-cart-button">
+					<a th:href="@{/cart}">[[#{cartLabel}]]</a>				
 				</div>
-				<div class="shopping-cart-button">BUTTON</div>
 			</div>
 		</div>
 
@@ -112,6 +116,11 @@
 	</section>
 	<script type="text/javascript" th:src="@{/js/scrollFunction.js}"></script>
 	<script type="text/javascript" th:src="@{/js/dropdownCart.js}"></script>
+	<script th:inline="javascript">
+		var amount = [[${basketProducts.size}]];
+		
+		document.documentElement.style.setProperty('--cart-amount', amount);
+	</script>
 
 </body>
 </html>

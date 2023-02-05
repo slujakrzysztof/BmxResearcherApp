@@ -46,8 +46,6 @@ public class ShoppingCartService {
 			dtoBasketProducts.add(dtoBasketProduct);
 		});
 		
-		System.out.println("HHHHHHHHHHHHHHHHER" + shopName);
-		
 		if(Optional.ofNullable(shopName).isPresent())  {	
 			
 			System.out.println("I'm here");

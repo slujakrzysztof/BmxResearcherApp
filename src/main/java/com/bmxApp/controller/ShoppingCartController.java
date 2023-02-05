@@ -42,11 +42,11 @@ public class ShoppingCartController {
 		return "basket";
 	}
 	
-	@DeleteMapping("/removeDropdownProducts/{shopName}/{category}")
-	public String removeDropdownProducts(@PathVariable String shopName, @PathVariable String category) {
+	@DeleteMapping("/removeDropdownCartProducts")
+	public String removeDropdownProducts(@RequestParam("values") String[] values) {
 		
 		shoppingCartService.deleteBasketProducts();
-		return "redirect:/" + shoppingCartService.getPage(shopName, category);
+		return "redirect:/" + shoppingCartService.getPage(values[0], values[1]);
 	}
 	
 	@PatchMapping("/changeQuantity")
