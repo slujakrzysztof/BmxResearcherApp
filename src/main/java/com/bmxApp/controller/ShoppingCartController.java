@@ -25,8 +25,6 @@ public class ShoppingCartController {
 	
 	@GetMapping({ "/cart", "/cart/{shopName}" })
 	public String showShoppingCart(@PathVariable(required = false) String shopName, Model model) {
-
-		System.out.println("SHOP :" + shopName);
 		
 		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("totalPrice", shoppingCartService.formatPrice(shoppingCartService.getTotalPriceForShop(shopName)));
@@ -35,14 +33,6 @@ public class ShoppingCartController {
 		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shopName));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProductsInCart(shopName));
 		return "basket";
-	}
-
-	@PatchMapping("/quantityChangedPlus/{productId}")
-	public String changeQuantityPlus(@PathVariable String productId) {
-		
-		shoppingCartService.changeQuantity(Integer.parseInt(productId), 1);
-
-		return "redirect:/cart";
 	}
 
 	@DeleteMapping({"/deleteProducts", "/cart/deleteProducts"})
@@ -58,11 +48,11 @@ public class ShoppingCartController {
 		shoppingCartService.deleteBasketProducts();
 		return "redirect:/" + shoppingCartService.getPage(shopName, category);
 	}
-
-	@PatchMapping("/quantityChangedMinus/{productId}")
-	public String changeQuantityMinus(@PathVariable String productId) {
+	
+	@PatchMapping("/changeQuantity")
+	public String changeQuantity(@RequestParam("quantityValue") String quantityValue, @RequestParam("productId") String productId) {
 		
-		shoppingCartService.changeQuantity(Integer.parseInt(productId), -1);
+		shoppingCartService.changeQuantity(Integer.parseInt(productId), Integer.parseInt(quantityValue));
 		return "redirect:/cart";
 	}
 
