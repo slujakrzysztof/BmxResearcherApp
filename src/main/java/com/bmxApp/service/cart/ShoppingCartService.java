@@ -176,5 +176,11 @@ public class ShoppingCartService {
 		if(shop.isEmpty()) return "main";
 		return "search?shop=" + shopName.toUpperCase() + "&category=" + category;
 	}
+	
+	public String getPage(String shopName) {
+		Optional<String> shop = Optional.ofNullable(shopName);
+		if(shop.isEmpty()) return "cart";
+		return "cart/" + shopName;
+	}
 
 }

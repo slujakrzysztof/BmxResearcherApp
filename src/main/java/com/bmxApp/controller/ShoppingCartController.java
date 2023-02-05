@@ -2,10 +2,14 @@ package com.bmxApp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -33,7 +37,7 @@ public class ShoppingCartController {
 		return "basket";
 	}
 
-	@GetMapping("/quantityChangedPlus/{productId}")
+	@PatchMapping("/quantityChangedPlus/{productId}")
 	public String changeQuantityPlus(@PathVariable String productId) {
 		
 		shoppingCartService.changeQuantity(Integer.parseInt(productId), 1);
@@ -41,32 +45,32 @@ public class ShoppingCartController {
 		return "redirect:/cart";
 	}
 
-	@PostMapping({"/deleteProducts", "/cart/deleteProducts"})
+	@DeleteMapping({"/deleteProducts", "/cart/deleteProducts"})
 	public String deleteBasketProducts() {
 		
 		shoppingCartService.deleteBasketProducts();
 		return "basket";
 	}
 	
-	@GetMapping("/removeDropdownProducts/{shopName}/{category}")
+	@DeleteMapping("/removeDropdownProducts/{shopName}/{category}")
 	public String removeDropdownProducts(@PathVariable String shopName, @PathVariable String category) {
 		
 		shoppingCartService.deleteBasketProducts();
 		return "redirect:/" + shoppingCartService.getPage(shopName, category);
 	}
 
-	@GetMapping("/quantityChangedMinus/{productId}")
+	@PatchMapping("/quantityChangedMinus/{productId}")
 	public String changeQuantityMinus(@PathVariable String productId) {
 		
 		shoppingCartService.changeQuantity(Integer.parseInt(productId), -1);
 		return "redirect:/cart";
 	}
 
-	@GetMapping("/removeProduct/{shopName}/{category}/{productId}")
-	public String removeBasketProduct(@PathVariable String shopName, @PathVariable String category, @PathVariable String productId) {
+	@DeleteMapping("/removeProduct")
+	public String removeBasketProduct(@RequestParam("values") String[] values) {
 		
-		shoppingCartService.deleteBasketProductByProductId(Integer.parseInt(productId));
-		return "redirect:/" + shoppingCartService.getPage(shopName,category);
+		shoppingCartService.deleteBasketProductByProductId(Integer.parseInt(values[0]));
+		return "redirect:/" + shoppingCartService.getPage(values[1]);
 	}
 
 }

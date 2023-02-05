@@ -68,10 +68,17 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 																	<div>
 																		[[#{shopName}]] <span class="value">[[${basketProduct.shopName}]]</span>
 																	</div>
-																	<div>
-																		<a class="fas fa-trash icon-dark"
-																			th:href="@{/removeProduct/cart/{productId}(productId=${basketProduct.productId})}"></a>
-																	</div>
+																	<form th:action="@{/removeProduct}" th:method="delete">
+																		<div>
+																			<input type="hidden" name="values"
+																				th:value="${basketProduct.productId}" /> <input
+																				type="hidden" name="values"
+																				th:value="${basketProduct.shopName}" />
+																			<button class="btn">
+																				<i class="fas fa-trash icon-dark"></i>
+																			</button>
+																		</div>
+																	</form>
 																	<div>
 																		<form th:object="${shopModel}" th:action="@{/search}"
 																			method="get">
@@ -88,18 +95,20 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 														</div>
 														<div class="col-md-4 quantity">
 															<div class="input-group quantity-wrapper">
-
-																<span class="input-group-btn"> <a
-																	th:href="@{/quantityChangedMinus/{productId}(productId=${basketProduct.productId})}"
-																	class="btn btn-info">-</a>
-																</span> <input type="number" name="quantityController"
-																	class="form-control input-number quantity-style"
-																	th:value="${basketProduct.quantity}" min="0"> <span
-																	class="input-group-btn"> <a
-																	th:href="@{/quantityChangedPlus/{productId}(productId=${basketProduct.productId})}"
-																	class="btn btn-info">+</a>
-																</span>
-
+																<form action="" th:method="patch">
+																	<input type="hidden" name="${_csrf.parameterName}"
+																		value="${_csrf.token}" /> <span
+																		class="input-group-btn"> <a
+																		th:href="@{/quantityChangedMinus/{productId}(productId=${basketProduct.productId})}"
+																		class="btn btn-info">-</a>
+																	</span> <input type="number" name="quantityController"
+																		class="form-control input-number quantity-style"
+																		th:value="${basketProduct.quantity}" min="0">
+																	<span class="input-group-btn"> <a
+																		th:href="@{/quantityChangedPlus/{productId}(productId=${basketProduct.productId})}"
+																		class="btn btn-info">+</a>
+																	</span>
+																</form>
 															</div>
 														</div>
 														<div class="col-md-3 price">
@@ -132,7 +141,7 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 								<div class="summary-item">
 									<span class="text">[[#{finalPrice}]]</span><span class="price">[[${finalPrice}]]</span>
 								</div>
-								<form action="#" th:action="@{deleteProducts}" method="post">
+								<form action="#" th:action="@{deleteProducts}" th:method="delete">
 									<button type="submit" value="submit" class="btn btn-danger">[[#{deleteButton}]]</button>
 								</form>
 								<a th:href="@{/main}">
