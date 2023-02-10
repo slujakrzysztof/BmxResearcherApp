@@ -22,6 +22,7 @@ import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 import com.bmxApp.service.product.ProductRepositoryService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -112,6 +113,11 @@ public class SearchService {
 
 		Arrays.asList(Shop.values()).stream()
 				.forEach(shop -> this.search(category, shop.name().toLowerCase(), partSelection));
+	}
+	
+	public String getSearchURL(HttpServletRequest request) {
+		
+		return request.getRequestURL() + "?" + request.getQueryString();
 	}
 	
 	public ArrayList<BasketProductDTO> getBasketProducts() {

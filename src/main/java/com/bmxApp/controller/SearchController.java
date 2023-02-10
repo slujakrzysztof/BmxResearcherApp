@@ -15,6 +15,8 @@ import com.bmxApp.model.product.Product;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.search.SearchService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class SearchController {
 
@@ -25,10 +27,10 @@ public class SearchController {
 	
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
-			@RequestParam("shop") String shopName) {
+			@RequestParam("shop") String shopName, HttpServletRequest request) {
 		
 		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
-
+		
 		searchService.searchProducts(shopName, category);
 		searchService.setCategory(category);
 		searchService.setCurrentShop(shopName);
@@ -40,6 +42,9 @@ public class SearchController {
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discount", discount);
 		model.addAttribute("discountValue", discount.getValue());
+		model.addAttribute("currentURL", searchService.getSearchURL(request));
+		
+		
 		searchService.resetDiscount();
 		return "products";
 	}

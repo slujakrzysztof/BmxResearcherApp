@@ -19,6 +19,8 @@ import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 import com.bmxApp.service.product.ProductRepositoryService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class ShoppingCartService {
 
@@ -173,6 +175,11 @@ public class ShoppingCartService {
 		Optional<String> shop = Optional.ofNullable(shopName);
 		if(shop.isEmpty()) return "main";
 		return "search?shop=" + shopName.toUpperCase() + "&category=" + category;
+	}
+	
+	public String getCartURL(HttpServletRequest request) {
+		
+		return request.getRequestURL().toString();
 	}
 	
 	public String getPage(String shopName) {

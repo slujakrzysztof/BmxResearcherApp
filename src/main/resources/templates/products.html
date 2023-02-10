@@ -18,54 +18,11 @@
 </head>
 <body>
 	<header>
-<div class="main">
-<span>[[#{discountLabel}]]</span>
-</div>
-		<div class="shopping-cart">
-			<div class="shopping-cart-icon">
-				<span id="cart-amount">[[${basketProducts.size}]]</span>
-				<i id="cart-icon" class="fa-solid fa-cart-shopping fa-2x no-empty"></i>
-			</div>
-			<div class="shopping-cart-container hide">
-				<div class="shopping-cart-wrapper">
-					<div class="shopping-cart-item"
-						th:each="basketProduct : ${basketProducts}">
-						<img th:src="${basketProduct.getDtoProduct().getImageUrl()}" />
-						<div class="details">
-							<p1>[[${basketProduct.getDtoProduct().getProductName()}]]</p1>
-							<br> <br>
-							<p1>[[${basketProduct.getShopName()}]]</p1>
-							<span class="price">[[${basketProduct.getDtoProduct().getPrice()}]]</span>
-						</div>
-
-						<form th:action="@{/removeBasketProduct/{productId} (productId = ${basketProduct.productId})}"
-							th:method="delete">
-							<div class="trash">
-								<div class="product-cart-button">
-									<input type="hidden" name="values" th:value="${shopName}" /> <input
-										type="hidden" name="values" th:value="${category}" />
-										<button class="btn" id="product-delete-button"> 
-										<i class="fa-solid fa-trash-can"></i>
-										</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				<div class="totalPrice">[[${basketTotalPrice}]]</div>
-				<form th:action="@{/removeDropdownCartProducts}" th:method="delete">
-					<div class="delete-cart-button">
-						<input type="hidden" name="values"
-							th:value="${shopName}" /> <input type="hidden"
-							name="values" th:value="${category}" />
-						<button class="btn" id="delete-button" disabled="disabled">[[#{deleteButton}]]</button>
-					</div>
-				</form>
-				<div class="shopping-cart-button">
-					<a th:href="@{/cart}">[[#{cartLabel}]]</a>				
-				</div>
-			</div>
+		<div class="main">
+			<span> <a th:href="@{/main}">[[#{mainPage}]]</a></span> <span></span>
+			<span>[[#{discountLabel}]]</span>
 		</div>
-</div>
+		<div th:replace="fragments/dropdownCart :: dropdown-shopping-cart"></div>
 	</header>
 
 

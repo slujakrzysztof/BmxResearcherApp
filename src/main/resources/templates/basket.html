@@ -68,12 +68,10 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 																	<div>
 																		[[#{shopName}]] <span class="value">[[${basketProduct.shopName}]]</span>
 																	</div>
-																	<form th:action="@{/removeProduct}" th:method="delete">
+																	<form th:action="@{/removeBasketProduct/{productId} (productId=${basketProduct.productId})}" th:method="delete">
 																		<div>
-																			<input type="hidden" name="values"
-																				th:value="${basketProduct.productId}" /> <input
-																				type="hidden" name="values"
-																				th:value="${basketProduct.shopName}" />
+																		<input type="hidden" name="currentURL"
+																				th:value="${currentURL}">
 																			<button class="btn">
 																				<i class="fas fa-trash icon-dark"></i>
 																			</button>
