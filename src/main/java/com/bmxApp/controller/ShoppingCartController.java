@@ -56,11 +56,11 @@ public class ShoppingCartController {
 		return "redirect:/cart";
 	}
 
-	@DeleteMapping("/removeProduct")
-	public String removeBasketProduct(@RequestParam("values") String[] values) {
+	@DeleteMapping("/removeBasketProduct/{productId}")
+	public String removeBasketProduct(@RequestParam("values") String[] values, @PathVariable int productId) {
 		
-		shoppingCartService.deleteBasketProductByProductId(Integer.parseInt(values[0]));
-		return "redirect:/" + shoppingCartService.getPage(values[1]);
+		shoppingCartService.deleteBasketProductByProductId(productId);
+		return "redirect:/" + shoppingCartService.getPage(values[0], values[1]);
 	}
 
 }

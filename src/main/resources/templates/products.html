@@ -18,9 +18,12 @@
 </head>
 <body>
 	<header>
-
+<div class="main">
+<span>[[#{discountLabel}]]</span>
+</div>
 		<div class="shopping-cart">
 			<div class="shopping-cart-icon">
+				<span id="cart-amount">[[${basketProducts.size}]]</span>
 				<i id="cart-icon" class="fa-solid fa-cart-shopping fa-2x no-empty"></i>
 			</div>
 			<div class="shopping-cart-container hide">
@@ -34,21 +37,27 @@
 							<p1>[[${basketProduct.getShopName()}]]</p1>
 							<span class="price">[[${basketProduct.getDtoProduct().getPrice()}]]</span>
 						</div>
-						<div class="trash">
-							<a
-								th:href="@{/removeProduct/{shopName}/{category}/{productId}(shopName=${shopName}, category=${category}, productId=${basketProduct.productId})}">
-								<i class="fa-solid fa-trash-can"></i>
-							</a>
-						</div>
+
+						<form th:action="@{/removeBasketProduct/{productId} (productId = ${basketProduct.productId})}"
+							th:method="delete">
+							<div class="trash">
+								<div class="product-cart-button">
+									<input type="hidden" name="values" th:value="${shopName}" /> <input
+										type="hidden" name="values" th:value="${category}" />
+										<button class="btn" id="product-delete-button"> 
+										<i class="fa-solid fa-trash-can"></i>
+										</button>
+								</div>
+							</div>
+						</form>
 					</div>
-				</div>
 				<div class="totalPrice">[[${basketTotalPrice}]]</div>
 				<form th:action="@{/removeDropdownCartProducts}" th:method="delete">
 					<div class="delete-cart-button">
 						<input type="hidden" name="values"
 							th:value="${shopName}" /> <input type="hidden"
 							name="values" th:value="${category}" />
-						<button class="btn">[[#{deleteButton}]]</button>
+						<button class="btn" id="delete-button" disabled="disabled">[[#{deleteButton}]]</button>
 					</div>
 				</form>
 				<div class="shopping-cart-button">
@@ -56,7 +65,7 @@
 				</div>
 			</div>
 		</div>
-
+</div>
 	</header>
 
 
@@ -118,8 +127,11 @@
 	<script type="text/javascript" th:src="@{/js/dropdownCart.js}"></script>
 	<script th:inline="javascript">
 		var amount = [[${basketProducts.size}]];
+		const deleteButton = document.getElementById('delete-button');
 		
-		document.documentElement.style.setProperty('--cart-amount', amount);
+		if(amount===0) deleteButton.setAttribute('disabled', 'disabled');
+		else deleteButton.removeAttribute("disabled");
+		
 	</script>
 
 </body>
