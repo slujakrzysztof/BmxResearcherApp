@@ -150,18 +150,14 @@ public class ShopResearcherService {
 
 			long listSize = pageUrlList.size();
 			
-			System.out.println("PAGE URL LIST : " + pageUrlList);
-			
 			if (allProductsDisplay) {
-				System.out.println("HAHAH: " + pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList()));
 				pageUrlList = pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList());
 			}
 			else if (pageUrlList.isEmpty())
 				pageUrlList.add(partUrl);
 			else if(pageUrlList.get(0).isBlank()) {
-				System.out.println("JESTEM TU" + partUrl);
 				pageUrlList.set(0, partUrl);
-				System.out.println("PAGE URL LIST 2: " + pageUrlList);			}
+				}
 				
 
 		} catch (ValidationException ex) {
@@ -182,12 +178,6 @@ public class ShopResearcherService {
 			imageUrlElements = this.getDocument().select(PropertyManager.getInstance().IMAGE_URL());
 		else
 			imageUrlElements = div.select(PropertyManager.getInstance().IMAGE_URL());
-		
-		System.out.println("DIIIIIIIV: "  + div);
-		System.out.println("NAAAAAAAAMES : " + productNameElements);
-		System.out.println("PRIIIIIICES : " + productPriceElements);
-		System.out.println("URRRRRRRRL : " + productUrlElements);
-		System.out.println("IMG URRRRRRRRL : " + imageUrlElements);
 		
 	}
 	
@@ -242,7 +232,6 @@ public class ShopResearcherService {
 
 		ArrayList<String> pagesList = (ArrayList<String>) this.findPagesInCategory(url);
 		LinkedList<Product> productsList = new LinkedList<>();
-		System.out.println("SEARCH CATEGORY : " + category);
 		
 		pagesList.stream().forEach(page -> {
 			this.setConnection(page);

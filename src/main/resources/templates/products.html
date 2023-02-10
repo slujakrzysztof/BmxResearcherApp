@@ -22,7 +22,7 @@
 			<span> <a th:href="@{/main}">[[#{mainPage}]]</a></span> <span></span>
 			<span>[[#{discountLabel}]]</span>
 		</div>
-		<div th:replace="fragments/dropdownCart :: dropdown-shopping-cart"></div>
+		<div th:replace="~{fragments/dropdownCart :: dropdown-shopping-cart}"></div>
 	</header>
 
 

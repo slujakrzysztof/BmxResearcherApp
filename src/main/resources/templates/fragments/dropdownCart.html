@@ -10,7 +10,7 @@
 					th:each="basketProduct : ${basketProducts}">
 					<img th:src="${basketProduct.getDtoProduct().getImageUrl()}" />
 					<div class="details">
-						<p1>[[${basketProduct.getDtoProduct().getProductName()}]]</p1>
+						<a th:href="@{${basketProduct.dtoProduct.url}}">[[${basketProduct.getDtoProduct().getProductName()}]]</a>
 						<br> <br>
 						<p1>[[${basketProduct.getShopName()}]]</p1>
 						<span class="price">[[${basketProduct.getDtoProduct().getPrice()}]]</span>

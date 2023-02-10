@@ -50,12 +50,8 @@ public class ShoppingCartService {
 		
 		if(Optional.ofNullable(shopName).isPresent())  {	
 			
-			System.out.println("I'm here");
-			
 			List<BasketProductDTO> dtoBasketProductsByShopName = dtoBasketProducts.stream().
 					filter(basketProduct -> basketProduct.getShopName().equalsIgnoreCase(shopName)).collect(Collectors.toList());
-			
-			System.out.println("LIIIIIIST: " + dtoBasketProductsByShopName);
 			
 			return (ArrayList<BasketProductDTO>) dtoBasketProductsByShopName;
 		}
@@ -169,12 +165,6 @@ public class ShoppingCartService {
 	public String getFinalPrice(String shopName) {
 		float price = this.getTotalPriceForShop(shopName) - Float.parseFloat(this.getTotalDiscount(shopName));
 		return formatPrice(price);
-	}
-	
-	public String getPage(String shopName, String category) {
-		Optional<String> shop = Optional.ofNullable(shopName);
-		if(shop.isEmpty()) return "main";
-		return "search?shop=" + shopName.toUpperCase() + "&category=" + category;
 	}
 	
 	public String getCartURL(HttpServletRequest request) {
