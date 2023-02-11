@@ -171,11 +171,5 @@ public class ShoppingCartService {
 		
 		return request.getRequestURL().toString();
 	}
-	
-	public String getPage(String shopName) {
-		Optional<String> shop = Optional.ofNullable(shopName);
-		if(shop.isEmpty()) return "cart";
-		return "cart/" + shopName;
-	}
 
 }

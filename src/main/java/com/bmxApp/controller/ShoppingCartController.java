@@ -1,5 +1,7 @@
 package com.bmxApp.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +21,7 @@ import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.shopModel.ShopModelDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -61,10 +64,14 @@ public class ShoppingCartController {
 	}
 
 	@PatchMapping("/changeQuantity")
-	public String changeQuantity(@RequestParam("quantityValue") String quantityValue,
-			@RequestParam("productId") String productId) {
-
-		shoppingCartService.changeQuantity(Integer.parseInt(productId), Integer.parseInt(quantityValue));
+	public String changeQuantity(@Nullable @RequestParam("quantityValue") String quantityValue,
+			@Nullable @RequestParam("quantityController") String quantityController, @RequestParam("productId") String productId) {
+	
+		//TO CHANGE!!!
+		
+		boolean notNull = Optional.ofNullable(quantityValue).isPresent();
+		int quantity = ((notNull) ? Integer.parseInt(quantityValue) : Integer.parseInt(quantityController));
+		shoppingCartService.changeQuantity(Integer.parseInt(productId), quantity);
 		return "redirect:/cart";
 	}
 
