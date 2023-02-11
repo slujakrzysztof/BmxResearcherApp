@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.model.discount.Discount;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.search.SearchService;
@@ -40,7 +42,6 @@ public class SearchController {
 		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
-		model.addAttribute("discount", discount);
 		model.addAttribute("discountValue", discount.getValue());
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
 		
@@ -50,12 +51,14 @@ public class SearchController {
 	}
 	
 
-	@GetMapping("/applyDiscount")
-	public String applyDiscount(@ModelAttribute("value") int value, Model model) {
-
-		searchService.setDiscount(value);
+	@PostMapping("/applyDiscount")
+	public RedirectView applyDiscount(@RequestParam("value") int value, @RequestParam("currentURL") String currentURL) {
 		
-		return "redirect:/search?shop=" + searchService.getCurrentShop() + "&category=" + searchService.getCategory();
+		searchService.setDiscount(value);
+		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl(currentURL);
+		return redirectView;		
+		//return "redirect:/search?shop=" + searchService.getCurrentShop() + "&category=" + searchService.getCategory();
 	}
 	
 	@GetMapping("/resetDiscount")

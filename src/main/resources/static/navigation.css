@@ -114,6 +114,12 @@ h1 {
 	top:-20px;
 }
 
+.main-button {
+   word-spacing: normal;
+   letter-spacing: normal;
+   display: inline-block;
+}
+
 
 a{
   text-decoration: none;
