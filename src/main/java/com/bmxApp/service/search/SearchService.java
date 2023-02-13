@@ -47,14 +47,14 @@ public class SearchService {
 		this.shopResearcherService = shopResearcherService;		
 	}
 
-	public ArrayList<Product> getProducts(String shopName, String category) {
+	public List<Product> getProducts(String shopName, String category) {
 
 		return this.productRepositoryService.getSearchedProducts(shopName, category);
 	}
 
 	public ArrayList<ProductDTO> getProductsWithDiscount(String shopName, String category) {
 
-		ArrayList<Product> productList = this.getProducts(shopName, category);
+		List<Product> productList = this.getProducts(shopName, category);
 		DiscountDTO discountDTO = this.getShopResearcherService().getDiscount();
 		ArrayList<ProductDTO> productDTOList = new ArrayList<>();
 		
@@ -115,7 +115,7 @@ public class SearchService {
 	// Iterate all available shops to get products
 	public void searchAllShops(String category, boolean partSelection) {
 
-		Arrays.asList(Shop.values()).stream()
+		Shop.getShops().stream()
 				.forEach(shop -> this.search(category, shop.name().toLowerCase(), partSelection));
 	}
 	

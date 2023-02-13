@@ -1,6 +1,7 @@
 package com.bmxApp.enums;
 
-import java.util.EnumSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public enum Shop {
 
@@ -12,8 +13,13 @@ public enum Shop {
 	ALLSHOPS;
 	
 	// While Allday hasn't been configured this method doesn't return it - ADD LATER
-	public static EnumSet<Shop> getShops() {
-		return EnumSet.of(Shop.BMXLIFE, Shop.AVEBMX, Shop.MANYFESTBMX);
+	public static List<Shop> getShops() {
+		
+		List<Shop> shopList = new ArrayList<>();
+		shopList.add(BMXLIFE);
+		shopList.add(AVEBMX);
+		shopList.add(MANYFESTBMX);
+		return shopList;
 	}
 	
 }

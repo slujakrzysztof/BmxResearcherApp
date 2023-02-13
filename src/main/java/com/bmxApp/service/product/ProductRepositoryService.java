@@ -29,17 +29,17 @@ public class ProductRepositoryService {
 	private final ProductRepository productRepository;
 
 	@Transactional
-	public ArrayList<Product> getSearchedProducts(String shopName, String category) {
+	public List<Product> getSearchedProducts(String shopName, String category) {
 
-		List<Product> productList = productRepository.findByShopNameAndCategory(shopName, category);
-		// ArrayList<ProductDTO> productDTOList = new ArrayList<>();
+		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
 
-		/*
-		 * productList.forEach(product ->
-		 * productDTOList.add(ProductMapper.mapToProductDTO(product)) );
-		 */
+			List<Product> productList = new ArrayList<>();
+			for (Shop shop : Shop.getShops()) 
+				productList.addAll(productRepository.findByShopNameAndCategory(shop.name(), category));
+			return productList;
+		}
 
-		return (ArrayList<Product>) productList;
+		return productRepository.findByShopNameAndCategory(shopName, category);
 	}
 
 	public Product getProductByProductNameAndShopName(String productName, String shopName) {
@@ -76,18 +76,20 @@ public class ProductRepositoryService {
 		String productName = dtoProduct.getProductName();
 		String shopName = dtoProduct.getShopName();
 		Optional<Product> product = Optional.ofNullable(this.getProductByProductNameAndShopName(productName, shopName));
-		
+
 		if (product.isPresent() && dtoProduct.equals(ProductMapper.mapToProductDTO(product.get())))
 			return true;
 		return false;
 	}
-	
+
 	public void insertUpdateProduct(ProductDTO dtoProduct) {
-		
-		Product product = productRepository.findByProductNameAndShopName(dtoProduct.getProductName(), dtoProduct.getShopName());
-		
-		if(product == null) product = ProductMapper.mapToProduct(dtoProduct);
-		
+
+		Product product = productRepository.findByProductNameAndShopName(dtoProduct.getProductName(),
+				dtoProduct.getShopName());
+
+		if (product == null)
+			product = ProductMapper.mapToProduct(dtoProduct);
+
 		productRepository.save(product);
 	}
 
