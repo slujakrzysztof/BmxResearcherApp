@@ -23,12 +23,13 @@ import com.bmxApp.service.cart.ShoppingCartService;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class ShoppingCartController {
 
-	@Autowired
-	private ShoppingCartService shoppingCartService;
+	private final ShoppingCartService shoppingCartService;
 
 	@GetMapping({ "/cart", "/cart/{shopName}" })
 	public String showShoppingCart(@PathVariable(required = false) String shopName, Model model,

@@ -20,12 +20,13 @@ import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ProductRepositoryService {
 
-	@Autowired
-	ProductRepository productRepository;
+	private final ProductRepository productRepository;
 
 	@Transactional
 	public ArrayList<Product> getSearchedProducts(String shopName, String category) {

@@ -20,18 +20,15 @@ import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 import com.bmxApp.service.product.ProductRepositoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ShoppingCartService {
 
-	@Autowired
-	private BasketProductRepositoryService basketProductRepositoryService;
-
-	@Autowired
-	private ProductRepositoryService productRepositoryService;
-
-	@Autowired(required = false)
-	private ShopResearcherService shopResearcher;
+	private final BasketProductRepositoryService basketProductRepositoryService;
+	private final ProductRepositoryService productRepositoryService;
+	private final ShopResearcherService shopResearcher;
 
 	public ArrayList<BasketProduct> getBasketProducts() {
 

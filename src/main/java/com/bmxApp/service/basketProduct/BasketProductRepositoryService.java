@@ -18,11 +18,13 @@ import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.repository.BasketProductRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BasketProductRepositoryService {
 
-	@Autowired
-	BasketProductRepository basketProductRepository;
+	private final BasketProductRepository basketProductRepository;
 
 	public float getTotalPrice() {
 		if(this.getBasketProducts().isEmpty()) return 0f;

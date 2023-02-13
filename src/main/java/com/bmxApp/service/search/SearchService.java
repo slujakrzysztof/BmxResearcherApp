@@ -31,17 +31,21 @@ import lombok.Setter;
 @Setter
 public class SearchService {
 
-	@Autowired
-	ProductRepositoryService productRepositoryService;
-
-	@Autowired
-	BasketProductRepositoryService basketProductRepositoryService;
-	
-	@Autowired(required = false)
-	ShopResearcherService shopResearcherService;
+	private final ProductRepositoryService productRepositoryService;
+	private final BasketProductRepositoryService basketProductRepositoryService;
+	private final ShopResearcherService shopResearcherService;
 	
 	private String currentShop;
 	private String category;
+	
+	public SearchService(ProductRepositoryService productRepositoryService,
+						 BasketProductRepositoryService basketProductRepositoryService,
+						 ShopResearcherService shopResearcherService) {
+		
+		this.productRepositoryService = productRepositoryService;
+		this.basketProductRepositoryService = basketProductRepositoryService;
+		this.shopResearcherService = shopResearcherService;		
+	}
 
 	public ArrayList<Product> getProducts(String shopName, String category) {
 

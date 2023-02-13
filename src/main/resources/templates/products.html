@@ -75,7 +75,8 @@
 									th:value="${product.getPrice()}" /> <input type="hidden"
 									th:attr="name='url'" th:value="${product.getUrl()}" /> <input
 									type="hidden" th:attr="name='imageUrl'"
-									th:value="${product.getImageUrl()}" />
+									th:value="${product.getImageUrl()}" /> <input type="hidden"
+									name="currentURL" th:value="${currentURL}" />
 								<button type="submit" value="submit" th:text="#{addBasket}"></button>
 							</form></td>
 					</tr>

@@ -1,6 +1,5 @@
 package com.bmxApp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,20 +11,19 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
-import com.bmxApp.model.discount.Discount;
-import com.bmxApp.model.product.Product;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.search.SearchService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class SearchController {
 
-	@Autowired
-	private SearchService searchService;
-	@Autowired
-	private ShoppingCartService shoppingCartService;
+	private final SearchService searchService;
+	private final ShoppingCartService shoppingCartService;
+	
 	
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
@@ -58,25 +56,27 @@ public class SearchController {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl(currentURL);
 		return redirectView;		
-		//return "redirect:/search?shop=" + searchService.getCurrentShop() + "&category=" + searchService.getCategory();
 	}
 	
 	@GetMapping("/resetDiscount")
-	public String applyDiscount(Model model) {
+	public RedirectView applyDiscount(@RequestParam("currentURL") String currentURL) {
 
 		searchService.resetDiscount();
-		
-		return "redirect:/search?shop=" + searchService.getCurrentShop() + "&category=" + searchService.getCategory();
+		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl(currentURL);
+		return redirectView;
 	}
 	
 	@PostMapping("/addProduct")
-	public String addProductToBasket(@ModelAttribute("product") ProductDTO dtoProduct, Model model,
+	public RedirectView addProductToBasket(@ModelAttribute("product") ProductDTO dtoProduct,
+			@RequestParam("currentURL") String currentURL,
+			Model model,
 			BindingResult bindingResult) {
 		
 		shoppingCartService.addProductToCart(dtoProduct.getProductName(), dtoProduct.getShopName());
-
-		return "redirect:/search?shop=" + dtoProduct.getShopName() + "&category="
-				+ dtoProduct.getCategory();
+		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl(currentURL);
+		return redirectView;
 	}
 	
 }
