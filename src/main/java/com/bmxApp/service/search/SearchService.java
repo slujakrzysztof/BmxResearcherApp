@@ -18,35 +18,25 @@ import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
+import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 import com.bmxApp.service.product.ProductRepositoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Service
 @Getter
-@Setter
+@RequiredArgsConstructor
 public class SearchService {
 
 	private final ProductRepositoryService productRepositoryService;
 	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ShopResearcherService shopResearcherService;
 	
-	private String currentShop;
-	private String category;
-	
-	public SearchService(ProductRepositoryService productRepositoryService,
-						 BasketProductRepositoryService basketProductRepositoryService,
-						 ShopResearcherService shopResearcherService) {
-		
-		this.productRepositoryService = productRepositoryService;
-		this.basketProductRepositoryService = basketProductRepositoryService;
-		this.shopResearcherService = shopResearcherService;		
-	}
-
 	public List<Product> getProducts(String shopName, String category) {
 
 		return this.productRepositoryService.getSearchedProducts(shopName, category);

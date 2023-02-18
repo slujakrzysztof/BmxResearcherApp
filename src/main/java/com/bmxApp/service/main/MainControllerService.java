@@ -22,26 +22,25 @@ import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
+import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.repository.ProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Service
 @Getter
-@Setter
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class MainControllerService {
 
 	@Autowired
-	BasketProductRepositoryService basketProductRepositoryService;
+	final BasketProductRepositoryService basketProductRepositoryService;
+
 	
-	private String language = "polish";
-
-
 	public ArrayList<BasketProductDTO> getBasketProducts() {
 
 		return basketProductRepositoryService.getBasketProductsDTO();

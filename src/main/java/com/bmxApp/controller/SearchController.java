@@ -32,8 +32,6 @@ public class SearchController {
 		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
 		
 		searchService.searchProducts(shopName, category);
-		searchService.setCategory(category);
-		searchService.setCurrentShop(shopName);
 
 		model.addAttribute("products", searchService.getProductsWithDiscount(shopName, category));
 		model.addAttribute("basketProducts", searchService.getBasketProducts());
@@ -42,7 +40,6 @@ public class SearchController {
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discountValue", discount.getValue());
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
-		
 		
 		searchService.resetDiscount();
 		return "products";
