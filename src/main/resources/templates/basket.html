@@ -68,9 +68,11 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 																	<div>
 																		[[#{shopName}]] <span class="value">[[${basketProduct.shopName}]]</span>
 																	</div>
-																	<form th:action="@{/removeBasketProduct/{productId} (productId=${basketProduct.productId})}" th:method="delete">
+																	<form
+																		th:action="@{/removeBasketProduct/{productId} (productId=${basketProduct.productId})}"
+																		th:method="delete">
 																		<div>
-																		<input type="hidden" name="currentURL"
+																			<input type="hidden" name="currentURL"
 																				th:value="${currentURL}">
 																			<button class="btn">
 																				<i class="fas fa-trash icon-dark"></i>
@@ -93,20 +95,23 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 														</div>
 
 														<div class="col-md-4 quantity">
-															<form id="quantityForm" th:action="@{/changeQuantity}" th:method="patch">
+															<form id="quantityForm" th:action="@{/changeQuantity}"
+																th:method="patch">
 																<div class="input-group quantity-wrapper">
 																	<input type="hidden" name="productId"
-																		th:value="${basketProduct.productId}" > <input
-																		type="hidden" th:value="-1" name="quantityValue" disabled="disabled" id="minus-input"> <span
+																		th:value="${basketProduct.productId}"> <input
+																		type="hidden" th:value="-1" name="quantityValue"
+																		disabled="disabled" id="minus-input"> <span
 																		class="input-group-btn">
 																		<button type="submit" value="submit"
 																			class="btn btn-info" id="minus-button">-</button>
-																			
+
 																	</span> <input type="number" name="quantityController"
 																		class="form-control input-number quantity-style"
 																		th:value="${basketProduct.quantity}" min="0">
 
-																	<input type="hidden" name="quantityValue" th:value="1" id="plus-input" disabled="disabled"> <span
+																	<input type="hidden" name="quantityValue" th:value="1"
+																		id="plus-input" disabled="disabled"> <span
 																		class="input-group-btn">
 																		<button type="submit" value="submit"
 																			class="btn btn-info" id="plus-button">+</button>
@@ -145,13 +150,21 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 								<div class="summary-item">
 									<span class="text">[[#{finalPrice}]]</span><span class="price">[[${finalPrice}]]</span>
 								</div>
-								<form action="#" th:action="@{deleteProducts}"
-									th:method="delete">
+								<form th:action="@{/deleteProducts}" th:method="delete">
 									<button type="submit" value="submit" class="btn btn-danger">[[#{deleteButton}]]</button>
 								</form>
 								<a th:href="@{/main}">
 									<button type="submit" value="submit" class="btn btn-info">[[#{mainPage}]]</button>
 								</a>
+								<br>
+								<br>
+								<form th:action="@{/applyCartDiscount}" th:method="post">
+									<input class="form-control-lg" type="number" min="0" max="100"
+										step="1" th:placeholder="${discountValue}"
+										th:value="*{discountV}" name="value" /> <input type="hidden"
+										name="currentURL" th:value="${currentURL}" />
+									<button type="submit" value="submit" class="btn btn-info" th:text="ENTER"></button>
+								</form>
 							</div>
 						</div>
 					</div>

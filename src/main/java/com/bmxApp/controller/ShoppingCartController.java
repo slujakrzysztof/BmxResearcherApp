@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.shopModel.ShopModelDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 
@@ -40,12 +41,22 @@ public class ShoppingCartController {
 				shoppingCartService.formatPrice(shoppingCartService.getTotalPriceForShop(shopName)));
 		model.addAttribute("totalPriceForBasketProduct", shoppingCartService.getTotalPriceForEachBasketProduct());
 		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shopName));
+		model.addAttribute("discountValue", shoppingCartService.getDiscountValue());
 		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shopName));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProductsInCart(shopName));
 		model.addAttribute("currentURL", shoppingCartService.getCartURL(request));
 
 		return "basket";
 	}
+	
+	@PostMapping("/applyCartDiscount")
+	public RedirectView applyCartDiscount(@RequestParam("value") int value, @RequestParam("currentURL") String currentURL) {
+		
+		shoppingCartService.setCartDiscount(value);
+		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl(currentURL);
+		return redirectView;		
+	}	
 
 	@DeleteMapping({ "/deleteProducts", "/cart/deleteProducts" })
 	public String deleteBasketProducts() {

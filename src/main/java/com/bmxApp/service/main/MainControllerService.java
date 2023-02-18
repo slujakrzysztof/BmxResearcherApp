@@ -37,7 +37,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class MainControllerService {
 
-	@Autowired
 	final BasketProductRepositoryService basketProductRepositoryService;
 
 	

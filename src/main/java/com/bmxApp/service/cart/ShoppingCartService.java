@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
@@ -35,6 +36,11 @@ public class ShoppingCartService {
 		return basketProductRepositoryService.getBasketProducts();
 	}
 
+	public void setCartDiscount(int value) {
+		
+		shopResearcher.getDiscount().setValue(value);
+	}
+	
 	public ArrayList<BasketProductDTO> getBasketProductsInCart(String shopName) {
 		
 		ArrayList<BasketProduct> basketProducts = this.getBasketProducts();
@@ -151,16 +157,22 @@ public class ShoppingCartService {
 	}
 
 	public String getTotalDiscount(String shopName) {
+		
+		int discountValue = shopResearcher.getDiscount().getValue();
 		float discount = (float) (this.getTotalPriceForShop(shopName)
-				* ((100.0 - shopResearcher.getDiscount().getValue()) / 100.0));
-		float totalDiscount = this.getTotalPriceForShop(shopName) - discount;
-		if (totalDiscount == 0f)
-			return formatPrice(totalDiscount);
-		return "-  " + formatPrice(totalDiscount);
+				* ((100.0 - discountValue) / 100.0));
+		float totalDiscount = (this.getTotalPriceForShop(shopName) - discount) * (-1);
+		return formatPrice(totalDiscount);
+	}
+	
+	public int getDiscountValue() {
+		
+		return this.shopResearcher.getDiscount().getValue();
 	}
 
 	public String getFinalPrice(String shopName) {
-		float price = this.getTotalPriceForShop(shopName) - Float.parseFloat(this.getTotalDiscount(shopName));
+		
+		float price = this.getTotalPriceForShop(shopName) + Float.parseFloat(this.getTotalDiscount(shopName));
 		return formatPrice(price);
 	}
 	
