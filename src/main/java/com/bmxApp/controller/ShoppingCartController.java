@@ -77,13 +77,13 @@ public class ShoppingCartController {
 
 	@PatchMapping("/changeQuantity")
 	public String changeQuantity(@Nullable @RequestParam("quantityValue") String quantityValue,
-			@Nullable @RequestParam("quantityController") String quantityController, @RequestParam("productId") String productId) {
+			@RequestParam("quantityController") int quantityController, @RequestParam("productId") int productId) {
 	
 		//TO CHANGE!!!
+		System.out.println("CONTAINER: " + quantityController);
+		System.out.println("VALUE: " + quantityValue);
 		
-		boolean notNull = Optional.ofNullable(quantityValue).isPresent();
-		int quantity = ((notNull) ? Integer.parseInt(quantityValue) : Integer.parseInt(quantityController));
-		shoppingCartService.changeQuantity(Integer.parseInt(productId), quantity);
+		//shoppingCartService.changeQuantity(productId, quantityValue, quantityController);
 		return "redirect:/cart";
 	}
 

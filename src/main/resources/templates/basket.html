@@ -95,16 +95,16 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 														</div>
 
 														<div class="col-md-4 quantity">
-															<form id="quantityForm" th:action="@{/changeQuantity}"
+															<form id="quantityForm" th:action="@{/changeQuantity/{quantityValue}}"
 																th:method="patch">
 																<div class="input-group quantity-wrapper">
 																	<input type="hidden" name="productId"
 																		th:value="${basketProduct.productId}"> <input
 																		type="hidden" th:value="-1" name="quantityValue"
-																		disabled="disabled" id="minus-input"> <span
+																		id="minus-input"> <span
 																		class="input-group-btn">
 																		<button type="submit" value="submit"
-																			class="btn btn-info" id="minus-button">-</button>
+																			class="btn btn-info" id="minus-button" disabled="disabled">-</button>
 
 																	</span> <input type="number" name="quantityController"
 																		class="form-control input-number quantity-style"

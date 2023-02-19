@@ -136,13 +136,16 @@ public class ShoppingCartService {
 		return basketProductRepositoryService.getQuantity(basketProductId);
 	}
 
-	public void changeQuantity(int productId, int value) {
+	public void changeQuantity(int productId, int quantityValue, int quantityController) {
 
-		
 		Product product = productRepositoryService.getProductById(productId);
 		BasketProduct basketProduct = basketProductRepositoryService.getBasketProductByProduct(product);
+		int actualQuantity = basketProduct.getQuantity();
+		int quantity;
 		
-		basketProduct.setQuantity(basketProduct.getQuantity() + value);
+		quantity = (Math.abs(quantityController - actualQuantity) >= 2) ? quantityController : (actualQuantity + quantityValue); 
+		
+		basketProduct.setQuantity(quantity);
 		
 		if(basketProduct.getQuantity() <= 0) {
 			this.deleteBasketProductById(basketProduct.getId());

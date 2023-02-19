@@ -1,11 +1,9 @@
 package com.bmxApp.service.search;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
@@ -18,7 +16,6 @@ import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
-import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 import com.bmxApp.service.product.ProductRepositoryService;
@@ -26,7 +23,6 @@ import com.bmxApp.service.product.ProductRepositoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Service
 @Getter
