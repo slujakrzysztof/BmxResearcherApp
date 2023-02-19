@@ -8,6 +8,10 @@
 	   margin-right:5px;
 }
 
+   form{
+       display: inline;
+     }
+
 .shopping-cart.dark {
 	background-color: #f6f6f6;
 }

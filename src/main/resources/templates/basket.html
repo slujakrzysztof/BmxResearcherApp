@@ -95,13 +95,34 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 														</div>
 
 														<div class="col-md-4 quantity">
+															<form th:action="@{/changeQuantity}" th:method="patch">
+																<input type="hidden" name="productId"
+																	th:value="${basketProduct.productId}"> <input
+																	type="hidden" th:value="-1" name="quantityValue"
+																	class="minus-input"> <span>
+																	<button type="submit" value="submit"
+																		class="btn btn-info" id="minus-button">-</button>
+
+																</span>
+															</form>
 															<form id="quantityForm" th:action="@{/changeQuantity}"
 																th:method="patch">
 																<input type="hidden" name="productId"
 																	th:value="${basketProduct.productId}"> <input
-																	type="number" id="quantityValue"
-																	th:name="quantityValue" min="0" max="100"
+																	type="number" id="quantityContainer"
+																	th:name="quantityContainer" min="0" max="100"
 																	th:value="${basketProduct.quantity}">
+															</form>
+															<form th:action="@{/changeQuantity}" th:method="patch">
+
+																<input type="hidden" name="productId"
+																	th:value="${basketProduct.productId}"> <input
+																	type="hidden" name="quantityValue" th:value="1"
+																	class="plus-input"> <span>
+																	<button type="submit" value="submit" th:value="1"
+																		th:name="btnValue" class="btn btn-info"
+																		id="plus-button">+</button>
+																</span>
 															</form>
 														</div>
 
@@ -159,7 +180,6 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 	</main>
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" th:src="@{/js/shoppingCart.js}"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.2/js/bootstrap.min.js"></script>
 </body>

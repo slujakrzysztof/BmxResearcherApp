@@ -77,10 +77,22 @@ public class ShoppingCartController {
 	}
 
 	@PatchMapping("/changeQuantity")
-	public String changeQuantity(@Nullable @RequestParam("quantityValue") int quantityValue,
-			@RequestParam("productId") int productId) {
+	public String changeQuantity(@Nullable @RequestParam("quantityContainer") String quantityContainer, 
+			@Nullable @RequestParam("quantityValue") String quantityValue, @RequestParam("productId") int productId) {
 
-	    shoppingCartService.changeQuantity(productId, quantityValue);
+		System.out.println("AAA: " + quantityContainer);
+		System.out.println("BBB: " + quantityValue);
+		
+	    shoppingCartService.changeQuantity(productId, quantityContainer, quantityValue);
+		return "redirect:/cart";
+	}
+	
+	@PatchMapping("/changeQuantity1")
+	public String changeQuantity1(@RequestParam("quantityValue") int quantityValue
+			) {
+
+		System.out.println("VALUE: " + quantityValue);
+	   // shoppingCartService.changeQuantity(productId, quantityValue);
 		return "redirect:/cart";
 	}
 

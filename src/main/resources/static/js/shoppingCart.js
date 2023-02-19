@@ -1,17 +1,22 @@
 
+var plusButton = document.getElementsByClassName('plus-button');
+var minusButton = document.getElementsByClassName('minus-button');
+var minusInput = document.getElementsByClassName('minus-input');
+var plusInput = document.getElementsByClassName('plus-input');
 
-const form = document.getElementById('quantityForm');
-const plusButton = document.getElementById('plus-button');
-const minusButton = document.getElementById('minus-button');
-const minusInput = document.getElementById('minus-input');
-const plusInput = document.getElementById('plus-input');
+for (let step = 0; step < plusInput.length; step++) {
+	echo('Siema');
+	plusButton[step].addEventListener("click", function() {
+		minusInput[step].setAttribute('disabled', 'disabled');
+		plusInput[step].removeAttribute("disabled");
+	});
+	
+	minusButton[step].addEventListener("click", function() {
+		plusInput[step].setAttribute('disabled', 'disabled');
+		minusInput[step].removeAttribute("disabled");
+	});
 
-plusButton.addEventListener("click", function() {
-	plusInput.removeAttribute("disabled");
-	minusInput.setAttribute('disabled', 'disabled');
-});
+}
 
-minusButton.addEventListener("click", function() {
-	minusInput.removeAttribute("disabled");
-	plusInput.setAttribute('disabled', 'disabled');
-});
+
+
