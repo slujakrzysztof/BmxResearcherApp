@@ -48,15 +48,16 @@ public class ShoppingCartController {
 
 		return "basket";
 	}
-	
+
 	@PostMapping("/applyCartDiscount")
-	public RedirectView applyCartDiscount(@RequestParam("value") int value, @RequestParam("currentURL") String currentURL) {
-		
+	public RedirectView applyCartDiscount(@RequestParam("value") int value,
+			@RequestParam("currentURL") String currentURL) {
+
 		shoppingCartService.setCartDiscount(value);
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl(currentURL);
-		return redirectView;		
-	}	
+		return redirectView;
+	}
 
 	@DeleteMapping({ "/deleteProducts", "/cart/deleteProducts" })
 	public String deleteBasketProducts() {
@@ -76,14 +77,10 @@ public class ShoppingCartController {
 	}
 
 	@PatchMapping("/changeQuantity")
-	public String changeQuantity(@Nullable @RequestParam("quantityValue") String quantityValue,
-			@RequestParam("quantityController") int quantityController, @RequestParam("productId") int productId) {
-	
-		//TO CHANGE!!!
-		System.out.println("CONTAINER: " + quantityController);
-		System.out.println("VALUE: " + quantityValue);
-		
-		//shoppingCartService.changeQuantity(productId, quantityValue, quantityController);
+	public String changeQuantity(@Nullable @RequestParam("quantityValue") int quantityValue,
+			@RequestParam("productId") int productId) {
+
+	    shoppingCartService.changeQuantity(productId, quantityValue);
 		return "redirect:/cart";
 	}
 

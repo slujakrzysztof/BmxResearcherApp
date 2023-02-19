@@ -3,6 +3,11 @@
 	font-family: 'Montserrat', sans-serif;
 }
 
+.inline {
+	display:inline-block;
+	   margin-right:5px;
+}
+
 .shopping-cart.dark {
 	background-color: #f6f6f6;
 }
