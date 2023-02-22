@@ -1,27 +1,16 @@
 package com.bmxApp.mapper.product;
 
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.model.product.Product;
 
-public class ProductMapper {
+public class ProductMapper implements Function<ProductDTO, Product>{
 
-	public static ProductDTO mapToProductDTO(Product product) {
-		
-		return ProductDTO.builder()
-				 .productName(product.getProductName())
-				 .shopName(product.getShopName())
-				 .category(product.getCategory())
-				 .price(product.getPrice())
-				 .url(product.getUrl())
-				 .imageUrl(product.getImageUrl())
-				 .build();
-		
-	}
+	@Override
+	public Product apply(ProductDTO productDTO) {
 
-	public static Product mapToProduct(ProductDTO productDTO) {
-		
 		Product product = new Product();
 		double price = BigDecimal.valueOf(productDTO.getPrice()).setScale(2).doubleValue();
 		
@@ -33,6 +22,5 @@ public class ProductMapper {
 		product.setImageUrl(productDTO.getImageUrl());
 		
 		return product;
-		
 	}
 }
