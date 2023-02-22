@@ -19,28 +19,18 @@
 
 <body>
 
-	<!-- HEADER -->
-
-	<header class="header">
-
-		<a href="#" class="logo"> <img th:src="@{/logo.png}">
-		</a>
-		<nav class="navbar">
-			<a href="https://bmxspokecalc.com/" th:text="#{calculator}"></a> <a
-				th:href="@{/cart}" th:text="#{profile}"></a> <a th:href="@{/cart}"
-				th:text="#{contact}"></a>
-		</nav>
-		<form th:action="@{/(lang=en)}">
-			<input type="image" th:src="@{/images/pl.png}" width="30" height="20"
-				alt="Submit"> <input type="image" th:src="@{/images/gb.png}"
-				width="30" height="20" alt="Submit">
-		</form>
-
+	<header>
+		<div class="main">
+			<span class="main-button"> <a th:href="@{/main}">[[#{mainPage}]]</a></span>
+		</div>
+		<div class="calculator">
+			<span class="calculator-button"> <a
+				href="https://bmxspokecalc.com/">[[#{calculator}]]</a></span>
+		</div>
+		<div th:replace="~{fragments/search :: dropdown-search}"></div>
 		<div th:replace="~{fragments/dropdownCart :: dropdown-shopping-cart}"></div>
 
 	</header>
-
-	<!-- HEADER -->
 
 	<section class="home" id="mainPage">
 		<div class="parent">

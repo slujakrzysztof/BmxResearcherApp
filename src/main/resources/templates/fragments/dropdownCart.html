@@ -8,12 +8,12 @@
 			<div class="shopping-cart-wrapper">
 				<div class="shopping-cart-item"
 					th:each="basketProduct : ${basketProducts}">
-					<img th:src="${basketProduct.getDtoProduct().getImageUrl()}" />
+					<img th:src="${basketProduct.getImageUrl()}" />
 					<div class="details">
-						<a th:href="@{${basketProduct.dtoProduct.url}}">[[${basketProduct.getDtoProduct().getProductName()}]]</a>
+						<a th:href="@{${basketProduct.url}}">[[${basketProduct.getProductName()}]]</a>
 						<br> <br>
 						<p1>[[${basketProduct.getShopName()}]]</p1>
-						<span class="price">[[${basketProduct.getDtoProduct().getPrice()}]]</span>
+						<span class="price">[[${basketProduct.getPrice()}]]</span>
 					</div>
 
 					<form

@@ -21,6 +21,7 @@
 		<div class="main">
 			<span class="main-button"> <a th:href="@{/main}">[[#{mainPage}]]</a></span>
 		</div>
+		<div th:replace="~{fragments/search :: dropdown-search}"></div>
 		<div th:replace="~{fragments/dropdownCart :: dropdown-shopping-cart}"></div>
 	</header>
 

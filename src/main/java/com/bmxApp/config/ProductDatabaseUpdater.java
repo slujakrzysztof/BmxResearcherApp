@@ -25,16 +25,18 @@ import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.main.MainControllerService;
 import com.bmxApp.service.product.ProductRepositoryService;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableAsync
 @EnableScheduling
+@RequiredArgsConstructor
 public class ProductDatabaseUpdater {
 
-	@Autowired
-	ProductRepositoryService productRepositoryService;
+	final ProductRepositoryService productRepositoryService;
+	final ShopResearcherService shopResearcherService;
 	
-	@Autowired
-	ShopResearcherService shopResearcherService;
+	
 	
 	//Update products' database once per day
 	@Scheduled(fixedDelay = 86_400_000)
@@ -53,7 +55,8 @@ public class ProductDatabaseUpdater {
 			PropertyReader.getInstance().connectPropertyReader(shopName);
 			String html = PropertyManager.getInstance().URL();
 			
-			partList.forEach(part -> {
+			partList.forEach(part ->
+					{
 			
 				shopResearcherService.setConnection(html);
 				String category = part.name().toLowerCase();
