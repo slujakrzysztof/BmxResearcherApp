@@ -11,6 +11,10 @@ public class BasketProductDTO {
 	
 	private int productId;
 	private int quantity;
-	private ProductDTO dtoProduct;
+	private String imageUrl;
+	private String url;
+	private String productName;
+	private double price;
+	//private ProductDTO dtoProduct;
 	private String shopName;
 }
