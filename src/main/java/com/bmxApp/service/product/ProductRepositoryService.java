@@ -47,7 +47,11 @@ public class ProductRepositoryService {
 		Product product = productRepository.findByProductNameAndShopName(productName, shopName);
 
 		return product;
-		// ProductMapper.mapToProductDTO(product);
+	}
+	
+	public List<Product> getRequestedItem(String value) {
+		
+		return productRepository.findRequestedItems(value);
 	}
 
 	public List<Product> getProductsByShopNameAndCategory(String shopName, String category) {
@@ -68,7 +72,6 @@ public class ProductRepositoryService {
 		Product product = productRepository.findById(id);
 
 		return product;
-		// ProductMapper.mapToProductDTO(product);
 	}
 
 	public boolean isProductInDatabase(ProductDTO dtoProduct) {
@@ -92,14 +95,4 @@ public class ProductRepositoryService {
 
 		productRepository.save(product);
 	}
-
-	/*
-	 * public Product getProduct(ProductDTO dtoProduct) {
-	 * 
-	 * Product product =
-	 * productRepository.findByProductNameAndShopName(dtoProduct.getProductName(),
-	 * dtoProduct.getShopName());
-	 * 
-	 * return product; }
-	 */
 }

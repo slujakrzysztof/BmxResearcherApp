@@ -45,6 +45,20 @@ public class SearchController {
 		return "products";
 	}
 	
+	@GetMapping(value="/cartSearch")
+	public String search(@RequestParam("value") String searchValue, Model model, HttpServletRequest request) {
+
+		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
+		
+		
+		model.addAttribute("products", searchService.getRequestedItems(searchValue));
+		model.addAttribute("discountValue", discount.getValue());
+		model.addAttribute("currentURL", searchService.getSearchURL(request));
+		model.addAttribute("basketProducts", searchService.getBasketProducts());
+		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());
+		return "";
+	}
+	
 
 	@PostMapping("/applyDiscount")
 	public RedirectView applyDiscount(@RequestParam("value") int value, @RequestParam("currentURL") String currentURL) {

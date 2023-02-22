@@ -159,6 +159,7 @@ public class ShoppingCartService {
 	}
 
 	public String formatPrice(double price) {
+		
 		return String.format(Locale.US, "%.2f", price);
 	}
 

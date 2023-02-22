@@ -75,6 +75,11 @@ public class SearchService {
 		shopResearcherService.getDiscount().setValue(0);
 	}
 	
+	public void getRequestedItems(String value) {
+		
+		productRepositoryService.getRequestedItem(value);
+	}
+	
 	public void search(String category, String shopName, boolean partSelection) {
 
 		String html;
