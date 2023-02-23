@@ -54,6 +54,7 @@ public class ProductRepositoryService {
 
 	public List<Product> getRequestedItem(String value) {
 
+		System.out.println("AAA: " + productRepository.findRequestedItems(value));
 		return productRepository.findRequestedItems(value);
 	}
 
@@ -82,10 +83,10 @@ public class ProductRepositoryService {
 		String productName = productDTO.getProductName();
 		String shopName = productDTO.getShopName();
 		Optional<Product> product = Optional.ofNullable(this.getProductByProductNameAndShopName(productName, shopName));
-		Optional<ProductDTO> foundProductDTO = Optional.ofNullable(productDTOMapper.apply(product.get()));
 
-		if (product.isPresent() && productDTO.equals(foundProductDTO.get()))
+		if (product.isPresent())
 			return true;
+
 		return false;
 	}
 
@@ -95,8 +96,7 @@ public class ProductRepositoryService {
 				productRepository.findByProductNameAndShopName(productDTO.getProductName(), productDTO.getShopName()));
 
 		if (product.isEmpty())
-			product = Optional.of(productMapper.apply(productDTO)); 
-			//ProductMapper.mapToProduct(dtoProduct);
+			product = Optional.of(productMapper.apply(productDTO));
 
 		productRepository.save(product.get());
 	}

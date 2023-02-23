@@ -25,13 +25,31 @@
 		<div th:replace="~{fragments/search :: dropdown-search}"></div>
 		<div th:replace="~{fragments/dropdownCart :: dropdown-shopping-cart}"></div>
 	</header>
-	
-		<section class="products" id="productsPage">
+
+	<section>
+		<div id="info_container_1">
+			<p class="h5 infoText" th:text="#{shopName}"></p>
+			<p class="h5 infoText" id="shopName" th:text="${shopName}"></p>
+		</div>
+		<div id="info_container_3">
+			<form th:action="@{/applyDiscount}" th:method="post">
+				<input class="form-control-lg" type="number" min="0" max="100"
+					step="1" th:placeholder="${discountValue}" th:value="*{discountV}"
+					name="value" /> <input type="hidden" name="currentURL"
+					th:value="${currentURL}" />
+				<button type="submit" value="submit" th:text="ENTER"></button>
+			</form>
+		</div>
+		<br>
+	</section>
+
+	<section class="products" id="productsPage">
 		<div id="product_container">
 			<table class="table table-bordered">
 				<thead>
 					<tr>
 						<th scope="col" th:text="#{name}" />
+						<th scope="col" th:text="#{shopNameTh}" />
 						<th scope="col" th:text="#{price}" />
 						<th scope="col" th:text="#{image}" />
 						<th scope="col" />
@@ -41,6 +59,7 @@
 				<tbody>
 					<tr th:each="product : ${products}">
 						<td th:text="${product.getProductName()}" />
+						<td th:text="${product.getShopName()}" />
 						<td th:text="${product.getPrice()}" />
 						<td class="w-25"><img th:src="${product.getImageUrl()}"
 							alt="${product.getImageUrl()}" class="img-fluid" width=200
@@ -71,7 +90,7 @@
 	<script type="text/javascript" th:src="@{/js/scrollFunction.js}"></script>
 	<script type="text/javascript" th:src="@{/js/dropdownCart.js}"></script>
 	<script type="text/javascript" th:src="@{/js/discount.js}"></script>
-		<script th:inline="javascript">
+	<script th:inline="javascript">
 		var amount = [[${basketProducts.size}]];
 		const deleteButton = document.getElementById('delete-button');
 		
@@ -79,6 +98,6 @@
 		else deleteButton.removeAttribute("disabled");
 		
 	</script>
-	
+
 </body>
 </html>

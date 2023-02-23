@@ -1,6 +1,7 @@
 package com.bmxApp.service.search;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
+import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
@@ -51,8 +53,8 @@ public class SearchService {
 
 		productDTOList = productList.stream().map(product -> productDTOMapper.apply(product))
 				.collect(Collectors.toList());
-		productDTOList.forEach(productDTO -> productDTO.setPrice(
-				Double.parseDouble(this.formatPrice(productDTO.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0)))));
+		productDTOList.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(ProductFormatter
+				.formatProductPrice(productDTO.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0)))));
 
 		/*
 		 * productList.forEach(product -> {
@@ -64,10 +66,6 @@ public class SearchService {
 		 */
 
 		return productDTOList;
-	}
-
-	public String formatPrice(double price) {
-		return String.format(Locale.US, "%.2f", price);
 	}
 
 	public void applyDiscount(List<Product> products, double discountValue) {
@@ -86,9 +84,16 @@ public class SearchService {
 		shopResearcherService.getDiscount().setValue(0);
 	}
 
-	public void getRequestedItems(String value) {
+	public List<ProductDTO> getRequestedItemsWithDiscount(String value, DiscountDTO discount) {
 
-		productRepositoryService.getRequestedItem(value);
+		List<Product> products = productRepositoryService.getRequestedItem(value);
+		List<ProductDTO> productsDTO = new LinkedList<>();
+
+		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
+		productsDTO.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(ProductFormatter
+				.formatProductPrice(productDTO.getPrice() * ((100.0 - discount.getValue()) / 100.0)))));
+		
+		return productsDTO;
 	}
 
 	public void search(String category, String shopName, boolean partSelection) {
@@ -130,12 +135,14 @@ public class SearchService {
 		List<BasketProduct> basketProducts = basketProductRepositoryService.getBasketProducts();
 		List<BasketProductDTO> basketProductsDTO = new ArrayList<>();
 
-		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct)).collect(Collectors.toList());
-		
-		/*basketProducts.forEach(basketProduct -> {
-			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
-			dtoBasketProducts.add(dtoBasketProduct);
-		});*/
+		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct))
+				.collect(Collectors.toList());
+
+		/*
+		 * basketProducts.forEach(basketProduct -> { BasketProductDTO dtoBasketProduct =
+		 * BasketProductMapper.mapToBasketProductDTO(basketProduct);
+		 * dtoBasketProducts.add(dtoBasketProduct); });
+		 */
 
 		return basketProductsDTO;
 	}

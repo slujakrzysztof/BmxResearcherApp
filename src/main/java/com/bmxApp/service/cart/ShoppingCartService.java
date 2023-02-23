@@ -47,11 +47,6 @@ public class ShoppingCartService {
 		List<BasketProductDTO> basketProductsDTO = new ArrayList<>();
 
 		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct)).collect(Collectors.toList());
-		
-		/*basketProducts.forEach(basketProduct -> {
-			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
-			dtoBasketProducts.add(dtoBasketProduct);
-		});*/
 
 		if (Optional.ofNullable(shopName).isPresent()) {
 
