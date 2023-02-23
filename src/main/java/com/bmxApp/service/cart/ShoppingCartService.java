@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
@@ -162,17 +163,12 @@ public class ShoppingCartService {
 		basketProductRepositoryService.insertUpdateBasketProduct(basketProduct);
 	}
 
-	public String formatPrice(double price) {
-		
-		return String.format(Locale.US, "%.2f", price);
-	}
-
 	public String getTotalDiscount(String shopName) {
 
 		int discountValue = shopResearcher.getDiscount().getValue();
 		float discount = (float) (this.getTotalPriceForShop(shopName) * ((100.0 - discountValue) / 100.0));
 		float totalDiscount = (this.getTotalPriceForShop(shopName) - discount) * (-1);
-		return formatPrice(totalDiscount);
+		return ProductFormatter.formatProductPrice(totalDiscount);
 	}
 
 	public int getDiscountValue() {
@@ -183,7 +179,7 @@ public class ShoppingCartService {
 	public String getFinalPrice(String shopName) {
 
 		float price = this.getTotalPriceForShop(shopName) + Float.parseFloat(this.getTotalDiscount(shopName));
-		return formatPrice(price);
+		return ProductFormatter.formatProductPrice(price);
 	}
 
 	public String getCartURL(HttpServletRequest request) {
