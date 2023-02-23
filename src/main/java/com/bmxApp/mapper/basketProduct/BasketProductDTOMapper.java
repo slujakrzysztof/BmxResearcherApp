@@ -19,6 +19,7 @@ public class BasketProductDTOMapper implements Function<BasketProduct, BasketPro
 				   .shopName(basketProduct.getShopName())
 				   .imageUrl(basketProduct.getProduct().getImageUrl())
 				   .url(basketProduct.getProduct().getUrl())
+				   .category(basketProduct.getProduct().getCategory())
 				   .price(basketProduct.getProduct().getPrice())
 				   .productName(basketProduct.getProduct().getProductName())
 				   .build();
