@@ -48,22 +48,20 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 						<div class="col-md-12 col-lg-8">
 							<div class="items">
 								<th:block th:each="basketProduct : ${basketProducts}">
-									<div class="dtoProduct"
-										th:with="dtoProduct = ${basketProduct.dtoProduct}">
 										<div class="row">
 											<div class="col-md-3">
 												<img class="img-fluid mx-auto d-block image"
-													th:src="@{${dtoProduct.imageUrl}}">
+													th:src="@{${basketProduct.imageUrl}}">
 											</div>
 											<div class="col-md-8">
 												<div class="info">
 													<div class="row">
 														<div class="col-md-5 product-name">
 															<div class="product-name">
-																<a th:href="@{${dtoProduct.url}}">[[${basketProduct.dtoProduct.productName}]]</a>
+																<a th:href="@{${basketProduct.url}}">[[${basketProduct.productName}]]</a>
 																<div class="product-info">
 																	<div>
-																		[[#{singlePrice}]] <span class="value">[[${dtoProduct.price}]]</span>
+																		[[#{singlePrice}]] <span class="value">[[${basketProduct.price}]]</span>
 																	</div>
 																	<div>
 																		[[#{shopName}]] <span class="value">[[${basketProduct.shopName}]]</span>
@@ -83,9 +81,9 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 																		<form th:object="${shopModel}" th:action="@{/search}"
 																			method="get">
 																			<input type="hidden" name="shop"
-																				th:value="${dtoProduct.shopName}"> <input
+																				th:value="${basketProduct.shopName}"> <input
 																				type="hidden" name="category"
-																				th:value="${dtoProduct.category}">
+																				th:value="${basketProduct.category}">
 																			<button type="submit" value="submit"
 																				class="btn btn-info">[[#{selectProducts}]]</button>
 																		</form>
@@ -133,7 +131,6 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 												</div>
 											</div>
 										</div>
-									</div>
 								</th:block>
 								<div class="noProduct">
 									<div th:if="${#lists.isEmpty(basketProducts)}">
