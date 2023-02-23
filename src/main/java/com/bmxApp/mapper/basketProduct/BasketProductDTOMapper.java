@@ -2,10 +2,12 @@ package com.bmxApp.mapper.basketProduct;
 
 import java.util.function.Function;
 
+import org.springframework.stereotype.Component;
+
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
-import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 
+@Component 
 public class BasketProductDTOMapper implements Function<BasketProduct, BasketProductDTO> {
 
 	@Override

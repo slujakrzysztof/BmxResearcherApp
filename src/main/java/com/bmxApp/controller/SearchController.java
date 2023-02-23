@@ -51,11 +51,11 @@ public class SearchController {
 		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
 		
 		
-		model.addAttribute("products", searchService.getRequestedItems(searchValue));
+		/*model.addAttribute("products", searchService.getRequestedItems(searchValue));
 		model.addAttribute("discountValue", discount.getValue());
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
 		model.addAttribute("basketProducts", searchService.getBasketProducts());
-		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());
+		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());*/
 		return "";
 	}
 	

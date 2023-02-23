@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
@@ -27,6 +28,7 @@ public class ShoppingCartService {
 	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ProductRepositoryService productRepositoryService;
 	private final ShopResearcherService shopResearcher;
+	private final BasketProductDTOMapper basketProductDTOMapper;
 
 	public ArrayList<BasketProduct> getBasketProducts() {
 
@@ -41,22 +43,24 @@ public class ShoppingCartService {
 	public List<BasketProductDTO> getBasketProductsInCart(String shopName) {
 
 		List<BasketProduct> basketProducts = this.getBasketProducts();
-		List<BasketProductDTO> dtoBasketProducts = new ArrayList<>();
+		List<BasketProductDTO> basketProductsDTO = new ArrayList<>();
 
-		basketProducts.forEach(basketProduct -> {
+		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct)).collect(Collectors.toList());
+		
+		/*basketProducts.forEach(basketProduct -> {
 			BasketProductDTO dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
 			dtoBasketProducts.add(dtoBasketProduct);
-		});
+		});*/
 
 		if (Optional.ofNullable(shopName).isPresent()) {
 
-			List<BasketProductDTO> dtoBasketProductsByShopName = dtoBasketProducts.stream()
+			List<BasketProductDTO> basketProductsDTOByShopName = basketProductsDTO.stream()
 					.filter(basketProduct -> basketProduct.getShopName().equalsIgnoreCase(shopName))
 					.collect(Collectors.toList());
 
-			return (ArrayList<BasketProductDTO>) dtoBasketProductsByShopName;
+			return  basketProductsDTOByShopName;
 		}
-		return dtoBasketProducts;
+		return basketProductsDTO;
 	}
 
 	public void deleteBasketProductByProductId(int productId) {

@@ -230,14 +230,15 @@ public class ShopResearcherService {
 
 	public void searchNewProducts(String shopName, String category, String url) {
 
-		ArrayList<String> pagesList = (ArrayList<String>) this.findPagesInCategory(url);
-		LinkedList<Product> productsList = new LinkedList<>();
+		List<String> pagesList = this.findPagesInCategory(url);
+		List<Product> productsList = new LinkedList<>();
+		ProductMapper productMapper = new ProductMapper();
 		
 		pagesList.stream().forEach(page -> {
 			this.setConnection(page);
 			this.getProductsFromPage(shopName);
 			this.getFormattedDataProducts(shopName, category)
-					.forEach(dtoProduct -> productsList.add(ProductMapper.mapToProduct(dtoProduct)));
+					.forEach(productDto -> productsList.add(productMapper.apply(productDto)));
 		});		
 		
 		productRepository.saveAll((Iterable<Product>) productsList);

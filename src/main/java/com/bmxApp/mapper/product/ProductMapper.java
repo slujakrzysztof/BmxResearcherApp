@@ -3,9 +3,12 @@ package com.bmxApp.mapper.product;
 import java.math.BigDecimal;
 import java.util.function.Function;
 
+import org.springframework.stereotype.Component;
+
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.model.product.Product;
 
+@Component
 public class ProductMapper implements Function<ProductDTO, Product>{
 
 	@Override

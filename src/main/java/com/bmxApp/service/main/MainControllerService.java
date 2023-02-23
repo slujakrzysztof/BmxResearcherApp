@@ -40,7 +40,7 @@ public class MainControllerService {
 	final BasketProductRepositoryService basketProductRepositoryService;
 
 	
-	public ArrayList<BasketProductDTO> getBasketProducts() {
+	public List<BasketProductDTO> getBasketProducts() {
 
 		return basketProductRepositoryService.getBasketProductsDTO();
 	}

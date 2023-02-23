@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Part;
 import com.bmxApp.enums.Shop;
+import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
@@ -27,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 public class ProductRepositoryService {
 
 	private final ProductRepository productRepository;
+	private final ProductMapper productMapper;
+	private final ProductDTOMapper productDTOMapper;
 
 	@Transactional
 	public List<Product> getSearchedProducts(String shopName, String category) {
@@ -34,7 +37,7 @@ public class ProductRepositoryService {
 		if (shopName.equalsIgnoreCase(Shop.ALLSHOPS.name())) {
 
 			List<Product> productList = new ArrayList<>();
-			for (Shop shop : Shop.getShops()) 
+			for (Shop shop : Shop.getShops())
 				productList.addAll(productRepository.findByShopNameAndCategory(shop.name(), category));
 			return productList;
 		}
@@ -48,9 +51,9 @@ public class ProductRepositoryService {
 
 		return product;
 	}
-	
+
 	public List<Product> getRequestedItem(String value) {
-		
+
 		return productRepository.findRequestedItems(value);
 	}
 
@@ -74,25 +77,27 @@ public class ProductRepositoryService {
 		return product;
 	}
 
-	public boolean isProductInDatabase(ProductDTO dtoProduct) {
+	public boolean isProductInDatabase(ProductDTO productDTO) {
 
-		String productName = dtoProduct.getProductName();
-		String shopName = dtoProduct.getShopName();
+		String productName = productDTO.getProductName();
+		String shopName = productDTO.getShopName();
 		Optional<Product> product = Optional.ofNullable(this.getProductByProductNameAndShopName(productName, shopName));
+		Optional<ProductDTO> foundProductDTO = Optional.ofNullable(productDTOMapper.apply(product.get()));
 
-		if (product.isPresent() && dtoProduct.equals(ProductMapper.mapToProductDTO(product.get())))
+		if (product.isPresent() && productDTO.equals(foundProductDTO.get()))
 			return true;
 		return false;
 	}
 
-	public void insertUpdateProduct(ProductDTO dtoProduct) {
+	public void insertUpdateProduct(ProductDTO productDTO) {
 
-		Product product = productRepository.findByProductNameAndShopName(dtoProduct.getProductName(),
-				dtoProduct.getShopName());
+		Optional<Product> product = Optional.ofNullable(
+				productRepository.findByProductNameAndShopName(productDTO.getProductName(), productDTO.getShopName()));
 
-		if (product == null)
-			product = ProductMapper.mapToProduct(dtoProduct);
+		if (product.isEmpty())
+			product = Optional.of(productMapper.apply(productDTO)); 
+			//ProductMapper.mapToProduct(dtoProduct);
 
-		productRepository.save(product);
+		productRepository.save(product.get());
 	}
 }

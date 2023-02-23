@@ -2,6 +2,8 @@ package com.bmxApp.mapper.basketProduct;
 
 import java.util.function.Function;
 
+import org.springframework.stereotype.Component;
+
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
@@ -10,6 +12,7 @@ import com.bmxApp.service.product.ProductRepositoryService;
 
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
 public class BasketProductMapper implements Function<BasketProductDTO, BasketProduct> {
 
