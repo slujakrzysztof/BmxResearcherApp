@@ -56,15 +56,6 @@ public class SearchService {
 		productDTOList.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(ProductFormatter
 				.formatProductPrice(productDTO.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0)))));
 
-		/*
-		 * productList.forEach(product -> {
-		 * 
-		 * ProductDTO dtoProduct = ProductMapper.mapToProductDTO(product); double price
-		 * = Double.parseDouble(this.formatPrice(product.getPrice() * ((100.0 -
-		 * discountDTO.getValue()) / 100.0))); dtoProduct.setPrice(price);
-		 * productDTOList.add(dtoProduct); });
-		 */
-
 		return productDTOList;
 	}
 
