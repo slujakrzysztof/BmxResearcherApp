@@ -10,6 +10,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" th:href="@{/navigation.css}">
 <link rel="stylesheet" th:href="@{/products.css}">
+<link rel="stylesheet" th:href="@{/searchPage.css}">
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -26,22 +27,37 @@
 		<div th:replace="~{fragments/dropdownCart :: dropdown-shopping-cart}"></div>
 	</header>
 
-	<section>
-		<div id="info_container_1">
-			<p class="h5 infoText" th:text="#{shopName}"></p>
-			<p class="h5 infoText" id="shopName" th:text="${shopName}"></p>
+	<div class="info_component">
+		<div class="phraseInfo-and-discount-info">
+			<div id="info_container_1">
+				<p class="h5 infoText" th:text="#{searchValue}"></p>
+				<p class="h5 infoText" id="shopName" th:text="${searchValue}"></p>
+			</div>
+			<div class="info_container_discount">
+				<div class="form-container">
+					<form th:action="@{/applyDiscount}" th:method="post"
+						id="applyDiscount">
+						<input class="form-control-lg" type="number" min="0" max="100"
+							step="1" th:placeholder="${discountValue}"
+							th:value="*{discountV}" name="value" /> <input type="hidden"
+							name="currentURL" th:value="${currentURL}" />
+						<button type="submit" value="submit" th:text="ENTER"></button>
+					</form>
+				</div>
+				<div class="form-container">
+					<form th:action="@{/resetDiscount}" th:method="get"
+						id="resetDiscount">
+						<input type="hidden" name="currentURL" th:value="${currentURL}" />
+						<button type="submit" value="submit" th:text="RESET"></button>
+					</form>
+				</div>
+			</div>
 		</div>
-		<div id="info_container_3">
-			<form th:action="@{/applyDiscount}" th:method="post">
-				<input class="form-control-lg" type="number" min="0" max="100"
-					step="1" th:placeholder="${discountValue}" th:value="*{discountV}"
-					name="value" /> <input type="hidden" name="currentURL"
-					th:value="${currentURL}" />
-				<button type="submit" value="submit" th:text="ENTER"></button>
-			</form>
+		<div class="filters">
+			<p class="h5 infoText" th:text="#{searchValue}"></p>
 		</div>
 		<br>
-	</section>
+	</div>
 
 	<section class="products" id="productsPage">
 		<div id="product_container">

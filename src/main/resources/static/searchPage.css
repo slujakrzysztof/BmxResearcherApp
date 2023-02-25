@@ -1,0 +1,22 @@
+.form-container {
+	display: inline-block;
+	width: 50%;
+}
+
+.info_container_discount {
+	display: inline-block;
+}
+
+.phraseInfo-and-discount-info {
+	display: inline-block;
+	width: 50%;
+}
+
+.info_component {
+	display: inline-block;
+}
+
+.filters {
+	display: inline-block;
+	width: 50%;
+}
