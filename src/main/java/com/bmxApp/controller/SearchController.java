@@ -14,6 +14,7 @@ import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.search.SearchService;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -52,6 +53,7 @@ public class SearchController {
 		
 		model.addAttribute("products", searchService.getRequestedItemsWithDiscount(searchValue, discount));
 		model.addAttribute("discountValue", discount.getValue());
+		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
 		model.addAttribute("basketProducts", searchService.getBasketProducts());
 		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());
@@ -60,9 +62,11 @@ public class SearchController {
 	
 
 	@PostMapping("/applyDiscount")
-	public RedirectView applyDiscount(@RequestParam("value") int value, @RequestParam("currentURL") String currentURL) {
+	public RedirectView applyDiscount(@RequestParam("value") String value, @RequestParam("currentURL") String currentURL) {
 		
-		searchService.setDiscount(value);
+		if(value.isEmpty()) value = "0";
+		
+		searchService.setDiscount(Integer.parseInt(value));
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl(currentURL);
 		return redirectView;		
