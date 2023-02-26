@@ -51,9 +51,27 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th scope="col" th:text="#{name}" />
-						<th scope="col" th:text="#{price}" />
-						<th scope="col" th:text="#{image}" />
+						<th scope="col">[[#{name}]]
+							<form th:action="@{/search}" th:method="get">
+								<input type="hidden" name="shop" th:value="*{shopName}" />
+								<input type="hidden" name="category" th:value="*{category}"/>
+								<input type="hidden" name="sortBy" th:value="name"/>
+								<button type="submit" value="submit">
+									<i class="fa-solid fa-sort"></i>
+								</button>
+							</form>
+						</th>
+						<th scope="col">[[#{price}]]
+							<form th:action="@{/search}" th:method="get">
+								<input type="hidden" name="shop" th:value="*{shopName}" />
+								<input type="hidden" name="category" th:value="*{category}"/>
+								<input type="hidden" name="sortBy" th:value="price"/>
+								<button type="submit" value="submit">
+									<i class="fa-solid fa-sort"></i>
+								</button>
+							</form>
+						</th>
+						<th scope="col">[[#{image}]]</th>
 						<th scope="col" />
 
 					</tr>

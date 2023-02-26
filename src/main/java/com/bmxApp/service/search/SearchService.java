@@ -1,6 +1,7 @@
 package com.bmxApp.service.search;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -129,13 +130,17 @@ public class SearchService {
 		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct))
 				.collect(Collectors.toList());
 
-		/*
-		 * basketProducts.forEach(basketProduct -> { BasketProductDTO dtoBasketProduct =
-		 * BasketProductMapper.mapToBasketProductDTO(basketProduct);
-		 * dtoBasketProducts.add(dtoBasketProduct); });
-		 */
-
 		return basketProductsDTO;
+	}
+	
+	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy) {
+		
+		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
+		List<ProductDTO> sortedProducts;
+		
+		sortedProducts = products.stream().sorted(Comparator.comparing(product->product.toString())).collect(Collectors.toList());
+		
+		return sortedProducts;
 	}
 
 	public int getBasketAmount() {
