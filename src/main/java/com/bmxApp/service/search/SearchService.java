@@ -13,6 +13,7 @@ import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
+import com.bmxApp.enums.SortingItem;
 import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
@@ -82,9 +83,9 @@ public class SearchService {
 		List<ProductDTO> productsDTO = new LinkedList<>();
 
 		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
-		productsDTO.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(ProductFormatter
-				.formatProductPrice(productDTO.getPrice() * ((100.0 - discount.getValue()) / 100.0)))));
-		
+		productsDTO.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(
+				ProductFormatter.formatProductPrice(productDTO.getPrice() * ((100.0 - discount.getValue()) / 100.0)))));
+
 		return productsDTO;
 	}
 
@@ -132,14 +133,19 @@ public class SearchService {
 
 		return basketProductsDTO;
 	}
-	
+
 	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy) {
-		
+
 		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
-		List<ProductDTO> sortedProducts;
-		
-		sortedProducts = products.stream().sorted(Comparator.comparing(product->product.toString())).collect(Collectors.toList());
-		
+		List<ProductDTO> sortedProducts = new LinkedList<>();
+
+		if (sortedBy.equalsIgnoreCase(SortingItem.NAME.name()))
+			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getProductName()))
+					.collect(Collectors.toList());
+		else if (sortedBy.equalsIgnoreCase(SortingItem.PRICE.name()))
+			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getPrice()))
+					.collect(Collectors.toList());
+
 		return sortedProducts;
 	}
 
