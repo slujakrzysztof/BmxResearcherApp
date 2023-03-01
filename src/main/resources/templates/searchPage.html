@@ -64,46 +64,38 @@
 		</div>
 	</div>
 
-	<!--  <div class="info_component">
-		<div class="phraseInfo-and-discount-info">
-			<div id="info_container_1">
-				<p class="h5 infoText" th:text="#{searchValue}"></p>
-				<p class="h5 infoText" id="shopName" th:text="${searchValue}"></p>
-			</div>
-			<div class="info_container_discount">
-				<div class="form-container">
-					<form th:action="@{/applyDiscount}" th:method="post"
-						id="applyDiscount">
-						<input class="form-control-lg" type="number" min="0" max="100"
-							step="1" th:placeholder="${discountValue}"
-							th:value="*{discountV}" name="value" /> <input type="hidden"
-							name="currentURL" th:value="${currentURL}" />
-						<button type="submit" value="submit" th:text="ENTER"></button>
-					</form>
-				</div>
-				<div class="form-container">
-					<form th:action="@{/resetDiscount}" th:method="get"
-						id="resetDiscount">
-						<input type="hidden" name="currentURL" th:value="${currentURL}" />
-						<button type="submit" value="submit" th:text="RESET"></button>
-					</form>
-				</div>
-			</div>
-		</div>
-		<div class="filters">
-			<p class="h5 infoText" th:text="#{searchValue}"></p>
-		</div>
-		<br>
-	</div>-->
-
 	<section class="products" id="productsPage">
 		<div id="product_container">
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th scope="col" th:text="#{name}" />
-						<th scope="col" th:text="#{shopNameTh}" />
-						<th scope="col" th:text="#{price}" />
+						<th scope="col">[[#{name}]]
+							<form th:action="@{/requestProducts}" th:method="get">
+								<input type="hidden" name="value" th:value="${searchValue}" />
+								<input type="hidden" name="sortBy" th:value="name" />
+								<button type="submit" value="submit">
+									<i class="fa-solid fa-sort"></i>
+								</button>
+							</form>
+						</th>
+						<th scope="col">[[#{shopNameTh}]]
+							<form th:action="@{/requestProducts}" th:method="get">
+								<input type="hidden" name="value" th:value="${searchValue}" />
+								<input type="hidden" name="sortBy" th:value="shop" />
+								<button type="submit" value="submit">
+									<i class="fa-solid fa-sort"></i>
+								</button>
+							</form>
+						</th>
+						<th scope="col">[[#{price}]]
+							<form th:action="@{/requestProducts}" th:method="get">
+								<input type="hidden" name="value" th:value="${searchValue}" />
+								<input type="hidden" name="sortBy" th:value="price" />
+								<button type="submit" value="submit">
+									<i class="fa-solid fa-sort"></i>
+								</button>
+							</form>
+						</th>
 						<th scope="col" th:text="#{image}" />
 						<th scope="col" />
 

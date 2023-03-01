@@ -1,6 +1,5 @@
 package com.bmxApp.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -8,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
@@ -36,12 +34,13 @@ public class SearchController {
 
 		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
 		Optional<String> sortedBy = Optional.ofNullable(sortBy);
-		
+
 		searchService.searchProducts(shopName, category);
 
 		sortedBy.ifPresentOrElse((value) -> {
 			searchService.setSortedBy(!searchService.isSortedBy());
-			model.addAttribute("products", searchService.getSortedProductsWithDiscount(shopName, category, sortBy, searchService.isSortedBy()));
+			model.addAttribute("products", searchService.getSortedProductsWithDiscount(shopName, category, sortBy,
+					searchService.isSortedBy()));
 		}, () -> {
 			model.addAttribute("products", searchService.getProductsWithDiscount(shopName, category));
 		});
@@ -57,12 +56,21 @@ public class SearchController {
 		return "products";
 	}
 
-	@GetMapping(value = "/cartSearch")
-	public String search(@RequestParam("value") String searchValue, Model model, HttpServletRequest request) {
+	@GetMapping(value = "/requestProducts")
+	public String search(@RequestParam("value") String searchValue, @Nullable @RequestParam("sortBy") String sortBy,
+			Model model, HttpServletRequest request) {
 
 		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
+		Optional<String> sortedBy = Optional.ofNullable(sortBy);
 
-		model.addAttribute("products", searchService.getRequestedItemsWithDiscount(searchValue, discount));
+		sortedBy.ifPresentOrElse((value) -> {
+			searchService.setSortedBy(!searchService.isSortedBy());
+			model.addAttribute("products", searchService.getSortedRequestedItemsWithDiscount(searchValue, discount, sortBy,
+					searchService.isSortedBy()));
+		}, () -> {
+			model.addAttribute("products", searchService.getRequestedItemsWithDiscount(searchValue, discount));
+		});
+
 		model.addAttribute("discountValue", discount.getValue());
 		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("currentURL", searchService.getSearchURL(request));

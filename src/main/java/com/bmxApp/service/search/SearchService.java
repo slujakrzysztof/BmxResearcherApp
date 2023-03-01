@@ -96,6 +96,26 @@ public class SearchService {
 
 		return productsDTO;
 	}
+	
+	public List<ProductDTO> getSortedRequestedItemsWithDiscount(String value, DiscountDTO discount, String sortedBy, boolean isSorted) {
+
+		List<ProductDTO> products = this.getRequestedItemsWithDiscount(value, discount);
+		List<ProductDTO> sortedProducts = new LinkedList<>();
+
+		if (sortedBy.equalsIgnoreCase(SortingItem.NAME.name()))
+			sortedProducts = products.stream().sorted(Comparator.comparing(ProductDTO::getProductName))
+					.collect(Collectors.toList());
+		else if (sortedBy.equalsIgnoreCase(SortingItem.PRICE.name()))
+			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getPrice()))
+					.collect(Collectors.toList());
+		else if (sortedBy.equalsIgnoreCase(SortingItem.SHOP.name()))
+			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getShopName()))
+					.collect(Collectors.toList());
+
+		if(!isSorted) Collections.reverse(sortedProducts);
+		
+		return sortedProducts;
+	}
 
 	public void search(String category, String shopName, boolean partSelection) {
 
