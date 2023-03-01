@@ -1,13 +1,16 @@
 package com.bmxApp.service.search;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.expression.Lists;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
@@ -30,9 +33,11 @@ import com.bmxApp.service.product.ProductRepositoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Service
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class SearchService {
 
@@ -41,6 +46,9 @@ public class SearchService {
 	private final ShopResearcherService shopResearcherService;
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
+
+	@Value("false")
+	private boolean sortedBy;
 
 	public List<Product> getProducts(String shopName, String category) {
 
@@ -134,18 +142,20 @@ public class SearchService {
 		return basketProductsDTO;
 	}
 
-	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy) {
+	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy, boolean isSorted) {
 
 		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
 		List<ProductDTO> sortedProducts = new LinkedList<>();
 
 		if (sortedBy.equalsIgnoreCase(SortingItem.NAME.name()))
-			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getProductName()))
+			sortedProducts = products.stream().sorted(Comparator.comparing(ProductDTO::getProductName))
 					.collect(Collectors.toList());
 		else if (sortedBy.equalsIgnoreCase(SortingItem.PRICE.name()))
 			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getPrice()))
 					.collect(Collectors.toList());
 
+		if(!isSorted) Collections.reverse(sortedProducts);
+		
 		return sortedProducts;
 	}
 

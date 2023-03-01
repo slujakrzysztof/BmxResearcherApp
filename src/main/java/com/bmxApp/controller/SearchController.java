@@ -36,12 +36,12 @@ public class SearchController {
 
 		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
 		Optional<String> sortedBy = Optional.ofNullable(sortBy);
-		List<ProductDTO> products;
 		
 		searchService.searchProducts(shopName, category);
 
 		sortedBy.ifPresentOrElse((value) -> {
-			model.addAttribute("products", searchService.getSortedProductsWithDiscount(shopName, category, sortBy));
+			searchService.setSortedBy(!searchService.isSortedBy());
+			model.addAttribute("products", searchService.getSortedProductsWithDiscount(shopName, category, sortBy, searchService.isSortedBy()));
 		}, () -> {
 			model.addAttribute("products", searchService.getProductsWithDiscount(shopName, category));
 		});
