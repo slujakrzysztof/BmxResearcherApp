@@ -101,17 +101,18 @@ public class SearchService {
 
 		List<ProductDTO> products = this.getRequestedItemsWithDiscount(value, discount);
 		List<ProductDTO> sortedProducts = new LinkedList<>();
+		Comparator<ProductDTO> comparator;
 
-		if (sortedBy.equalsIgnoreCase(SortingItem.NAME.name()))
-			sortedProducts = products.stream().sorted(Comparator.comparing(ProductDTO::getProductName))
-					.collect(Collectors.toList());
+		if (sortedBy.equalsIgnoreCase(SortingItem.NAME.name())) 
+			comparator = Comparator.comparing(ProductDTO::getProductName);
 		else if (sortedBy.equalsIgnoreCase(SortingItem.PRICE.name()))
-			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getPrice()))
-					.collect(Collectors.toList());
-		else if (sortedBy.equalsIgnoreCase(SortingItem.SHOP.name()))
-			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getShopName()))
-					.collect(Collectors.toList());
+			comparator = Comparator.comparing(ProductDTO::getPrice);
+		else //if(sortedBy.equalsIgnoreCase(SortingItem.SHOP.name()))
+			comparator = Comparator.comparing(ProductDTO::getShopName);
 
+		sortedProducts = products.stream().sorted(comparator)
+				.collect(Collectors.toList());
+		
 		if(!isSorted) Collections.reverse(sortedProducts);
 		
 		return sortedProducts;
