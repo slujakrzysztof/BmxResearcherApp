@@ -29,6 +29,7 @@ import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
 import com.bmxApp.service.product.ProductRepositoryService;
+import com.bmxApp.service.sort.SortService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class SearchService {
 	private final ProductRepositoryService productRepositoryService;
 	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ShopResearcherService shopResearcherService;
+	private final SortService sortService;
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
@@ -100,18 +102,7 @@ public class SearchService {
 	public List<ProductDTO> getSortedRequestedItemsWithDiscount(String value, DiscountDTO discount, String sortedBy, boolean isSorted) {
 
 		List<ProductDTO> products = this.getRequestedItemsWithDiscount(value, discount);
-		List<ProductDTO> sortedProducts = new LinkedList<>();
-		Comparator<ProductDTO> comparator;
-
-		if (sortedBy.equalsIgnoreCase(SortingItem.NAME.name())) 
-			comparator = Comparator.comparing(ProductDTO::getProductName);
-		else if (sortedBy.equalsIgnoreCase(SortingItem.PRICE.name()))
-			comparator = Comparator.comparing(ProductDTO::getPrice);
-		else //if(sortedBy.equalsIgnoreCase(SortingItem.SHOP.name()))
-			comparator = Comparator.comparing(ProductDTO::getShopName);
-
-		sortedProducts = products.stream().sorted(comparator)
-				.collect(Collectors.toList());
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
 		
 		if(!isSorted) Collections.reverse(sortedProducts);
 		
@@ -166,14 +157,7 @@ public class SearchService {
 	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy, boolean isSorted) {
 
 		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
-		List<ProductDTO> sortedProducts = new LinkedList<>();
-
-		if (sortedBy.equalsIgnoreCase(SortingItem.NAME.name()))
-			sortedProducts = products.stream().sorted(Comparator.comparing(ProductDTO::getProductName))
-					.collect(Collectors.toList());
-		else if (sortedBy.equalsIgnoreCase(SortingItem.PRICE.name()))
-			sortedProducts = products.stream().sorted(Comparator.comparing(product -> product.getPrice()))
-					.collect(Collectors.toList());
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
 
 		if(!isSorted) Collections.reverse(sortedProducts);
 		
