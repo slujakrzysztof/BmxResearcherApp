@@ -39,14 +39,14 @@ public class SearchController {
 
 		sortedBy.ifPresentOrElse((value) -> {
 			searchService.setSortedBy(!searchService.isSortedBy());
-			model.addAttribute("products", searchService.getSortedProductsWithDiscount(shopName, category, sortBy,
+			model.addAttribute("products", searchService.getSortedProducts(shopName, category, sortBy,
 					searchService.isSortedBy()));
 		}, () -> {
-			model.addAttribute("products", searchService.getProductsWithDiscount(shopName, category));
+			model.addAttribute("products", searchService.getProducts(shopName, category));
 		});
 
-		model.addAttribute("basketProducts", searchService.getBasketProducts());
-		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());
+		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
+		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discountValue", discount.getValue());
@@ -65,17 +65,17 @@ public class SearchController {
 
 		sortedBy.ifPresentOrElse((value) -> {
 			searchService.setSortedBy(!searchService.isSortedBy());
-			model.addAttribute("products", searchService.getSortedRequestedItemsWithDiscount(searchValue, discount, sortBy,
+			model.addAttribute("products", searchService.getSortedRequestedProducts(searchValue, sortBy,
 					searchService.isSortedBy()));
 		}, () -> {
-			model.addAttribute("products", searchService.getRequestedItemsWithDiscount(searchValue, discount));
+			model.addAttribute("products", searchService.getRequestedProducts(searchValue));
 		});
 
 		model.addAttribute("discountValue", discount.getValue());
 		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
-		model.addAttribute("basketProducts", searchService.getBasketProducts());
-		model.addAttribute("basketTotalPrice", searchService.getBasketTotalPrice());
+		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
+		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		return "searchPage";
 	}
 

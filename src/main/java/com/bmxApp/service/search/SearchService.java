@@ -54,30 +54,35 @@ public class SearchService {
 	@Value("false")
 	private boolean sortedBy;
 
-	public List<Product> getProducts(String shopName, String category) {
+	public List<ProductDTO> getProducts(String shopName, String category) {
 
-		return this.productRepositoryService.getSearchedProducts(shopName, category);
-	}
-
-	public List<ProductDTO> getRequestedItemsWithDiscount(String value, DiscountDTO discount) {
-
-		List<Product> products = productRepositoryService.getRequestedItem(value);
-		List<ProductDTO> productsDTO = new LinkedList<>();
+		List<Product> products = productRepositoryService.getSearchedProducts(shopName, category);
+		List<ProductDTO> productsDTO;
 
 		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
-		productsDTO.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(
-				ProductFormatter.formatProductPrice(productDTO.getPrice() * ((100.0 - discount.getValue()) / 100.0)))));
 
 		return productsDTO;
 	}
-	
-	public List<ProductDTO> getSortedRequestedItemsWithDiscount(String value, DiscountDTO discount, String sortedBy, boolean isSorted) {
 
-		List<ProductDTO> products = this.getRequestedItemsWithDiscount(value, discount);
+	public List<ProductDTO> getRequestedProducts(String value) {
+
+		List<Product> products = productRepositoryService.getRequestedItem(value);
+		List<ProductDTO> productsDTO;
+
+		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
+
+		return productsDTO;
+	}
+
+	public List<ProductDTO> getSortedRequestedProducts(String value, String sortedBy,
+			boolean isSorted) {
+
+		List<ProductDTO> products = this.getRequestedProducts(value);
 		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
-		
-		if(!isSorted) Collections.reverse(sortedProducts);
-		
+
+		if (!isSorted)
+			Collections.reverse(sortedProducts);
+
 		return sortedProducts;
 	}
 
@@ -126,13 +131,15 @@ public class SearchService {
 		return basketProductsDTO;
 	}
 
-	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy, boolean isSorted) {
+	public List<ProductDTO> getSortedProducts(String shopName, String category, String sortedBy,
+			boolean isSorted) {
 
-		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
+		List<ProductDTO> products = this.getProducts(shopName, category);
 		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
 
-		if(!isSorted) Collections.reverse(sortedProducts);
-		
+		if (!isSorted)
+			Collections.reverse(sortedProducts);
+
 		return sortedProducts;
 	}
 

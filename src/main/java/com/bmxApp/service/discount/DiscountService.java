@@ -13,6 +13,7 @@ import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.product.ProductRepositoryService;
+import com.bmxApp.service.search.SearchService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,13 +24,14 @@ public class DiscountService {
 	private final ShopResearcherService shopResearcherService;
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDtoMapper;
+	private final SearchService searchService;
 
 	public void applyDiscount(List<ProductDTO> products, int discountValue) {
 
 		products.forEach(product -> {
 
 			double price = product.getPrice() * ((100.0 - discountValue) / 100.0);
-			product.setPrice(price);
+			product.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(price)));
 		});
 	}
 
@@ -41,6 +43,11 @@ public class DiscountService {
 	public void resetDiscount() {
 
 		shopResearcherService.getDiscount().setValue(0);
+	}
+	
+	public int getDiscount() {
+		
+		return this.shopResearcherService.getDiscount().getValue();
 	}
 
 	public List<ProductDTO> getProductsWithDiscount(String shopName, String category) {
@@ -56,6 +63,24 @@ public class DiscountService {
 				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
 
 		return productsDTO;
+	}
+	
+	public List<ProductDTO> getRequestedProductsWithDiscount(String value) {
+		
+		List<ProductDTO> products = searchService.getRequestedProducts(value);
+		
+		this.applyDiscount(products, this.getDiscount());
+		
+		return products;
+	}
+	
+	public List<ProductDTO> getSortedRequestedProductsWithDiscount(String shopName, String category, String sortedBy, boolean isSorted) {
+		
+		List<ProductDTO> products = searchService.getSortedProducts(shopName, category, sortedBy, isSorted);
+		
+		this.applyDiscount(products, this.getDiscount());
+		
+		return products;
 	}
 
 }
