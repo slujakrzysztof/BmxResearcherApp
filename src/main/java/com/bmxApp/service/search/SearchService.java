@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -66,14 +67,14 @@ public class SearchService {
 		return productsDTO;
 	}
 	
-	public String createUrl(String[] params) {
+	public String createUrl(String[] keys, Map<String,String> params) {
 		
 		StringBuilder url = new StringBuilder(SEARCH_PREFIX);
 		
-		for(int counter=0;counter < params.length; counter++) {
+		for(int counter=0;counter < params.size(); counter++) {
 			
-			url.append(params[counter]);
-			if(counter != (params.length-1)) url.append("&");
+			url.append(keys[counter] + "=" + params.get(keys[counter]));
+			if(counter != (params.size()-1)) url.append("&");
 		}
 		
 		return url.toString();
