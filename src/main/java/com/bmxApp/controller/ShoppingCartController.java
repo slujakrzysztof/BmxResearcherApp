@@ -34,7 +34,7 @@ public class ShoppingCartController {
 		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shopName));
 		model.addAttribute("discountValue", shoppingCartService.getDiscountValue());
 		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shopName));
-		model.addAttribute("basketProducts", shoppingCartService.getBasketProductsInCart(shopName));
+		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(shopName));
 		model.addAttribute("currentURL", shoppingCartService.getCartURL(request));
 
 		return "basket";

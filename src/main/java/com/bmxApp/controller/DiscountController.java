@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.discount.DiscountService;
 
 import io.micrometer.common.lang.Nullable;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class DiscountController {
 
 	private final DiscountService discountService;
+	private final ShoppingCartService shoppingCartService;
 
 	@GetMapping("/searchDiscount")
 	public String searchProductsWithDiscount(Model model, @RequestParam("category") String category,
@@ -36,7 +38,7 @@ public class DiscountController {
 		model.addAttribute("discountValue", discount.getValue());
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
 		
-		return null;
+		return "products";
 	}
 
 }

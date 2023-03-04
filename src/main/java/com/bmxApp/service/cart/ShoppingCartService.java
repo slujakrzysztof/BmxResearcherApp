@@ -31,33 +31,64 @@ public class ShoppingCartService {
 	private final ShopResearcherService shopResearcher;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
-	public ArrayList<BasketProduct> getBasketProducts() {
+	public List<BasketProductDTO> getBasketProducts(String shopName) {
 
-		return basketProductRepositoryService.getBasketProducts();
+		List<BasketProduct> basketProducts;
+		List<BasketProductDTO> basketProductsDTO;
+
+		if (Optional.ofNullable(shopName).isPresent())
+			basketProductsDTO = this.getBasketProductsByShopName(shopName);
+
+		else {
+
+			basketProducts = basketProductRepositoryService.getBasketProducts();
+			basketProductsDTO = basketProducts.stream().map(product -> basketProductDTOMapper.apply(product))
+					.collect(Collectors.toList());
+		}
+
+		return basketProductsDTO;
 	}
+
+	/*
+	 * public List<BasketProductDTO> getBasketProductsByShopName(String shopName) {
+	 * 
+	 * List<BasketProductDTO> basketProductsDTO = this.getBasketProducts();
+	 * List<BasketProductDTO> basketProductsDTOByShopName;
+	 * 
+	 * basketProductsDTOByShopName = basketProductsDTO.stream()
+	 * .filter(basketProduct ->
+	 * basketProduct.getShopName().equalsIgnoreCase(shopName))
+	 * .collect(Collectors.toList());
+	 * 
+	 * return basketProductsDTOByShopName;
+	 * 
+	 * }
+	 */
 
 	public void setCartDiscount(int value) {
 
 		shopResearcher.getDiscount().setValue(value);
 	}
 
-	public List<BasketProductDTO> getBasketProductsInCart(String shopName) {
-
-		List<BasketProduct> basketProducts = this.getBasketProducts();
-		List<BasketProductDTO> basketProductsDTO = new ArrayList<>();
-
-		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct)).collect(Collectors.toList());
-
-		if (Optional.ofNullable(shopName).isPresent()) {
-
-			List<BasketProductDTO> basketProductsDTOByShopName = basketProductsDTO.stream()
-					.filter(basketProduct -> basketProduct.getShopName().equalsIgnoreCase(shopName))
-					.collect(Collectors.toList());
-
-			return  basketProductsDTOByShopName;
-		}
-		return basketProductsDTO;
-	}
+	/*
+	 * public List<BasketProductDTO> getBasketProductsInCart(String shopName) {
+	 * 
+	 * List<BasketProduct> basketProducts =
+	 * basketProductRepositoryService.getBasketProducts(); List<BasketProductDTO>
+	 * basketProductsDTO = new ArrayList<>();
+	 * 
+	 * basketProductsDTO = basketProducts.stream().map(basketProduct ->
+	 * basketProductDTOMapper.apply(basketProduct)) .collect(Collectors.toList());
+	 * 
+	 * if (Optional.ofNullable(shopName).isPresent()) {
+	 * 
+	 * List<BasketProductDTO> basketProductsDTOByShopName =
+	 * basketProductsDTO.stream() .filter(basketProduct ->
+	 * basketProduct.getShopName().equalsIgnoreCase(shopName))
+	 * .collect(Collectors.toList());
+	 * 
+	 * return basketProductsDTOByShopName; } return basketProductsDTO; }
+	 */
 
 	public void deleteBasketProductByProductId(int productId) {
 
@@ -82,9 +113,15 @@ public class ShoppingCartService {
 		basketProductRepositoryService.deleteBasketProductById(id);
 	}
 
-	public ArrayList<BasketProduct> getBasketProductsByShopName(String shopName) {
+	public List<BasketProductDTO> getBasketProductsByShopName(String shopName) {
 
-		return basketProductRepositoryService.getBasketProductsByShopName(shopName);
+		List<BasketProduct> basketProducts = basketProductRepositoryService.getBasketProductsByShopName(shopName);
+		List<BasketProductDTO> basketProductsDTO;
+
+		basketProductsDTO = basketProducts.stream().map(product -> basketProductDTOMapper.apply(product))
+				.collect(Collectors.toList());
+
+		return basketProductsDTO;
 	}
 
 	public float getTotalPrice() {
@@ -97,7 +134,7 @@ public class ShoppingCartService {
 		Optional<String> shop = Optional.ofNullable(shopName);
 
 		if (shop.isPresent()) {
-			if (this.getBasketProducts().isEmpty() || this.getBasketProductsByShopName(shopName).isEmpty())
+			if (this.getBasketProducts(shopName).isEmpty())
 				return 0f;
 			else
 				return basketProductRepositoryService.getTotalPriceForShop(shopName);
