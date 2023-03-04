@@ -43,6 +43,8 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class SearchService {
 
+	private final String SEARCH_PREFIX = "search?";
+	
 	private final ProductRepositoryService productRepositoryService;
 	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ShopResearcherService shopResearcherService;
@@ -62,6 +64,19 @@ public class SearchService {
 		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
 
 		return productsDTO;
+	}
+	
+	public String createUrl(String[] params) {
+		
+		StringBuilder url = new StringBuilder(SEARCH_PREFIX);
+		
+		for(int counter=0;counter < params.length; counter++) {
+			
+			url.append(params[counter]);
+			if(counter != (params.length-1)) url.append("&");
+		}
+		
+		return url.toString();
 	}
 
 	public List<ProductDTO> getRequestedProducts(String value) {
