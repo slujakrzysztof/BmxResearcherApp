@@ -36,10 +36,10 @@
 			<p class="h5 infoText" id="category" th:text="#{${category}}"></p>
 		</div>
 		<div id="info_container_3">
-			<form th:action="@{/applyDiscount}" th:method="post">
+			<form th:action="@{/searchDiscount}" th:method="post">
 				<input class="form-control-lg" type="number" min="0" max="100"
 					step="1" th:placeholder="${discountValue}" th:value="*{discountV}"
-					name="value" /> <input type="hidden" name="currentURL"
+					name="discountValue" /> <input type="hidden" name="currentURL"
 					th:value="${currentURL}" />
 				<button type="submit" value="submit" th:text="ENTER"></button>
 			</form>

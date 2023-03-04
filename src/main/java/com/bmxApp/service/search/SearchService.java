@@ -28,6 +28,7 @@ import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
+import com.bmxApp.service.discount.DiscountService;
 import com.bmxApp.service.product.ProductRepositoryService;
 import com.bmxApp.service.sort.SortService;
 
@@ -46,6 +47,7 @@ public class SearchService {
 	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ShopResearcherService shopResearcherService;
 	private final SortService sortService;
+	private final DiscountService discountService;
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
@@ -55,36 +57,6 @@ public class SearchService {
 	public List<Product> getProducts(String shopName, String category) {
 
 		return this.productRepositoryService.getSearchedProducts(shopName, category);
-	}
-
-	public List<ProductDTO> getProductsWithDiscount(String shopName, String category) {
-
-		List<Product> productList = this.getProducts(shopName, category);
-		DiscountDTO discountDTO = this.getShopResearcherService().getDiscount();
-		List<ProductDTO> productDTOList = new ArrayList<>();
-
-		productDTOList = productList.stream().map(product -> productDTOMapper.apply(product))
-				.collect(Collectors.toList());
-		productDTOList.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(ProductFormatter
-				.formatProductPrice(productDTO.getPrice() * ((100.0 - discountDTO.getValue()) / 100.0)))));
-
-		return productDTOList;
-	}
-
-	public void applyDiscount(List<Product> products, double discountValue) {
-
-		for (int counter = 0; counter < products.size(); counter++)
-			products.get(counter).setPrice(products.get(counter).getPrice() * ((100.0 - discountValue) / 100.0));
-	}
-
-	public void setDiscount(int value) {
-
-		shopResearcherService.getDiscount().setValue(value);
-	}
-
-	public void resetDiscount() {
-
-		shopResearcherService.getDiscount().setValue(0);
 	}
 
 	public List<ProductDTO> getRequestedItemsWithDiscount(String value, DiscountDTO discount) {
