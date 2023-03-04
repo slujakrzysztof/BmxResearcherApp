@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SearchController {
 
+	
 	private final SearchService searchService;
 	private final ShoppingCartService shoppingCartService;
 
@@ -51,8 +52,7 @@ public class SearchController {
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("discountValue", discount.getValue());
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
-
-		searchService.resetDiscount();
+		
 		return "products";
 	}
 
@@ -79,36 +79,6 @@ public class SearchController {
 		return "searchPage";
 	}
 
-	@PostMapping("/applyDiscount")
-	public RedirectView applyDiscount(@RequestParam("value") String value,
-			@RequestParam("currentURL") String currentURL) {
 
-		if (value.isEmpty())
-			value = "0";
-
-		searchService.setDiscount(Integer.parseInt(value));
-		RedirectView redirectView = new RedirectView();
-		redirectView.setUrl(currentURL);
-		return redirectView;
-	}
-
-	@GetMapping("/resetDiscount")
-	public RedirectView applyDiscount(@RequestParam("currentURL") String currentURL) {
-
-		searchService.resetDiscount();
-		RedirectView redirectView = new RedirectView();
-		redirectView.setUrl(currentURL);
-		return redirectView;
-	}
-
-	@PostMapping("/addProduct")
-	public RedirectView addProductToBasket(@ModelAttribute("product") ProductDTO dtoProduct,
-			@RequestParam("currentURL") String currentURL, Model model, BindingResult bindingResult) {
-
-		shoppingCartService.addProductToCart(dtoProduct.getProductName(), dtoProduct.getShopName());
-		RedirectView redirectView = new RedirectView();
-		redirectView.setUrl(currentURL);
-		return redirectView;
-	}
 
 }
