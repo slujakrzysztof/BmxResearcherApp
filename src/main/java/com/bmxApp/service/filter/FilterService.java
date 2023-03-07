@@ -16,8 +16,8 @@ import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.researcher.ShopResearcherService;
-import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
-import com.bmxApp.service.product.ProductRepositoryService;
+import com.bmxApp.service.database.BasketProductRepositoryService;
+import com.bmxApp.service.database.ProductRepositoryService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

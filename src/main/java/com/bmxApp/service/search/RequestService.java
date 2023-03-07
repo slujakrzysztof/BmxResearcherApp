@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
-import com.bmxApp.service.product.ProductRepositoryService;
+import com.bmxApp.service.database.ProductRepositoryService;
 import com.bmxApp.service.sort.SortService;
 
 import jakarta.servlet.http.HttpServletRequest;

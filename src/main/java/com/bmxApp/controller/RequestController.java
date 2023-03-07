@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.search.RequestService;
 import com.bmxApp.service.sort.SortService;

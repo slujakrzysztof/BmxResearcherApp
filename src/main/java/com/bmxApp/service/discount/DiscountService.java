@@ -12,7 +12,7 @@ import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.researcher.ShopResearcherService;
-import com.bmxApp.service.product.ProductRepositoryService;
+import com.bmxApp.service.database.ProductRepositoryService;
 import com.bmxApp.service.sort.SortService;
 
 import lombok.RequiredArgsConstructor;

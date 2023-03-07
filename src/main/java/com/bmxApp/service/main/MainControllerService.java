@@ -25,7 +25,7 @@ import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.repository.BasketProductRepository;
 import com.bmxApp.repository.ProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
-import com.bmxApp.service.basketProduct.BasketProductRepositoryService;
+import com.bmxApp.service.database.BasketProductRepositoryService;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -22,8 +22,8 @@ import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.repository.ProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
+import com.bmxApp.service.database.ProductRepositoryService;
 import com.bmxApp.service.main.MainControllerService;
-import com.bmxApp.service.product.ProductRepositoryService;
 
 import lombok.RequiredArgsConstructor;
 

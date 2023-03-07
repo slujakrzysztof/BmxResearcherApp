@@ -8,7 +8,7 @@ import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
-import com.bmxApp.service.product.ProductRepositoryService;
+import com.bmxApp.service.database.ProductRepositoryService;
 
 import lombok.RequiredArgsConstructor;
 

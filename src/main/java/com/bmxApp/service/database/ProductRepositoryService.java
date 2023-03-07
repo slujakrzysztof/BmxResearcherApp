@@ -1,4 +1,4 @@
-package com.bmxApp.service.product;
+package com.bmxApp.service.database;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
