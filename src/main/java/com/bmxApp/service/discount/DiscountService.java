@@ -1,7 +1,7 @@
 package com.bmxApp.service.discount;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.List; 
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +14,7 @@ import com.bmxApp.model.product.Product;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.product.ProductRepositoryService;
 import com.bmxApp.service.search.SearchService;
+import com.bmxApp.service.sort.SortService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +25,7 @@ public class DiscountService {
 	private final ShopResearcherService shopResearcherService;
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDtoMapper;
-	private final SearchService searchService;
+	private final SortService sortService;
 
 	public void applyDiscount(List<ProductDTO> products, int discountValue) {
 
@@ -44,9 +45,9 @@ public class DiscountService {
 
 		shopResearcherService.getDiscount().setValue(0);
 	}
-	
+
 	public int getDiscount() {
-		
+
 		return this.shopResearcherService.getDiscount().getValue();
 	}
 
@@ -64,23 +65,41 @@ public class DiscountService {
 
 		return productsDTO;
 	}
-	
+
 	public List<ProductDTO> getRequestedProductsWithDiscount(String value) {
+
+		List<Product> products = productRepositoryService.getRequestedItem(value);
+		List<ProductDTO> productsDTO;
+
+		productsDTO = products.stream().map(product -> productDtoMapper.apply(product)).collect(Collectors.toList());
 		
-		List<ProductDTO> products = searchService.getRequestedProducts(value);
-		
-		this.applyDiscount(products, this.getDiscount());
-		
-		return products;
+		this.applyDiscount(productsDTO, this.getDiscount());
+
+		return productsDTO;
 	}
-	
-	public List<ProductDTO> getSortedRequestedProductsWithDiscount(String shopName, String category, String sortedBy, boolean isSorted) {
-		
-		List<ProductDTO> products = searchService.getSortedProducts(shopName, category, sortedBy, isSorted);
-		
-		this.applyDiscount(products, this.getDiscount());
-		
+
+	public List<ProductDTO> getSortedRequestedProductsWithDiscount(String value, String sortedBy, boolean isSorted) {
+
+		List<ProductDTO> products = this.getRequestedProductsWithDiscount(value);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
+
+		if (!isSorted)
+			Collections.reverse(sortedProducts);
+
 		return products;
 	}
 
+	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy,
+			boolean isSorted) {
+
+		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
+
+		if (!isSorted)
+			Collections.reverse(sortedProducts);
+
+		return products;
+	}
+
+	
 }
