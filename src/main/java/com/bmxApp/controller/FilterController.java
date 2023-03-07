@@ -20,14 +20,13 @@ public class FilterController {
 	private final FilterService filterService;
 	private final ShoppingCartService shoppingCartService;
 
-	
 	@PostMapping(value = "/filter")
-	public String filterByShop(@RequestParam("value") String searchValue, @RequestParam("shop") String shopName, @RequestParam("currentURL") String currentURL, Model model) {
-		
-		DiscountDTO discount = filterService.getShopResearcherService().getDiscount();
-		
-		model.addAttribute("products", filterService.getFilteredItemsWithDiscountByShopName(searchValue, shopName, discount));
-		model.addAttribute("discountValue", discount.getValue());
+	public String filterByShop(@RequestParam("value") String searchValue, @RequestParam("filter") String filter,
+			@RequestParam("filterValue") String filterValue, @RequestParam("currentURL") String currentURL,
+			Model model) {
+
+		model.addAttribute("products", filterService.getFilteredProducts(searchValue, filter, filterValue));
+		model.addAttribute("discountValue", "0");
 		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("currentURL", currentURL);
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
@@ -35,5 +34,5 @@ public class FilterController {
 
 		return "searchPage";
 	}
-	
+
 }

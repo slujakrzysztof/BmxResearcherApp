@@ -99,6 +99,11 @@ public class DiscountService {
 
 		return products;
 	}
+	
+	public List<ProductDTO> getFilteredProductsWithDiscount(){
+		
+		return null;
+	}
 
 	
 }

@@ -3,6 +3,7 @@ package com.bmxApp.service.filter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.enums.FilterItem;
+import com.bmxApp.enums.SortingItem;
 import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
 import com.bmxApp.mapper.product.ProductDTOMapper;
@@ -29,37 +32,50 @@ public class FilterService {
 
 	private final ProductRepositoryService productRepositoryService;
 	private final BasketProductRepositoryService basketProductRepositoryService;
-	private final ShopResearcherService shopResearcherService;
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
-	public List<ProductDTO> getFilteredItemsWithDiscountByShopName(String value, String shopName, DiscountDTO discount) {
+	public List<ProductDTO> getFilteredProducts(String value, String filter, String filterValue) {
 
 		List<Product> products = productRepositoryService.getRequestedItem(value);
-		List<ProductDTO> productsDTO = new LinkedList<>();
+		List<ProductDTO> productsDTO;
+		Predicate<Product> filteredParameter = this.getPredicate(filter, filterValue);
 
-		productsDTO = products.stream().filter(product -> product.getShopName().equalsIgnoreCase(shopName))
+		productsDTO = products.stream().filter(product -> filteredParameter.test(product))
 				.map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
-		
-		productsDTO.forEach(productDTO -> productDTO.setPrice(Double.parseDouble(
-				ProductFormatter.formatProductPrice(productDTO.getPrice() * ((100.0 - discount.getValue()) / 100.0)))));
 
 		return productsDTO;
 	}
 	
-	public List<BasketProductDTO> getBasketProducts() {
-
-		List<BasketProduct> basketProducts = basketProductRepositoryService.getBasketProducts();
-		List<BasketProductDTO> basketProductsDTO = new ArrayList<>();
-
-		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct))
-				.collect(Collectors.toList());
-
-		return basketProductsDTO;
-	}
-	
-	public double getBasketTotalPrice() {
+	private Predicate<Product> getPredicate(String filter, String filterValue){
 		
-		return this.basketProductRepositoryService.getTotalPrice();
+		Predicate<Product> predicate = null;
+		FilterItem filterItem = FilterItem.fromString(filter);
+		
+		switch(filterItem) {
+		
+		case SHOP : {
+			predicate = product -> product.getShopName().equalsIgnoreCase(filter);
+			break;
+		}
+		//TO CHANGE
+		case PRICE : {
+			String[] rangeString = filterValue.split("-");
+			double[] range = new double[2];
+			
+			for(int counter=0; counter < rangeString.length; counter++)
+				range[counter] = Double.parseDouble(rangeString[counter]);
+			
+			predicate = product -> (product.getPrice() >= range[0] && product.getPrice() < range[1]);
+		}
+		case PRODUCER:
+			break;
+		default:
+			break;
+		
+		}
+		
+		return predicate;
 	}
+
 }
