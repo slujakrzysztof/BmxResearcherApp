@@ -59,30 +59,4 @@ public class SearchController {
 		return "products";
 	}
 
-	@GetMapping(value = "/requestProducts")
-	public String search(@RequestParam("value") String searchValue, @Nullable @RequestParam("sortBy") String sortBy,
-			Model model, HttpServletRequest request) {
-
-		DiscountDTO discount = searchService.getShopResearcherService().getDiscount();
-		Optional<String> sortedBy = Optional.ofNullable(sortBy);
-
-		sortedBy.ifPresentOrElse((value) -> {
-			sortService.setSortedBy(!sortService.isSortedBy());
-			model.addAttribute("products", searchService.getSortedRequestedProducts(searchValue, sortBy,
-					sortService.isSortedBy()));
-		}, () -> {
-			model.addAttribute("products", searchService.getRequestedProducts(searchValue));
-		});
-
-		model.addAttribute("discountValue", discount.getValue());
-		model.addAttribute("searchValue", searchValue);
-		model.addAttribute("currentURL", searchService.getSearchURL(request));
-		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
-		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
-		
-		return "searchPage";
-	}
-
-
-
 }

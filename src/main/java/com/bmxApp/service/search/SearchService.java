@@ -80,28 +80,6 @@ public class SearchService {
 		return url.toString();
 	}
 
-	public List<ProductDTO> getRequestedProducts(String value) {
-
-		List<Product> products = productRepositoryService.getRequestedItem(value);
-		List<ProductDTO> productsDTO;
-
-		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
-
-		return productsDTO;
-	}
-
-	public List<ProductDTO> getSortedRequestedProducts(String value, String sortedBy,
-			boolean isSorted) {
-
-		List<ProductDTO> products = this.getRequestedProducts(value);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
-
-		if (!isSorted)
-			Collections.reverse(sortedProducts);
-
-		return sortedProducts;
-	}
-
 	public void search(String category, String shopName, boolean partSelection) {
 
 		String html;
