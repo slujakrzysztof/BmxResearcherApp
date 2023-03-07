@@ -47,10 +47,8 @@ public class SearchService {
 	private final String SEARCH_PREFIX = "search?";
 	
 	private final ProductRepositoryService productRepositoryService;
-	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ShopResearcherService shopResearcherService;
 	private final SortService sortService;
-	private final DiscountService discountService;
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 	
@@ -114,17 +112,6 @@ public class SearchService {
 		return request.getRequestURL() + "?" + request.getQueryString();
 	}
 
-	public List<BasketProductDTO> getBasketProducts() {
-
-		List<BasketProduct> basketProducts = basketProductRepositoryService.getBasketProducts();
-		List<BasketProductDTO> basketProductsDTO = new ArrayList<>();
-
-		basketProductsDTO = basketProducts.stream().map(basketProduct -> basketProductDTOMapper.apply(basketProduct))
-				.collect(Collectors.toList());
-
-		return basketProductsDTO;
-	}
-
 	public List<ProductDTO> getSortedProducts(String shopName, String category, String sortedBy,
 			boolean isSorted) {
 
@@ -135,14 +122,6 @@ public class SearchService {
 			Collections.reverse(sortedProducts);
 
 		return sortedProducts;
-	}
-
-	public int getBasketAmount() {
-		return this.getBasketProducts().size();
-	}
-
-	public double getBasketTotalPrice() {
-		return this.basketProductRepositoryService.getTotalPrice();
 	}
 
 	public void searchProducts(String shopName, String category) {
