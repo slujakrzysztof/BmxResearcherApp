@@ -4,19 +4,27 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.SortingItem;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Service
+@Getter
+@Setter
 public class SortService {
 	
 	private final String NAME = SortingItem.NAME.name();
 	private final String PRICE = SortingItem.PRICE.name();
 	private final String SHOP = SortingItem.SHOP.name();
+	
+	@Value("false")
+	private boolean sortedBy;
 
 	public List<ProductDTO> sortProductDTO(String sortedBy, List<ProductDTO> products){
 		

@@ -53,9 +53,9 @@ public class SearchService {
 	private final DiscountService discountService;
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
-
-	@Value("false")
-	private boolean sortedBy;
+	
+	@Value("/main")
+	private String initialSearchURL;
 
 	public List<ProductDTO> getProducts(String shopName, String category) {
 

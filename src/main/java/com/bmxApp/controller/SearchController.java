@@ -15,6 +15,7 @@ import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.search.SearchService;
+import com.bmxApp.service.sort.SortService;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ public class SearchController {
 	
 	private final SearchService searchService;
 	private final ShoppingCartService shoppingCartService;
+	private final SortService sortService;
 
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
@@ -39,11 +41,12 @@ public class SearchController {
 		searchService.searchProducts(shopName, category);
 
 		sortedBy.ifPresentOrElse((value) -> {
-			searchService.setSortedBy(!searchService.isSortedBy());
+			sortService.setSortedBy(!sortService.isSortedBy());
 			model.addAttribute("products", searchService.getSortedProducts(shopName, category, sortBy,
-					searchService.isSortedBy()));
+					sortService.isSortedBy()));
 		}, () -> {
 			model.addAttribute("products", searchService.getProducts(shopName, category));
+			searchService.setInitialSearchURL(searchService.getSearchURL(request));
 		});
 
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
@@ -64,9 +67,9 @@ public class SearchController {
 		Optional<String> sortedBy = Optional.ofNullable(sortBy);
 
 		sortedBy.ifPresentOrElse((value) -> {
-			searchService.setSortedBy(!searchService.isSortedBy());
+			sortService.setSortedBy(!sortService.isSortedBy());
 			model.addAttribute("products", searchService.getSortedRequestedProducts(searchValue, sortBy,
-					searchService.isSortedBy()));
+					sortService.isSortedBy()));
 		}, () -> {
 			model.addAttribute("products", searchService.getRequestedProducts(searchValue));
 		});
@@ -76,6 +79,7 @@ public class SearchController {
 		model.addAttribute("currentURL", searchService.getSearchURL(request));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
+		
 		return "searchPage";
 	}
 
