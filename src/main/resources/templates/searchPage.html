@@ -49,14 +49,13 @@
 
 		<div class="filter-container">
 			<h2>[[#{filter}]]</h2>
-			<form th:action="@{/filter}" th:method="post">
+			<form th:action="@{/filter}" th:method="get">
 				<div class="radio-container">
 					<label th:each="model : ${T(com.bmxApp.enums.Shop).values()}">
-						<input type="radio" th:name="shop" th:value="${model}"> <span
-						th:text="${model}"></span>
-					</label> <input type="hidden" th:name="currentURL" th:value="${currentURL}" />
-					<input type="hidden" th:name="value" th:value="${searchValue}" />
-					<br>
+						<input type="radio" th:name="filterValue" th:value="${model}">
+						<span th:text="${model}"> </span>
+					</label> <input type="hidden" th:name="filter" value="shop"> <input
+						type="hidden" th:name="value" th:value="${searchValue}" /> <br>
 				</div>
 				<button class="btn btn-primary" type="submit"
 					th:text="#{applyButton}"></button>

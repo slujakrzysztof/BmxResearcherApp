@@ -13,6 +13,7 @@ import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.database.ProductRepositoryService;
+import com.bmxApp.service.filter.FilterService;
 import com.bmxApp.service.sort.SortService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class DiscountService {
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDtoMapper;
 	private final SortService sortService;
+	private final FilterService filterService;
 
 	public void applyDiscount(List<ProductDTO> products, int discountValue) {
 
@@ -100,9 +102,13 @@ public class DiscountService {
 		return products;
 	}
 	
-	public List<ProductDTO> getFilteredProductsWithDiscount(){
+	public List<ProductDTO> getFilteredProductsWithDiscount(String value, String filter, String filterValue){
 		
-		return null;
+		List<ProductDTO> filteredProducts = filterService.getFilteredProducts(value, filter, filterValue);
+		
+		this.applyDiscount(filteredProducts, this.getDiscount());
+		
+		return filteredProducts;
 	}
 
 	
