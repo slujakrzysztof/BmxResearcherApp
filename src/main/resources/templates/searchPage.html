@@ -47,7 +47,10 @@
 			</form>
 		</div>
 		<div class="filter-container">
-			<form method="GET" th:action="@{/filter}" onsubmit="disableSelectedOption()">
+			<form method="GET" th:action="@{/filter}"
+				onsubmit="disableSelectedOption()">
+
+				<input type="hidden" th:name="searchValue" th:value="${searchValue}">
 
 				<h1 style="color: black; font-size: 25px;">
 					<label for="shops">[[#{shops}]]:</label>
@@ -73,11 +76,11 @@
 					type="number" th:name="maxPrice" id="max-price"
 					th:placeholder="#{maxPrice}" th:value="${maxPrice}">
 
+
 				<button type="submit">ENTER</button>
 			</form>
 		</div>
 	</div>
-
 
 	<section class="products" id="productsPage">
 		<div id="product_container">
@@ -167,8 +170,6 @@
 		    
 		    var selectedOption1 = selectElement1.options[0];
 		    var selectedOption = selectElement.options[0];
-
-		    alert(selectElement3.value);
 		    
 		    if(selectElement3.value === "" || selectElement3.value === null) selectElement3.disabled = true;
 		    if(selectElement2.value === "" || selectElement3.value === null) selectElement2.disabled = true;

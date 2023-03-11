@@ -1,6 +1,7 @@
 package com.bmxApp.service.filter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -27,47 +28,35 @@ public class FilterService {
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
-	public List<ProductDTO> getFilteredProducts(String value, String filter, String filterValue) {
+	public List<ProductDTO> getFilteredProducts(String searchValue, String shop, String category, Integer minPrice,
+			Integer maxPrice) {
 
-		List<Product> products = productRepositoryService.getRequestedItem(value);
+		List<Product> products = productRepositoryService.getRequestedItem(searchValue);
 		List<ProductDTO> productsDTO;
-		Predicate<Product> filteredParameter = this.getPredicate(filter, filterValue);
+		Optional<Integer> minimumPrice = Optional.ofNullable(minPrice);
+		Optional<Integer> maximumPrice = Optional.ofNullable(maxPrice);
+		Optional<String> shopName = Optional.ofNullable(shop);
+		Optional<String> categoryName = Optional.ofNullable(category);
+
+		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
+
+		if(shopName.isPresent())
+			productsDTO = productsDTO.stream().filter(product -> product.getShopName().equalsIgnoreCase(shop))
+			.collect(Collectors.toList());
+
+		if(categoryName.isPresent())
+			productsDTO = productsDTO.stream().filter(product -> product.getCategory().equalsIgnoreCase(category))
+			.collect(Collectors.toList());
 		
-		productsDTO = products.stream().filter(product -> filteredParameter.test(product))
-				.map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
+		if (minimumPrice.isPresent())
+			productsDTO = productsDTO.stream().filter(product -> product.getPrice() > minimumPrice.get().intValue())
+					.collect(Collectors.toList());
+
+		if (maximumPrice.isPresent())
+			productsDTO = productsDTO.stream().filter(product -> product.getPrice() < maximumPrice.get().intValue())
+					.collect(Collectors.toList());
 
 		return productsDTO;
-	}
-	
-	private Predicate<Product> getPredicate(String filter, String filterValue){
-		
-		Predicate<Product> predicate = null;
-		FilterItem filterItem = FilterItem.fromString(filter.toLowerCase());
-		
-		switch(filterItem) {
-		
-		case SHOP : {
-			predicate = product -> product.getShopName().equalsIgnoreCase(filterValue);
-			break;
-		}
-		//TO CHANGE
-		case PRICE : {
-			String[] rangeString = filterValue.split("-");
-			double[] range = new double[2];
-			
-			for(int counter=0; counter < rangeString.length; counter++)
-				range[counter] = Double.parseDouble(rangeString[counter]);
-			
-			predicate = product -> (product.getPrice() >= range[0] && product.getPrice() < range[1]);
-		}
-		case PRODUCER:
-			break;
-		default:
-			break;
-		
-		}
-		
-		return predicate;
 	}
 
 }

@@ -10,6 +10,7 @@ import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.filter.FilterService;
 
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -22,10 +23,12 @@ public class FilterController {
 	private final ShoppingCartService shoppingCartService;
 
 	@GetMapping(value = "/filter")
-	public String filterByShop(@RequestParam("value") String searchValue, @RequestParam("filter") String filter,
-			@RequestParam("filterValue") String filterValue, Model model) {
-
-		model.addAttribute("products", filterService.getFilteredProducts(searchValue, filter, filterValue));
+	public String filterByShop(@Nullable @RequestParam("shop") String shop,
+			@Nullable @RequestParam("category") String category, @RequestParam("searchValue") String searchValue,
+			@Nullable @RequestParam("minPrice") Integer minPrice, @Nullable @RequestParam("maxPrice") Integer maxPrice,
+			Model model) {
+		
+		model.addAttribute("products", filterService.getFilteredProducts(searchValue, shop, category, minPrice, maxPrice));
 		model.addAttribute("discountValue", "0");
 		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));

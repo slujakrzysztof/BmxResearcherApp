@@ -1,7 +1,7 @@
 package com.bmxApp.service.discount;
 
 import java.util.Collections;
-import java.util.List; 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -73,7 +73,7 @@ public class DiscountService {
 		List<ProductDTO> productsDTO;
 
 		productsDTO = products.stream().map(product -> productDtoMapper.apply(product)).collect(Collectors.toList());
-		
+
 		this.applyDiscount(productsDTO, this.getDiscount());
 
 		return productsDTO;
@@ -101,15 +101,16 @@ public class DiscountService {
 
 		return products;
 	}
-	
-	public List<ProductDTO> getFilteredProductsWithDiscount(String value, String filter, String filterValue){
-		
-		List<ProductDTO> filteredProducts = filterService.getFilteredProducts(value, filter, filterValue);
-		
+
+	public List<ProductDTO> getFilteredProductsWithDiscount(String searchValue, String shop, String category,
+			int minPrice, int maxPrice) {
+
+		List<ProductDTO> filteredProducts = filterService.getFilteredProducts(searchValue, shop, category, minPrice,
+				maxPrice);
+
 		this.applyDiscount(filteredProducts, this.getDiscount());
-		
+
 		return filteredProducts;
 	}
 
-	
 }
