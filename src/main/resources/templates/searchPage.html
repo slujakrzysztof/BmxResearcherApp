@@ -46,67 +46,38 @@
 				<button type="submit" value="submit" th:text="RESET"></button>
 			</form>
 		</div>
-				<div class="filter-container">
-		 <form method="GET" action="/search">
-
-  <h1 style="color:black; font-size: 25px;"><label for="shops">[[#{shops}]]:</label> </h1>
-  <select name="#{shops}" id="shops">
-    <option th:name="${shop}">[[#{allShops}]]</option>
-    <option th:each="shop : ${T(com.bmxApp.enums.Shop).getShops()}" th:value="${shop}" th:text="${shop}"></option>
-  </select>
-<br>
-<br>
-<h1 style="color:black; font-size: 25px;"><label for="categories">[[#{category}]]:</label> </h1>
-  <select name="#{category}" id="categories">
-    <option th:name="${category}">[[#{allCategory}]]</option>
-    <option th:each="category : ${T(com.bmxApp.enums.Part).values()}" th:value="${category}" th:text="${category.value}"></option>
-  </select>
-  <br>
-  <br>
-  <h1 style="color:black; font-size: 25px;"><label for="price-range">[[#{price}]]:</label></h1>
-  <input type="number" th:name="minPrice" id="min-price" th:placeholder="#{minimalPrice}" th:value="${minPrice}">
-  <input type="number" th:name="maxPrice" id="max-price" th:placeholder="#{maxPrice}" th:value="${maxPrice}">
-
-  <button type="submit">ENTER</button>
-</form>
-	</div>	 
-<!-- 
-<form th:action="@{/filter}" th:method="get">
-
-			<h2>[[#{shops}]]</h2>
-			<!-- <form th:action="@{/filter}" th:method="get">
-				<div class="radio-container">
-					<label th:each="model : ${T(com.bmxApp.enums.Shop).values()}">
-						<input type="radio" th:name="filterValue" th:value="${model}">
-						<span th:text="${model}"> </span>
-					</label> <input type="hidden" th:name="filter" value="shop"> <input
-						type="hidden" th:name="value" th:value="${searchValue}" /> <br>
-				</div>
-				<button class="btn btn-primary" type="submit"
-					th:text="#{applyButton}"></button>
-			<!--  </form> 
-		</div>
-
 		<div class="filter-container">
-			<h2>[[#{price}]]</h2>
-			<!--  <form th:action="@{/filter}" th:method="get">
-				<div class="radio-container">
-					<input type="number" class="border-input" th:name="lowerBorder"
-						th:value="${lowerBorder}" th:placeholder="${lowerBorder}">
-					<h1 style="color: black;">&#8595 &#8595 &#8595</h1>
-					<input type="number" class="border-input" th:name="upperBorder"
-						th:value="${upperBorder}" th:placeholder="${upperBorder}"> <input
-						type="hidden" th:name="filter" value="price"> <input
-						type="hidden" th:name="value" th:value="${searchValue}" /> <br>
-				</div>
-				<button class="btn btn-primary" type="submit"
-					th:text="#{applyButton}"></button>
-			<!--  </form> 
+			<form method="GET" th:action="@{/filter}" onsubmit="disableSelectedOption()">
+
+				<h1 style="color: black; font-size: 25px;">
+					<label for="shops">[[#{shops}]]:</label>
+				</h1>
+				<select th:name="shop" id="shops">
+					<option id="allShops" value="#{allShops}">[[#{allShops}]]</option>
+					<option th:each="shop : ${T(com.bmxApp.enums.Shop).getShops()}"
+						th:value="${shop}" th:text="${shop}"></option>
+				</select> <br> <br>
+				<h1 style="color: black; font-size: 25px;">
+					<label for="categories">[[#{category}]]:</label>
+				</h1>
+				<select th:name="category" id="categories">
+					<option id="allCategory">[[#{allCategory}]]</option>
+					<option th:each="category : ${T(com.bmxApp.enums.Part).values()}"
+						th:value="${category}" th:text="${category.value}"></option>
+				</select> <br> <br>
+				<h1 style="color: black; font-size: 25px;">
+					<label for="price-range">[[#{price}]]:</label>
+				</h1>
+				<input type="number" th:name="minPrice" id="min-price"
+					th:placeholder="#{minimalPrice}" th:value="${minPrice}"> <input
+					type="number" th:name="maxPrice" id="max-price"
+					th:placeholder="#{maxPrice}" th:value="${maxPrice}">
+
+				<button type="submit">ENTER</button>
+			</form>
 		</div>
-		</form>
-		 -->
 	</div>
-	
+
 
 	<section class="products" id="productsPage">
 		<div id="product_container">
@@ -186,6 +157,26 @@
 		if(amount===0) deleteButton.setAttribute('disabled', 'disabled');
 		else deleteButton.removeAttribute("disabled");
 		
+	</script>
+	<script th:inline="javascript">
+	  function disableSelectedOption() {
+		    var selectElement = document.getElementsByName("shop")[0];	
+		    var selectElement1 = document.getElementsByName("category")[0];
+		    var selectElement2 = document.getElementById("min-price");
+		    var selectElement3 = document.getElementById("max-price");
+		    
+		    var selectedOption1 = selectElement1.options[0];
+		    var selectedOption = selectElement.options[0];
+
+		    alert(selectElement3.value);
+		    
+		    if(selectElement3.value === "" || selectElement3.value === null) selectElement3.disabled = true;
+		    if(selectElement2.value === "" || selectElement3.value === null) selectElement2.disabled = true;
+		    
+		    // Add disabled attribute to selected option
+		    selectedOption.disabled = true;
+		    selectedOption1.disabled = true;
+		  }
 	</script>
 
 </body>
