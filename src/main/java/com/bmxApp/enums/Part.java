@@ -1,5 +1,7 @@
 package com.bmxApp.enums;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import org.hibernate.internal.build.AllowSysOut;
@@ -11,10 +13,10 @@ import org.springframework.core.Constants;
 import com.bmxApp.service.main.MainControllerService;
 
 public enum Part {
-	GRIPS("gripy"), BARS("kierownice"), BARENDS("barendy"), STEMS("wsporniki"), HEADS("stery"), FRAMES("ramy"),
-	FORKS("widelce"), RIMS("obrecze"), TIRES("opony"), SPOKES("szprychy"), HUBS("piasty"), POSTS("sztyce"),
-	GEARS("zebatki"), CRANKS("korby"), PEDALS("pedaly"), CHAINS("lancuchy"), SEATS("siodelka"), SUPPORTS("suporty"),
-	PEGS("pegi");
+	GRIPS("Gripy"), BARS("Kierownice"), BARENDS("Barendy"), STEMS("Wsporniki"), HEADS("Stery"), FRAMES("Ramy"),
+	FORKS("Widelce"), RIMS("Obrecze"), TIRES("Opony"), SPOKES("Szprychy"), HUBS("Piasty"), POSTS("Sztyce"),
+	GEARS("Zebatki"), CRANKS("Korby"), PEDALS("Pedaly"), CHAINS("Lancuchy"), SEATS("Siodelka"), SUPPORTS("Suporty"),
+	PEGS("Pegi");
 
 	@Autowired
 	MainControllerService mainControllerService;
@@ -23,10 +25,6 @@ public enum Part {
 	private static Logger logger = LoggerFactory.getLogger(Constants.class);
 	private static Properties properties;
 	private String value;
-
-	private Part() {
-		// TODO Auto-generated constructor stub
-	}
 
 	private Part(String value) {
 		this.value = value;
@@ -48,7 +46,7 @@ public enum Part {
 	}
 
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 
 	private void init() {

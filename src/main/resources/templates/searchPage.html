@@ -49,14 +49,21 @@
 				<div class="filter-container">
 		 <form method="GET" action="/search">
 
-  <h1 style="color:black;"><label for="shops">[[#{shops}]]:</label> </h1>
+  <h1 style="color:black; font-size: 25px;"><label for="shops">[[#{shops}]]:</label> </h1>
   <select name="#{shops}" id="shops">
-    <option th:name="${shop}" th:value="">[[#{allShops}]]</option>
+    <option th:name="${shop}">[[#{allShops}]]</option>
     <option th:each="shop : ${T(com.bmxApp.enums.Shop).getShops()}" th:value="${shop}" th:text="${shop}"></option>
   </select>
 <br>
 <br>
-  <h1 style="color:black;"><label for="price-range">[[#{price}]]:</label></h1>
+<h1 style="color:black; font-size: 25px;"><label for="categories">[[#{category}]]:</label> </h1>
+  <select name="#{category}" id="categories">
+    <option th:name="${category}">[[#{allCategory}]]</option>
+    <option th:each="category : ${T(com.bmxApp.enums.Part).values()}" th:value="${category}" th:text="${category.value}"></option>
+  </select>
+  <br>
+  <br>
+  <h1 style="color:black; font-size: 25px;"><label for="price-range">[[#{price}]]:</label></h1>
   <input type="number" th:name="minPrice" id="min-price" th:placeholder="#{minimalPrice}" th:value="${minPrice}">
   <input type="number" th:name="maxPrice" id="max-price" th:placeholder="#{maxPrice}" th:value="${maxPrice}">
 
