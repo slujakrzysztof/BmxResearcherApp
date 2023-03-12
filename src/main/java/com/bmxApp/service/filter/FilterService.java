@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.product.ProductDTO;
@@ -17,9 +18,11 @@ import com.bmxApp.service.database.ProductRepositoryService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Service
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class FilterService {
 
@@ -28,8 +31,14 @@ public class FilterService {
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
-	public List<ProductDTO> getFilteredProducts(String searchValue, String shop, String category, Integer minPrice,
-			Integer maxPrice) {
+	@Value("0")
+	private Integer minPrice;
+	@Value("0")
+	private Integer maxPrice;
+	private String shop;
+	private String category;
+
+	public List<ProductDTO> getFilteredProducts(String searchValue) {
 
 		List<Product> products = productRepositoryService.getRequestedItem(searchValue);
 		List<ProductDTO> productsDTO;

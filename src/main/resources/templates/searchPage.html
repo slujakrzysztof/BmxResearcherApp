@@ -88,9 +88,10 @@
 				<thead>
 					<tr>
 						<th scope="col">[[#{name}]]
-							<form th:action="@{/requestProducts}" th:method="get">
+							<form th:action="@{/sort}" th:method="get">
 								<input type="hidden" name="value" th:value="${searchValue}" />
 								<input type="hidden" name="sortBy" th:value="name" />
+								<input type="hidden" name="products" th:value="${products}"/>
 								<button type="submit" value="submit">
 									<i class="fa-solid fa-sort"></i>
 								</button>

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
+import com.bmxApp.service.discount.DiscountService;
 import com.bmxApp.service.filter.FilterService;
 
 import jakarta.annotation.Nullable;
@@ -21,6 +22,7 @@ public class FilterController {
 
 	private final FilterService filterService;
 	private final ShoppingCartService shoppingCartService;
+	private final DiscountService discountService;
 
 	@GetMapping(value = "/filter")
 	public String filterByShop(@Nullable @RequestParam("shop") String shop,
@@ -28,13 +30,21 @@ public class FilterController {
 			@Nullable @RequestParam("minPrice") Integer minPrice, @Nullable @RequestParam("maxPrice") Integer maxPrice,
 			Model model) {
 		
-		model.addAttribute("products", filterService.getFilteredProducts(searchValue, shop, category, minPrice, maxPrice));
-		model.addAttribute("discountValue", "0");
+		filterService.setMinPrice(minPrice);
+		filterService.setMaxPrice(maxPrice);
+		filterService.setCategory(category);
+		filterService.setShop(shop);
+		
+		model.addAttribute("products", filterService.getFilteredProducts(searchValue));
+		model.addAttribute("discountValue", discountService.getDiscount());
+		model.addAttribute("minPrice", minPrice);
+		model.addAttribute("maxPrice", maxPrice);
 		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 
 		return "searchPage";
 	}
+	
 
 }

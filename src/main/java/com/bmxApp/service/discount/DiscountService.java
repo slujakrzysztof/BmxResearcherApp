@@ -102,11 +102,9 @@ public class DiscountService {
 		return products;
 	}
 
-	public List<ProductDTO> getFilteredProductsWithDiscount(String searchValue, String shop, String category,
-			int minPrice, int maxPrice) {
+	public List<ProductDTO> getFilteredProductsWithDiscount(String searchValue) {
 
-		List<ProductDTO> filteredProducts = filterService.getFilteredProducts(searchValue, shop, category, minPrice,
-				maxPrice);
+		List<ProductDTO> filteredProducts = filterService.getFilteredProducts(searchValue);
 
 		this.applyDiscount(filteredProducts, this.getDiscount());
 
