@@ -58,14 +58,6 @@ public class SearchController {
 		
 		return "products";
 	}
-	
-	@GetMapping(value = "/aaa")
-	public String searchProducts(Model model,
-			HttpServletRequest request) {
-
-		
-		return request.getRequestURI();
-	}
 
 }
 

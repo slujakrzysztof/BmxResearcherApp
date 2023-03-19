@@ -47,6 +47,6 @@ public class RequestService {
 	
 	public String getSearchURL(HttpServletRequest request) {
 
-		return request.getRequestURL() + "?" + request.getQueryString();
+		return request.getRequestURI() + "?" + request.getQueryString();
 	}
 }

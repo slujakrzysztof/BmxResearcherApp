@@ -24,7 +24,7 @@ public class RequestController {
 	private final RequestService requestService;
 	
 	@GetMapping(value = "/requestProducts")
-	public String search(@RequestParam("value") String searchValue, @Nullable @RequestParam("sortBy") String sortBy,
+	public String search(@RequestParam("value") String searchValue, @Nullable @RequestParam("sortedBy") String sortBy,
 			Model model, HttpServletRequest request) {
 
 		Optional<String> sortedBy = Optional.ofNullable(sortBy);
@@ -39,7 +39,7 @@ public class RequestController {
 
 		model.addAttribute("discountValue", "0");
 		model.addAttribute("searchValue", searchValue);
-		model.addAttribute("currentURL", requestService.getSearchURL(request));
+		model.addAttribute("currentUrl", requestService.getSearchURL(request));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		

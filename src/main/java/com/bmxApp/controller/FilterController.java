@@ -45,11 +45,12 @@ public class FilterController {
 		filterService.setCategory(category);
 		filterService.setShop(shop);
 		
-		//System.out.println("URL: " + (request.getRequestURI() + "?" + request.getQueryString()));
-		
 		List<ProductDTO> products = filterService.getFilteredProducts(searchValue);
 		
-		if(sortedBy != null) products = sortService.sortProductDTO(sortedBy, products);
+		if(sortedBy != null) {
+			sortService.setSortedBy(!sortService.isSortedBy());
+			products = sortService.sortProductDTO(sortedBy, products);
+		}
 
 		model.addAttribute("products", products);
 		model.addAttribute("discountValue", discountService.getDiscount());
@@ -66,12 +67,6 @@ public class FilterController {
 		
 	}
 	
-	@GetMapping(value = "/sortFilter")
-	public ModelAndView sortFilter(Model model, @RequestParam("currentUrl") String currentUrl, @RequestParam("sortedBy") String sortedBy) {
-		
-		
-		return new ModelAndView("redirect:" + sortService.getSortUrl(currentUrl, sortedBy));
 
-	}
 
 }
