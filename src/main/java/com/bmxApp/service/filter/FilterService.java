@@ -1,5 +1,6 @@
 package com.bmxApp.service.filter;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -37,6 +38,16 @@ public class FilterService {
 	private Integer maxPrice;
 	private String shop;
 	private String category;
+	
+/*	public FilterService(ProductRepositoryService productRepositoryService, BasketProductRepositoryService basketProductRepositoryService,
+			ProductDTOMapper productDTOMapper, BasketProductDTOMapper basketProductDTOMapper) {
+		
+		this.productRepositoryService = productRepositoryService;
+		this.basketProductRepositoryService = basketProductRepositoryService;
+		this.productDTOMapper = productDTOMapper;
+		this.basketProductDTOMapper = basketProductDTOMapper;
+		
+	}*/
 
 	public List<ProductDTO> getFilteredProducts(String searchValue) {
 
@@ -46,6 +57,7 @@ public class FilterService {
 		Optional<Integer> maximumPrice = Optional.ofNullable(maxPrice);
 		Optional<String> shopName = Optional.ofNullable(shop);
 		Optional<String> categoryName = Optional.ofNullable(category);
+		
 
 		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
 

@@ -2,7 +2,7 @@
 	<form th:action="@{/requestProducts}" th:method="get">
 		<div class="input-group rounded">
 			<input type="search" name="value" class="form-control rounded"
-				placeholder="Search" aria-label="Search"
+				th:placeholder="#{search}" aria-label="Search" th:value="${searchValue}"
 				aria-describedby="search-addon" style="z-index: 1000 !important;" />				
 			<button  type="submit">
 				<i class="fas fa-search"></i>
