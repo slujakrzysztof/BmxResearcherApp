@@ -39,8 +39,6 @@ public class ShopResearcherService {
 	private String category;
 	private String shopName;
 
-	private DiscountDTO discount = new DiscountDTO();
-
 	Document.OutputSettings outputSettings = new Document.OutputSettings();
 
 	ArrayList<Product> products = new ArrayList<>();
@@ -55,15 +53,6 @@ public class ShopResearcherService {
 
 	double price = 0;
 	String productURLComplete;
-
-
-	public DiscountDTO getDiscount() {
-		return this.discount;
-	}
-
-	public void setDiscount(DiscountDTO discount) {
-		this.discount = discount;
-	}
 
 	public String getHTML() {
 		return this.html;

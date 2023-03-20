@@ -2,6 +2,7 @@ package com.bmxApp.service.discount;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,40 +23,44 @@ import com.bmxApp.service.sort.SortService;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class DiscountService {
 
-	private final String DISCOUNT_KEY = "discountValue=";
+	private final String DISCOUNT_KEY;
 
-	private final ShopResearcherService shopResearcherService;
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDtoMapper;
 	private final SortService sortService;
 	private final FilterService filterService;
+	private DiscountDTO discount;
 
-	public void applyDiscount(List<ProductDTO> products, int discountValue) {
+	public DiscountService(ProductRepositoryService productRepositoryService, ProductDTOMapper productDtoMapper,
+			SortService sortService, FilterService filterService) {
 
-		products.forEach(product -> {
-
-			double price = product.getPrice() * ((100.0 - discountValue) / 100.0);
-			product.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(price)));
-		});
+		this.DISCOUNT_KEY = "discountValue=";
+		this.productRepositoryService = productRepositoryService;
+		this.productDtoMapper = productDtoMapper;
+		this.sortService = sortService;
+		this.filterService = filterService;
+		this.discount = new DiscountDTO();
 	}
 
-	public void setDiscount(int value) {
+	public void setDiscount(int discount) {
 
-		System.out.println("KEEEEEEEEY: " + DISCOUNT_KEY);
-		shopResearcherService.getDiscount().setValue(value);
-	}
-
-	public void resetDiscount() {
-
-		shopResearcherService.getDiscount().setValue(0);
+		this.discount.setValue(discount);
 	}
 
 	public int getDiscount() {
 
-		return this.shopResearcherService.getDiscount().getValue();
+		return this.discount.getValue();
+	}
+
+	public void applyDiscount(List<ProductDTO> products) {
+
+		products.forEach(product -> {
+
+			double price = product.getPrice() * ((100.0 - getDiscount()) / 100.0);
+			product.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(price)));
+		});
 	}
 
 	public String createUrlWithDiscount(String url, String discountValue) {
@@ -64,17 +69,25 @@ public class DiscountService {
 		String requestUrl = url.substring(0, url.indexOf("?") + 1);
 		String params = url.substring(url.indexOf("?") + 1);
 		StringBuilder finalUrl = new StringBuilder(requestUrl);
-		
-		List<String> paramList = Arrays.asList(params.split("&"));
+		int index = 0;
+
+		List<String> paramList = new LinkedList<>(Arrays.asList(params.split("&")));
 
 		if (params.contains(DISCOUNT_KEY)) {
+		
 			for (String param : paramList)
 				if (param.contains(DISCOUNT_KEY))
-					paramList.remove(param);
+					index = paramList.indexOf(param);
+		
+			paramList.remove(index);
+			
 		}
+		
+		
 
 		for (String param : paramList) {
-			if(!(paramList.indexOf(param) == 0)) finalUrl.append("&");
+			if (!(paramList.indexOf(param) == 0))
+				finalUrl.append("&");
 			finalUrl.append(param);
 		}
 
@@ -82,7 +95,7 @@ public class DiscountService {
 			finalUrl.append("&");
 			finalUrl.append(DISCOUNT_KEY).append(discount);
 		}
-		
+
 		return finalUrl.toString();
 
 	}
@@ -91,22 +104,21 @@ public class DiscountService {
 
 		List<ProductDTO> productsDTO;
 		List<Product> products = productRepositoryService.getSearchedProducts(shopName, category);
-		DiscountDTO discountDTO = shopResearcherService.getDiscount();
 
 		productsDTO = products.stream().map(product -> productDtoMapper.apply(product)).collect(Collectors.toList());
 
-		this.applyDiscount(productsDTO, discountDTO.getValue());
+		this.applyDiscount(productsDTO);
 		productsDTO.forEach(product -> product
 				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
 
 		return productsDTO;
 	}
 
-	public List<ProductDTO> getProductsWithDiscount(List<ProductDTO> products, int discountValue) {
+	public List<ProductDTO> getProductsWithDiscount(List<ProductDTO> products) {
 
 		List<ProductDTO> discountProducts = products;
 
-		this.applyDiscount(discountProducts, discountValue);
+		this.applyDiscount(discountProducts);
 		discountProducts.forEach(product -> product
 				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
 		return products;
@@ -119,7 +131,7 @@ public class DiscountService {
 
 		productsDTO = products.stream().map(product -> productDtoMapper.apply(product)).collect(Collectors.toList());
 
-		this.applyDiscount(productsDTO, this.getDiscount());
+		this.applyDiscount(productsDTO);
 
 		return productsDTO;
 	}
@@ -151,7 +163,7 @@ public class DiscountService {
 
 		List<ProductDTO> filteredProducts = filterService.getFilteredProducts(searchValue);
 
-		this.applyDiscount(filteredProducts, this.getDiscount());
+		this.applyDiscount(filteredProducts);
 
 		return filteredProducts;
 	}

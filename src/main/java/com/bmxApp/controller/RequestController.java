@@ -42,7 +42,7 @@ public class RequestController {
 			model.addAttribute("products", products);
 			
 			discount.ifPresent(discValue -> model.addAttribute("products",
-					discountService.getProductsWithDiscount(products, Integer.parseInt(discountValue))));
+					discountService.getProductsWithDiscount(products)));
 			
 		}, () -> {
 			
@@ -50,7 +50,7 @@ public class RequestController {
 			model.addAttribute("products", products);
 			
 			discount.ifPresent(discValue -> model.addAttribute("products",
-					discountService.getProductsWithDiscount(products, Integer.parseInt(discountValue))));
+					discountService.getProductsWithDiscount(products)));
 		});
 
 		model.addAttribute("discountValue", discountValue);

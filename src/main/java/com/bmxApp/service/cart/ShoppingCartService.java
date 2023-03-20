@@ -18,6 +18,7 @@ import com.bmxApp.model.product.Product;
 import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.database.BasketProductRepositoryService;
 import com.bmxApp.service.database.ProductRepositoryService;
+import com.bmxApp.service.discount.DiscountService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class ShoppingCartService {
 
 	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ProductRepositoryService productRepositoryService;
-	private final ShopResearcherService shopResearcher;
+	private final DiscountService discountService;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
 	public List<BasketProductDTO> getBasketProducts(String shopName) {
@@ -67,7 +68,7 @@ public class ShoppingCartService {
 
 	public void setCartDiscount(int value) {
 
-		shopResearcher.getDiscount().setValue(value);
+		discountService.setDiscount(value);
 	}
 
 	/*
@@ -197,7 +198,7 @@ public class ShoppingCartService {
 
 	public String getTotalDiscount(String shopName) {
 
-		int discountValue = shopResearcher.getDiscount().getValue();
+		int discountValue = discountService.getDiscount();
 		float discount = (float) (this.getTotalPriceForShop(shopName) * ((100.0 - discountValue) / 100.0));
 		float totalDiscount = (this.getTotalPriceForShop(shopName) - discount) * (-1);
 		return ProductFormatter.formatProductPrice(totalDiscount);
@@ -205,7 +206,7 @@ public class ShoppingCartService {
 
 	public int getDiscountValue() {
 
-		return this.shopResearcher.getDiscount().getValue();
+		return this.discountService.getDiscount();
 	}
 
 	public String getFinalPrice(String shopName) {

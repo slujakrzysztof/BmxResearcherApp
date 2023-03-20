@@ -50,7 +50,7 @@ public class SearchController {
 
 			model.addAttribute("products", products);
 			discount.ifPresent(discValue -> model.addAttribute("products",
-					discountService.getProductsWithDiscount(products, Integer.parseInt(discountValue))));
+					discountService.getProductsWithDiscount(products)));
 
 		}, () -> {
 
@@ -59,13 +59,12 @@ public class SearchController {
 			model.addAttribute("products", products);
 
 			discount.ifPresent(discValue -> model.addAttribute("products",
-					discountService.getProductsWithDiscount(products, Integer.parseInt(discountValue))));
+					discountService.getProductsWithDiscount(products)));
 
 			searchService.setInitialSearchURL(searchService.getSearchURL(request));
 		});
 
-		discount.ifPresentOrElse(disc -> model.addAttribute("discountValue", discountValue),
-				() -> model.addAttribute("discountValue", "0"));
+		discount.ifPresent(disc -> model.addAttribute("discountValue", discountValue));
 		
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
