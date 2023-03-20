@@ -1,9 +1,12 @@
 package com.bmxApp.service.discount;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.discount.DiscountDTO;
@@ -22,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiscountService {
 
+	private final String DISCOUNT_KEY = "discountValue=";
+
 	private final ShopResearcherService shopResearcherService;
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDtoMapper;
@@ -39,6 +44,7 @@ public class DiscountService {
 
 	public void setDiscount(int value) {
 
+		System.out.println("KEEEEEEEEY: " + DISCOUNT_KEY);
 		shopResearcherService.getDiscount().setValue(value);
 	}
 
@@ -50,6 +56,35 @@ public class DiscountService {
 	public int getDiscount() {
 
 		return this.shopResearcherService.getDiscount().getValue();
+	}
+
+	public String createUrl(String url, String discountValue) {
+
+		int discount = Integer.parseInt(discountValue);
+		String requestUrl = url.substring(0, url.indexOf("?") + 1);
+		String params = url.substring(url.indexOf("?") + 1);
+		StringBuilder finalUrl = new StringBuilder(requestUrl);
+		
+		List<String> paramList = Arrays.asList(params.split("&"));
+
+		if (params.contains(DISCOUNT_KEY)) {
+			for (String param : paramList)
+				if (param.contains(DISCOUNT_KEY))
+					paramList.remove(param);
+		}
+
+		for (String param : paramList) {
+			if(!(paramList.indexOf(param) == 0)) finalUrl.append("&");
+			finalUrl.append(param);
+		}
+
+		if (!(discount == 0)) {
+			finalUrl.append("&");
+			finalUrl.append(DISCOUNT_KEY).append(discount);
+		}
+		
+		return finalUrl.toString();
+
 	}
 
 	public List<ProductDTO> getProductsWithDiscount(String shopName, String category) {
@@ -66,11 +101,11 @@ public class DiscountService {
 
 		return productsDTO;
 	}
-	
-	public List<ProductDTO> getProductsWithDiscount(List<ProductDTO> products, int discountValue){
-		
-		List<ProductDTO> discountProducts = products; 
-				
+
+	public List<ProductDTO> getProductsWithDiscount(List<ProductDTO> products, int discountValue) {
+
+		List<ProductDTO> discountProducts = products;
+
 		this.applyDiscount(discountProducts, discountValue);
 		discountProducts.forEach(product -> product
 				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
