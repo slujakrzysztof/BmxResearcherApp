@@ -3,6 +3,7 @@ package com.bmxApp.service.search;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -131,5 +132,20 @@ public class SearchService {
 		} else {
 			this.search(category, shopName.toLowerCase(), true);
 		}
+	}
+	
+	public Map<String, String> getModelAttributes(String url){
+		
+		String params = url.substring(url.indexOf("?") + 1, url.length());
+		String[] list = params.split("&");
+		String[] elements = new String[2];
+		Map<String, String> paramsMap = new HashMap<>();
+		
+		for(int i=0; i < list.length; i++) {
+			elements = list[i].split("=");
+			paramsMap.put(elements[0], elements[1]);
+		}
+			
+		return paramsMap;
 	}
 }

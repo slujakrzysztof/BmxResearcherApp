@@ -66,6 +66,16 @@ public class DiscountService {
 
 		return productsDTO;
 	}
+	
+	public List<ProductDTO> getProductsWithDiscount(List<ProductDTO> products, int discountValue){
+		
+		List<ProductDTO> discountProducts = products; 
+				
+		this.applyDiscount(discountProducts, discountValue);
+		discountProducts.forEach(product -> product
+				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
+		return products;
+	}
 
 	public List<ProductDTO> getRequestedProductsWithDiscount(String value) {
 

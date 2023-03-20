@@ -1,5 +1,6 @@
 package com.bmxApp.controller;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.bmxApp.dto.discount.DiscountDTO;
@@ -61,35 +63,43 @@ public class DiscountController {
 		return "products";
 	}
 
-	@GetMapping(value = "/requestProductsDiscount")
-	public String search(@RequestParam("value") String searchValue, @Nullable @RequestParam("sortBy") String sortBy,
+	@GetMapping(value = "/applyDiscount")
+	public String search(@RequestParam("currentUrl") String currentUrl, @Nullable @RequestParam("sortedBy") String sortBy,
 			@RequestParam("discountValue") String discountValue, Model model, HttpServletRequest request) {
 
 		Optional<String> sortedBy = Optional.ofNullable(sortBy);
-
+		Map<String, String> params = searchService.getModelAttributes(currentUrl); 
+		
 		if (discountValue.isEmpty() || discountValue.equalsIgnoreCase("0")) {
 
 			discountValue = "0";
 			discountService.setDiscount(Integer.parseInt(discountValue));
-			return "redirect/" + searchService.getInitialSearchURL();
+			return "redirect:" + searchService.getInitialSearchURL();
 		}
 
 		discountService.setDiscount(Integer.parseInt(discountValue));
 
+		System.out.println("SEARCHVAL: " + params.get("value"));
+		
 		sortedBy.ifPresentOrElse((value) -> {
 			sortService.setSortedBy(!sortService.isSortedBy());
-			model.addAttribute("products", discountService.getSortedRequestedProductsWithDiscount(searchValue, sortBy,
+			model.addAttribute("products", discountService.getSortedRequestedProductsWithDiscount(params.get("value"), sortBy,
 					sortService.isSortedBy()));
 		}, () -> {
-			model.addAttribute("products", discountService.getRequestedProductsWithDiscount(searchValue));
+			model.addAttribute("products", discountService.getRequestedProductsWithDiscount(params.get("value")));
 		});
-
+		
+		for(var param : params.entrySet()) 
+			model.addAttribute(param.getKey(), param.getValue());
+		
+		
 		model.addAttribute("discountValue", discountService.getDiscount());
-		model.addAttribute("searchValue", searchValue);
-		model.addAttribute("currentURL", searchService.getSearchURL(request));
+		//model.addAttribute("searchValue", searchValue);
+		//model.addAttribute("currentUrl", searchService.getSearchURL(request));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 
 		return "searchPage";
+		//return new ModelAndView("redirect:" + currentUrl);
 	}
 }

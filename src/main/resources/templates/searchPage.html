@@ -29,14 +29,14 @@
 
 	<div class="container">
 		<div>
-			<form th:action="@{/applyDiscount}" th:method="post"
+			<form th:action="@{/applyDiscount}" th:method="get"
 				id="applyDiscount">
 				<p class="h5 infoText" th:text="#{searchValue}"></p>
 				<h2>[[${searchValue}]]</h2>
 				<input class="form-control-lg" type="number" min="0" max="100"
-					step="1" th:placeholder="${discountValue}" th:value="*{discountV}"
-					name="value" /> <input type="hidden" name="currentURL"
-					th:value="${currentURL}" />
+					step="1" th:placeholder="${discountValue}" th:value="*{discountValue}"
+					name="discountValue" /> <input type="hidden" name="currentUrl"
+					th:value="${currentUrl}" />
 				<button type="submit" value="submit" th:text="ENTER"></button>
 			</form>
 			<br>
@@ -99,8 +99,8 @@
 							</form>
 						</th>
 						<th scope="col">[[#{shopNameTh}]]
-							<form th:action="@{/sortFilter}" th:method="shop">
-								<input type="hidden" name="sortedBy" th:value="name" /> <input
+							<form th:action="@{/sortFilter}" th:method="get">
+								<input type="hidden" name="sortedBy" th:value="shop" /> <input
 									type="hidden" name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit">
 									<i class="fa-solid fa-sort"></i>

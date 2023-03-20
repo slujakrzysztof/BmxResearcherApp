@@ -36,9 +36,9 @@
 			<p class="h5 infoText" id="category" th:text="#{${category}}"></p>
 		</div>
 		<div id="info_container_3">
-			<form th:action="@{/searchDiscount}" th:method="get">
+			<form th:action="@{/search}" th:method="get">
 				<input class="form-control-lg" type="number" min="0" max="100"
-					step="1" th:placeholder="${discountValue}" th:value="*{discountV}"
+					step="1" th:placeholder="${discountValue}" th:value="${discountValue}"
 					name="discountValue" /> <input type="hidden" name="category"
 					th:value="${category}" /> <input type="hidden" name="shop"
 					th:value="${shopName}" />
@@ -56,7 +56,8 @@
 							<form th:action="@{/search}" th:method="get">
 								<input type="hidden" name="shop" th:value="*{shopName}" /> <input
 									type="hidden" name="category" th:value="*{category}" /> <input
-									type="hidden" name="sortBy" th:value="name" />
+									type="hidden" name="sortedBy" th:value="name" /> <input
+									type="hidden" name="discountValue" th:value="${discountValue}" />
 								<button type="submit" value="submit">
 									<i class="fa-solid fa-sort"></i>
 								</button>
@@ -66,7 +67,8 @@
 							<form th:action="@{/search}" th:method="get">
 								<input type="hidden" name="shop" th:value="*{shopName}" /> <input
 									type="hidden" name="category" th:value="*{category}" /> <input
-									type="hidden" name="sortBy" th:value="price" />
+									type="hidden" name="sortedBy" th:value="price" /> <input
+									type="hidden" name="discountValue" th:value="${discountValue}" />
 								<button type="submit" value="submit">
 									<i class="fa-solid fa-sort"></i>
 								</button>
