@@ -53,6 +53,11 @@ public class DiscountService {
 
 		return this.discount.getValue();
 	}
+	
+	public void resetDiscount() {
+		
+		discount.setValue(0);
+	}
 
 	public void applyDiscount(List<ProductDTO> products) {
 

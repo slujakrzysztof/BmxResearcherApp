@@ -28,4 +28,13 @@ public class DiscountController {
 		return new ModelAndView("redirect:" + discountService.createUrlWithDiscount(currentUrl, discountValue));
 		
 	}
+	
+	@GetMapping(value = "/resetDiscount")
+	public ModelAndView resetDiscount(@RequestParam("currentUrl") String currentUrl, Model model, HttpServletRequest request) {
+
+		discountService.resetDiscount();
+		
+		return new ModelAndView("redirect:" + discountService.createUrlWithDiscount(currentUrl, "0"));
+		
+	}
 }
