@@ -23,7 +23,7 @@ public class DiscountController {
 	public ModelAndView applyDiscount(@RequestParam("currentUrl") String currentUrl,
 			@RequestParam("discountValue") String discountValue, Model model, HttpServletRequest request) {
 
-		return new ModelAndView("redirect:" + discountService.createUrl(currentUrl, discountValue));
+		return new ModelAndView("redirect:" + discountService.createUrlWithDiscount(currentUrl, discountValue));
 		
 	}
 }

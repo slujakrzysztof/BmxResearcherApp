@@ -101,7 +101,7 @@ public class ShoppingCartController {
 
 	@PostMapping("/addProduct")
 	public RedirectView addProductToBasket(@ModelAttribute("product") ProductDTO dtoProduct,
-			@RequestParam("currentURL") String currentURL, Model model, BindingResult bindingResult) {
+			@RequestParam("currentUrl") String currentURL, Model model, BindingResult bindingResult) {
 
 		shoppingCartService.addProductToCart(dtoProduct.getProductName(), dtoProduct.getShopName());
 		RedirectView redirectView = new RedirectView();

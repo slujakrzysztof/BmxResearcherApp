@@ -58,7 +58,7 @@ public class DiscountService {
 		return this.shopResearcherService.getDiscount().getValue();
 	}
 
-	public String createUrl(String url, String discountValue) {
+	public String createUrlWithDiscount(String url, String discountValue) {
 
 		int discount = Integer.parseInt(discountValue);
 		String requestUrl = url.substring(0, url.indexOf("?") + 1);

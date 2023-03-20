@@ -66,12 +66,12 @@ public class SearchController {
 
 		discount.ifPresentOrElse(disc -> model.addAttribute("discountValue", discountValue),
 				() -> model.addAttribute("discountValue", "0"));
-
+		
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
-		model.addAttribute("currentURL", searchService.getSearchURL(request));
+		model.addAttribute("currentUrl", searchService.getSearchURL(request));
 
 		return "products";
 	}
