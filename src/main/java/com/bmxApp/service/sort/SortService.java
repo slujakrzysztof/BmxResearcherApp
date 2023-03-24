@@ -1,5 +1,6 @@
 package com.bmxApp.service.sort;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class SortService {
 	@Value("false")
 	private boolean sortedBy;
 
-	public List<ProductDTO> sortProductDTO(String sortedBy, List<ProductDTO> products) {
+	public List<ProductDTO> sortProductDTO(String sortedBy, List<ProductDTO> products, boolean isSorted) {
 
 		Comparator<ProductDTO> comparator;
 		List<ProductDTO> sortedProducts;
@@ -40,6 +41,9 @@ public class SortService {
 
 		sortedProducts = products.stream().sorted(comparator).collect(Collectors.toList());
 
+		if (!isSorted)
+			Collections.reverse(sortedProducts);
+		
 		return sortedProducts;
 	}
 
@@ -53,7 +57,7 @@ public class SortService {
 						.replace(currentUrl.substring(currentUrl.indexOf("sortedBy") - 1, currentUrl.length()), "");
 
 			else
-				currentUrl = currentUrl.replace(currentUrl.substring(currentUrl.indexOf("sortedBy") - 1,
+				currentUrl = currentUrl.replace(currentUrl.substring(currentUrl.indexOf("sortedBy"),
 						currentUrl.indexOf("&", currentUrl.indexOf("sortedBy")) + 1), "");
 
 		}

@@ -117,10 +117,7 @@ public class SearchService {
 			boolean isSorted) {
 
 		List<ProductDTO> products = this.getProducts(shopName, category);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
-
-		if (!isSorted)
-			Collections.reverse(sortedProducts);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products, isSorted);
 
 		return sortedProducts;
 	}

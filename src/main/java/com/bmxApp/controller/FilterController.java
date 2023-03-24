@@ -38,19 +38,26 @@ public class FilterController {
 	public String filter(@Nullable @RequestParam("shop") String shop,
 			@Nullable @RequestParam("category") String category, @RequestParam("searchValue") String searchValue,
 			@Nullable @RequestParam("minPrice") Integer minPrice, @Nullable @RequestParam("maxPrice") Integer maxPrice,
-			@Nullable @RequestParam("sortedBy") String sortedBy, Model model, HttpServletRequest request) {
-		
+			@Nullable @RequestParam("sortedBy") String sortedBy,
+			@Nullable @RequestParam("discountValue") String discountValue, Model model, HttpServletRequest request) {
+
+		Optional<String> discount = Optional.ofNullable(discountValue);
+
 		filterService.setMinPrice(minPrice);
 		filterService.setMaxPrice(maxPrice);
 		filterService.setCategory(category);
 		filterService.setShop(shop);
-		
+
 		List<ProductDTO> products = filterService.getFilteredProducts(searchValue);
-		
-		if(sortedBy != null) {
+
+		if (sortedBy != null) {
 			sortService.setSortedBy(!sortService.isSortedBy());
-			products = sortService.sortProductDTO(sortedBy, products);
+			products = sortService.sortProductDTO(sortedBy, products, sortService.isSortedBy());
+
 		}
+
+		if (discount != null)
+			products = discountService.getProductsWithDiscount(products);
 
 		model.addAttribute("products", products);
 		model.addAttribute("discountValue", discountService.getDiscount());
@@ -64,9 +71,7 @@ public class FilterController {
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 
 		return "searchPage";
-		
-	}
-	
 
+	}
 
 }

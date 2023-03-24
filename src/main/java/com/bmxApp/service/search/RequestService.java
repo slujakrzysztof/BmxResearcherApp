@@ -37,10 +37,7 @@ public class RequestService {
 			boolean isSorted) {
 
 		List<ProductDTO> products = this.getRequestedProducts(value);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
-
-		if (!isSorted)
-			Collections.reverse(sortedProducts);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products,isSorted);
 
 		return sortedProducts;
 	}

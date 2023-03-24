@@ -144,10 +144,7 @@ public class DiscountService {
 	public List<ProductDTO> getSortedRequestedProductsWithDiscount(String value, String sortedBy, boolean isSorted) {
 
 		List<ProductDTO> products = this.getRequestedProductsWithDiscount(value);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
-
-		if (!isSorted)
-			Collections.reverse(sortedProducts);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products, isSorted);
 
 		return products;
 	}
@@ -156,12 +153,9 @@ public class DiscountService {
 			boolean isSorted) {
 
 		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products,isSorted);
 
-		if (!isSorted)
-			Collections.reverse(sortedProducts);
-
-		return products;
+		return sortedProducts;
 	}
 
 	public List<ProductDTO> getFilteredProductsWithDiscount(String searchValue) {
