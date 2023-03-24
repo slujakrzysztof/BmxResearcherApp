@@ -217,7 +217,12 @@ public class ShoppingCartService {
 
 	public String getCartURL(HttpServletRequest request) {
 
-		return request.getRequestURL().toString();
+		StringBuilder url = new StringBuilder(request.getRequestURI());
+		if (request.getQueryString() != null) {
+				url.append("?").append(request.getQueryString());
+		}
+
+		return url.toString();
 	}
 
 }

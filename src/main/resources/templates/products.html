@@ -67,6 +67,8 @@
 								</button>
 							</form>
 						</th>
+						<th th:if="${#strings.equals(shopName, 'ALLSHOPS')}">[[#{shopNameTh}]]</th> 
+						
 						<th scope="col">[[#{price}]]
 							<form th:action="@{/search}" th:method="get">
 								<input type="hidden" name="shop" th:value="*{shopName}" /> <input
@@ -86,6 +88,7 @@
 				<tbody>
 					<tr th:each="product : ${products}">
 						<td th:text="${product.getProductName()}" />
+						<td th:if="${#strings.equals(shopName, 'ALLSHOPS')}" th:text="${product.getShopName()}"/>
 						<td th:text="${product.getPrice()}" />
 						<td class="w-25"><img th:src="${product.getImageUrl()}"
 							alt="${product.getImageUrl()}" class="img-fluid" width=200

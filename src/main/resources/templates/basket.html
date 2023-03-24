@@ -16,7 +16,7 @@
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
 	rel="stylesheet" id="bootstrap-css">
 </head>
-  <style>
+<style>
 input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-outer-spin-button
 	{
 	opacity: 1;
@@ -48,89 +48,89 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 						<div class="col-md-12 col-lg-8">
 							<div class="items">
 								<th:block th:each="basketProduct : ${basketProducts}">
-										<div class="row">
-											<div class="col-md-3">
-												<img class="img-fluid mx-auto d-block image"
-													th:src="@{${basketProduct.imageUrl}}">
-											</div>
-											<div class="col-md-8">
-												<div class="info">
-													<div class="row">
-														<div class="col-md-5 product-name">
-															<div class="product-name">
-																<a th:href="@{${basketProduct.url}}">[[${basketProduct.productName}]]</a>
-																<div class="product-info">
+									<div class="row">
+										<div class="col-md-3">
+											<img class="img-fluid mx-auto d-block image"
+												th:src="@{${basketProduct.imageUrl}}">
+										</div>
+										<div class="col-md-8">
+											<div class="info">
+												<div class="row">
+													<div class="col-md-5 product-name">
+														<div class="product-name">
+															<a th:href="@{${basketProduct.url}}">[[${basketProduct.productName}]]</a>
+															<div class="product-info">
+																<div>
+																	[[#{singlePrice}]] <span class="value">[[${basketProduct.price}]]</span>
+																</div>
+																<div>
+																	[[#{shopName}]] <span class="value">[[${basketProduct.shopName}]]</span>
+																</div>
+																<form
+																	th:action="@{/removeBasketProduct/{productId} (productId=${basketProduct.productId})}"
+																	th:method="delete">
 																	<div>
-																		[[#{singlePrice}]] <span class="value">[[${basketProduct.price}]]</span>
+																		<input type="hidden" name="currentURL"
+																			th:value="${currentURL}">
+																		<button class="btn">
+																			<i class="fas fa-trash icon-dark"></i>
+																		</button>
 																	</div>
-																	<div>
-																		[[#{shopName}]] <span class="value">[[${basketProduct.shopName}]]</span>
-																	</div>
-																	<form
-																		th:action="@{/removeBasketProduct/{productId} (productId=${basketProduct.productId})}"
-																		th:method="delete">
-																		<div>
-																			<input type="hidden" name="currentURL"
-																				th:value="${currentURL}">
-																			<button class="btn">
-																				<i class="fas fa-trash icon-dark"></i>
-																			</button>
-																		</div>
+																</form>
+																<div>
+																	<form th:object="${shopModel}" th:action="@{/search}"
+																		method="get">
+																		<input type="hidden" name="shop"
+																			th:value="${basketProduct.shopName}"> <input
+																			type="hidden" name="category"
+																			th:value="${basketProduct.category}">
+																		<button type="submit" value="submit"
+																			class="btn btn-info">[[#{selectProducts}]]</button>
 																	</form>
-																	<div>
-																		<form th:object="${shopModel}" th:action="@{/search}"
-																			method="get">
-																			<input type="hidden" name="shop"
-																				th:value="${basketProduct.shopName}"> <input
-																				type="hidden" name="category"
-																				th:value="${basketProduct.category}">
-																			<button type="submit" value="submit"
-																				class="btn btn-info">[[#{selectProducts}]]</button>
-																		</form>
-																	</div>
 																</div>
 															</div>
 														</div>
+													</div>
 
-														<div class="col-md-4 quantity">
-															<form th:action="@{/changeQuantity}" th:method="patch">
-																<input type="hidden" name="productId"
-																	th:value="${basketProduct.productId}"> <input
-																	type="hidden" th:value="-1" name="quantityValue"
-																	class="minus-input"> <span>
-																	<button type="submit" value="submit"
-																		class="btn btn-info" id="minus-button">-</button>
+													<div class="col-md-4 quantity">
+														<form th:action="@{/changeQuantity}" th:method="patch">
+															<input type="hidden" name="productId"
+																th:value="${basketProduct.productId}"> <input
+																type="hidden" th:value="-1" name="quantityValue"
+																class="minus-input"> <span>
+																<button type="submit" value="submit"
+																	class="btn btn-info" id="minus-button">-</button>
 
-																</span>
-															</form>
-															<form id="quantityForm" th:action="@{/changeQuantity}"
-																th:method="patch">
-																<input type="hidden" name="productId"
-																	th:value="${basketProduct.productId}"> <input
-																	type="number" id="quantityContainer"
-																	th:name="quantityContainer" min="0" max="100"
-																	th:value="${basketProduct.quantity}">
-															</form>
-															<form th:action="@{/changeQuantity}" th:method="patch">
+															</span>
+														</form>
+														<form id="quantityForm" th:action="@{/changeQuantity}"
+															th:method="patch">
+															<input type="hidden" name="productId"
+																th:value="${basketProduct.productId}"> <input
+																type="number" id="quantityContainer"
+																th:name="quantityContainer" min="0" max="100"
+																th:value="${basketProduct.quantity}">
+														</form>
+														<form th:action="@{/changeQuantity}" th:method="patch">
 
-																<input type="hidden" name="productId"
-																	th:value="${basketProduct.productId}"> <input
-																	type="hidden" name="quantityValue" th:value="1"
-																	class="plus-input"> <span>
-																	<button type="submit" value="submit" th:value="1"
-																		th:name="btnValue" class="btn btn-info"
-																		id="plus-button">+</button>
-																</span>
-															</form>
-														</div>
+															<input type="hidden" name="productId"
+																th:value="${basketProduct.productId}"> <input
+																type="hidden" name="quantityValue" th:value="1"
+																class="plus-input"> <span>
+																<button type="submit" value="submit" th:value="1"
+																	th:name="btnValue" class="btn btn-info"
+																	id="plus-button">+</button>
+															</span>
+														</form>
+													</div>
 
-														<div class="col-md-3 price">
-															<span>[[${totalPriceForBasketProduct.get(basketProduct.productId)}]]</span>
-														</div>
+													<div class="col-md-3 price">
+														<span>[[${totalPriceForBasketProduct.get(basketProduct.productId)}]]</span>
 													</div>
 												</div>
 											</div>
 										</div>
+									</div>
 								</th:block>
 								<div class="noProduct">
 									<div th:if="${#lists.isEmpty(basketProducts)}">
@@ -159,13 +159,18 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 								<a th:href="@{/main}">
 									<button type="submit" value="submit" class="btn btn-info">[[#{mainPage}]]</button>
 								</a> <br> <br>
-								<form th:action="@{/applyCartDiscount}" th:method="post">
+								<form th:action="@{/applyDiscount}" th:method="get">
 									<input class="form-control-lg" type="number" min="0" max="100"
 										step="1" th:placeholder="${discountValue}"
-										th:value="*{discountV}" name="value" /> <input type="hidden"
-										name="currentURL" th:value="${currentURL}" />
+										th:value="${discountValue}" name="discountValue" /> <input
+										type="hidden" name="currentUrl" th:value="${currentUrl}" />
 									<button type="submit" value="submit" class="btn btn-info"
 										th:text="ENTER"></button>
+								</form>
+								<form th:action="@{/resetDiscount}" th:method="get">
+									<input type="hidden" name="currentUrl" th:value="${currentUrl}" />
+									<button type="submit" value="submit" class="btn btn-info"
+										th:text="RESET"></button>
 								</form>
 							</div>
 						</div>

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.formatter.product.ProductFormatter;
@@ -53,9 +54,9 @@ public class DiscountService {
 
 		return this.discount.getValue();
 	}
-	
+
 	public void resetDiscount() {
-		
+
 		discount.setValue(0);
 	}
 
@@ -68,41 +69,66 @@ public class DiscountService {
 		});
 	}
 
+	public void applyBasketDiscount(List<BasketProductDTO> products) {
+
+		products.forEach(product -> {
+
+			double price = product.getPrice() * ((100.0 - getDiscount()) / 100.0);
+			product.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(price)));
+		});
+	}
+
 	public String createUrlWithDiscount(String url, String discountValue) {
 
 		int discount = Integer.parseInt(discountValue);
-		String requestUrl = url.substring(0, url.indexOf("?") + 1);
-		String params = url.substring(url.indexOf("?") + 1);
-		StringBuilder finalUrl = new StringBuilder(requestUrl);
-		int index = 0;
+		StringBuilder finalUrl = new StringBuilder();
 
-		List<String> paramList = new LinkedList<>(Arrays.asList(params.split("&")));
+		int paramsIndex = url.indexOf("?") + 1;
 
-		if (params.contains(DISCOUNT_KEY)) {
-		
-			for (String param : paramList)
-				if (param.contains(DISCOUNT_KEY))
-					index = paramList.indexOf(param);
-		
-			paramList.remove(index);
-			
-		}
-		
-		
+		System.out.println("INDEEX: " + paramsIndex);
 
-		for (String param : paramList) {
-			if (!(paramList.indexOf(param) == 0))
+		if (paramsIndex <= 0) {
+			finalUrl.append(url);
+			if (discount != 0)
+				finalUrl.append("?").append(DISCOUNT_KEY).append(discount);
+		} else {
+
+			int index = 0;
+			String requestUrl = url.substring(0, paramsIndex);
+			String params = url.substring(paramsIndex);
+			finalUrl.append(requestUrl);
+
+			List<String> paramList = new LinkedList<>(Arrays.asList(params.split("&")));
+
+			if (params.contains(DISCOUNT_KEY)) {
+
+				for (String param : paramList)
+					if (param.contains(DISCOUNT_KEY))
+						index = paramList.indexOf(param);
+
+				paramList.remove(index);
+
+			}
+
+			for (String param : paramList) {
+				if (!(paramList.indexOf(param) == 0))
+					finalUrl.append("&");
+				finalUrl.append(param);
+			}
+
+			if (!(discount == 0)) {
 				finalUrl.append("&");
-			finalUrl.append(param);
+				finalUrl.append(DISCOUNT_KEY).append(discount);
+			}
+
 		}
 
-		if (!(discount == 0)) {
-			finalUrl.append("&");
-			finalUrl.append(DISCOUNT_KEY).append(discount);
-		}
+		String URL = finalUrl.toString();
 
-		return finalUrl.toString();
+		if (URL.indexOf("?") == (URL.indexOf("&") - 1))
+			URL = URL.replaceFirst("&", "");
 
+		return URL;
 	}
 
 	public List<ProductDTO> getProductsWithDiscount(String shopName, String category) {
@@ -124,6 +150,16 @@ public class DiscountService {
 		List<ProductDTO> discountProducts = products;
 
 		this.applyDiscount(discountProducts);
+		discountProducts.forEach(product -> product
+				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
+		return products;
+	}
+
+	public List<BasketProductDTO> getBasketProductsWithDiscount(List<BasketProductDTO> products) {
+
+		List<BasketProductDTO> discountProducts = products;
+
+		this.applyBasketDiscount(discountProducts);
 		discountProducts.forEach(product -> product
 				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
 		return products;
@@ -153,7 +189,7 @@ public class DiscountService {
 			boolean isSorted) {
 
 		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products,isSorted);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products, isSorted);
 
 		return sortedProducts;
 	}
