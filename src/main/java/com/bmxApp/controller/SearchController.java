@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.bmxApp.creator.PathCreator;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
@@ -61,7 +62,7 @@ public class SearchController {
 			discount.ifPresent(discValue -> model.addAttribute("products",
 					discountService.getProductsWithDiscount(products)));
 
-			searchService.setInitialSearchURL(searchService.getSearchURL(request));
+			searchService.setInitialSearchURL(PathCreator.createSearchHtml(request));
 		});
 
 		discount.ifPresent(disc -> model.addAttribute("discountValue", discountValue));
@@ -70,7 +71,7 @@ public class SearchController {
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
-		model.addAttribute("currentUrl", searchService.getSearchURL(request));
+		model.addAttribute("currentUrl", PathCreator.createSearchHtml(request));
 
 		return "products";
 	}

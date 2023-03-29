@@ -1,6 +1,7 @@
 package com.bmxApp.service.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.expression.Lists;
 
+import com.bmxApp.creator.PathCreator;
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
@@ -45,7 +47,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class SearchService {
 
-	private final String SEARCH_PREFIX = "search?";
+
 	
 	private final ProductRepositoryService productRepositoryService;
 	private final ShopResearcherService shopResearcherService;
@@ -65,19 +67,7 @@ public class SearchService {
 
 		return productsDTO;
 	}
-	
-	public String createUrl(String[] keys, Map<String,String> params) {
-		
-		StringBuilder url = new StringBuilder(SEARCH_PREFIX);
-		
-		for(int counter=0;counter < params.size(); counter++) {
-			
-			url.append(keys[counter] + "=" + params.get(keys[counter]));
-			if(counter != (params.size()-1)) url.append("&");
-		}
-		
-		return url.toString();
-	}
+
 
 	public void search(String category, String shopName, boolean partSelection) {
 
@@ -108,10 +98,6 @@ public class SearchService {
 		Shop.getShops().stream().forEach(shop -> this.search(category, shop.name().toLowerCase(), partSelection));
 	}
 
-	public String getSearchURL(HttpServletRequest request) {
-
-		return request.getRequestURL() + "?" + request.getQueryString();
-	}
 
 	public List<ProductDTO> getSortedProducts(String shopName, String category, String sortedBy,
 			boolean isSorted) {
