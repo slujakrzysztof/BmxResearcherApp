@@ -42,8 +42,5 @@ public class RequestService {
 		return sortedProducts;
 	}
 	
-	public String getSearchURL(HttpServletRequest request) {
 
-		return request.getRequestURI() + "?" + request.getQueryString();
-	}
 }

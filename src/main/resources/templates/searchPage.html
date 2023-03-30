@@ -90,7 +90,7 @@
 				<thead>
 					<tr>
 						<th scope="col">[[#{name}]]
-							<form th:action="@{/sortFilter}" th:method="get">
+							<form th:action="@{/sort}" th:method="get">
 								<input type="hidden" name="sortedBy" th:value="name" /> <input
 									type="hidden" name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit">
@@ -99,7 +99,7 @@
 							</form>
 						</th>
 						<th scope="col">[[#{shopNameTh}]]
-							<form th:action="@{/sortFilter}" th:method="get">
+							<form th:action="@{/sort}" th:method="get">
 								<input type="hidden" name="sortedBy" th:value="shop" /> <input
 									type="hidden" name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit">
@@ -108,7 +108,7 @@
 							</form>
 						</th>
 						<th scope="col">[[#{price}]]
-							<form th:action="@{/sortFilter}" th:method="get">
+							<form th:action="@{/sort}" th:method="get">
 								<input type="hidden" name="sortedBy" th:value="price" /> <input
 									type="hidden" name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit">

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bmxApp.creator.PathCreator;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.discount.DiscountService;
@@ -55,7 +56,7 @@ public class RequestController {
 
 		model.addAttribute("discountValue", discountValue);
 		model.addAttribute("searchValue", searchValue);
-		model.addAttribute("currentUrl", requestService.getSearchURL(request));
+		model.addAttribute("currentUrl", PathCreator.getCurrentUrl(request));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		

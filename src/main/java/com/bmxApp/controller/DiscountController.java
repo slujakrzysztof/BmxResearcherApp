@@ -6,8 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
-
+import com.bmxApp.creator.PathCreator;
 import com.bmxApp.service.discount.DiscountService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,21 +21,21 @@ public class DiscountController {
 	private final DiscountService discountService;
 
 	@GetMapping(value = "/applyDiscount")
-	public ModelAndView applyDiscount(@RequestParam("currentUrl") String currentUrl,
+	public RedirectView applyDiscount(@RequestParam("currentUrl") String currentUrl,
 			@RequestParam("discountValue") String discountValue, Model model, HttpServletRequest request) {
 
+		System.out.println("CURRENT: " + currentUrl);
+		
 		discountService.setDiscount(Integer.parseInt(discountValue));
 		
-		return new ModelAndView("redirect:" + discountService.createUrlWithDiscount(currentUrl, discountValue));
-		
+		return new RedirectView(PathCreator.createDiscountUrl(currentUrl, discountValue));
 	}
 	
 	@GetMapping(value = "/resetDiscount")
-	public ModelAndView resetDiscount(@RequestParam("currentUrl") String currentUrl, Model model, HttpServletRequest request) {
+	public RedirectView resetDiscount(@RequestParam("currentUrl") String currentUrl, Model model, HttpServletRequest request) {
 
 		discountService.resetDiscount();
 		
-		return new ModelAndView("redirect:" + discountService.createUrlWithDiscount(currentUrl, "0"));
-		
+		return new RedirectView(PathCreator.createDiscountUrl(currentUrl, "0"));
 	}
 }

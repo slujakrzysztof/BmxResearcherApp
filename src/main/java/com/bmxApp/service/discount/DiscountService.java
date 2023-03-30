@@ -26,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class DiscountService {
 
-	private final String DISCOUNT_KEY;
 
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDtoMapper;
@@ -37,7 +36,6 @@ public class DiscountService {
 	public DiscountService(ProductRepositoryService productRepositoryService, ProductDTOMapper productDtoMapper,
 			SortService sortService, FilterService filterService) {
 
-		this.DISCOUNT_KEY = "discountValue=";
 		this.productRepositoryService = productRepositoryService;
 		this.productDtoMapper = productDtoMapper;
 		this.sortService = sortService;
@@ -76,59 +74,6 @@ public class DiscountService {
 			double price = product.getPrice() * ((100.0 - getDiscount()) / 100.0);
 			product.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(price)));
 		});
-	}
-
-	public String createUrlWithDiscount(String url, String discountValue) {
-
-		int discount = Integer.parseInt(discountValue);
-		StringBuilder finalUrl = new StringBuilder();
-
-		int paramsIndex = url.indexOf("?") + 1;
-
-		System.out.println("INDEEX: " + paramsIndex);
-
-		if (paramsIndex <= 0) {
-			finalUrl.append(url);
-			if (discount != 0)
-				finalUrl.append("?").append(DISCOUNT_KEY).append(discount);
-		} else {
-
-			int index = 0;
-			String requestUrl = url.substring(0, paramsIndex);
-			String params = url.substring(paramsIndex);
-			finalUrl.append(requestUrl);
-
-			List<String> paramList = new LinkedList<>(Arrays.asList(params.split("&")));
-
-			if (params.contains(DISCOUNT_KEY)) {
-
-				for (String param : paramList)
-					if (param.contains(DISCOUNT_KEY))
-						index = paramList.indexOf(param);
-
-				paramList.remove(index);
-
-			}
-
-			for (String param : paramList) {
-				if (!(paramList.indexOf(param) == 0))
-					finalUrl.append("&");
-				finalUrl.append(param);
-			}
-
-			if (!(discount == 0)) {
-				finalUrl.append("&");
-				finalUrl.append(DISCOUNT_KEY).append(discount);
-			}
-
-		}
-
-		String URL = finalUrl.toString();
-
-		if (URL.indexOf("?") == (URL.indexOf("&") - 1))
-			URL = URL.replaceFirst("&", "");
-
-		return URL;
 	}
 
 	public List<ProductDTO> getProductsWithDiscount(String shopName, String category) {
@@ -182,7 +127,7 @@ public class DiscountService {
 		List<ProductDTO> products = this.getRequestedProductsWithDiscount(value);
 		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products, isSorted);
 
-		return products;
+		return sortedProducts;
 	}
 
 	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy,

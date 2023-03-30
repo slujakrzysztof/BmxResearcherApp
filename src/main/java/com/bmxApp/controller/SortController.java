@@ -5,7 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import com.bmxApp.creator.PathCreator;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.search.SearchService;
 import com.bmxApp.service.sort.SortService;
@@ -16,13 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SortController {
 
-	private final SortService sortService;
-	
-	@GetMapping(value = "/sortFilter")
-	public ModelAndView sortFilter(Model model, @RequestParam("currentUrl") String currentUrl, @RequestParam("sortedBy") String sortedBy) {
-		
-		return new ModelAndView("redirect:" + sortService.getSortUrl(currentUrl, sortedBy));
 
+	@GetMapping(value = "/sort")
+	public RedirectView sort(Model model, @RequestParam("currentUrl") String currentUrl, @RequestParam("sortedBy") String sortedBy) {
+		
+		System.out.println("CURRENT: " + currentUrl);
+		
+		return new RedirectView(PathCreator.createSortUrl(currentUrl, sortedBy));
 	}
 	
 }

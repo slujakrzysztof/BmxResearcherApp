@@ -21,6 +21,9 @@
 		<div class="main">
 			<span class="main-button"> <a th:href="@{/main}">[[#{mainPage}]]</a></span>
 		</div>
+		<div class="main">
+			<span class="main-button"> <a th:href="@{/comparision}">[[#{comparision}]]</a></span>
+		</div>
 		<div th:replace="~{fragments/search :: dropdown-search}"></div>
 		<div th:replace="~{fragments/dropdownCart :: dropdown-shopping-cart}"></div>
 	</header>
@@ -57,24 +60,20 @@
 				<thead>
 					<tr>
 						<th scope="col">[[#{name}]]
-							<form th:action="@{/search}" th:method="get">
-								<input type="hidden" name="shop" th:value="*{shopName}" /> <input
-									type="hidden" name="category" th:value="*{category}" /> <input
-									type="hidden" name="sortedBy" th:value="name" /> <input
-									type="hidden" name="discountValue" th:value="${discountValue}" />
+							<form th:action="@{/sort}" th:method="get">
+								<input type="hidden" name="sortedBy" th:value="name" /> <input
+									type="hidden" name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit">
 									<i class="fa-solid fa-sort"></i>
 								</button>
 							</form>
 						</th>
-						<th th:if="${#strings.equals(shopName, 'ALLSHOPS')}">[[#{shopNameTh}]]</th> 
-						
+						<th th:if="${#strings.equals(shopName, 'ALLSHOPS')}">[[#{shopNameTh}]]</th>
+
 						<th scope="col">[[#{price}]]
-							<form th:action="@{/search}" th:method="get">
-								<input type="hidden" name="shop" th:value="*{shopName}" /> <input
-									type="hidden" name="category" th:value="*{category}" /> <input
-									type="hidden" name="sortedBy" th:value="price" /> <input
-									type="hidden" name="discountValue" th:value="${discountValue}" />
+							<form th:action="@{/sort}" th:method="get">
+								<input type="hidden" name="sortedBy" th:value="price" /> <input
+									type="hidden" name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit">
 									<i class="fa-solid fa-sort"></i>
 								</button>
@@ -88,7 +87,8 @@
 				<tbody>
 					<tr th:each="product : ${products}">
 						<td th:text="${product.getProductName()}" />
-						<td th:if="${#strings.equals(shopName, 'ALLSHOPS')}" th:text="${product.getShopName()}"/>
+						<td th:if="${#strings.equals(shopName, 'ALLSHOPS')}"
+							th:text="${product.getShopName()}" />
 						<td th:text="${product.getPrice()}" />
 						<td class="w-25"><img th:src="${product.getImageUrl()}"
 							alt="${product.getImageUrl()}" class="img-fluid" width=200
@@ -107,6 +107,23 @@
 									th:value="${product.getImageUrl()}" /> <input type="hidden"
 									name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit" th:text="#{addBasket}"></button>
+							</form>
+							</br>
+						</br>
+							<form th:action="@{addProduct}" method="post"
+								th:object="${product}">
+								<input type="hidden" th:attr="name='productName'"
+									th:value="${product .getProductName()}" /> <input
+									type="hidden" th:attr="name='shopName'"
+									th:value="${product.getShopName()}" /> <input type="hidden"
+									th:attr="name='category'" th:value="${product.getCategory()}" />
+								<input type="hidden" th:attr="name='price'"
+									th:value="${product.getPrice()}" /> <input type="hidden"
+									th:attr="name='url'" th:value="${product.getUrl()}" /> <input
+									type="hidden" th:attr="name='imageUrl'"
+									th:value="${product.getImageUrl()}" /> <input type="hidden"
+									name="currentUrl" th:value="${currentUrl}" />
+								<button type="submit" value="submit" th:text="#{compare}"></button>
 							</form></td>
 					</tr>
 				</tbody>

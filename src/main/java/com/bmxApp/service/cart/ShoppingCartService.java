@@ -1,5 +1,7 @@
 package com.bmxApp.service.cart;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -99,7 +101,7 @@ public class ShoppingCartService {
 		basketProductRepositoryService.deleteBasketProductById(id);
 	}
 
-	public float getTotalPriceForBasketProduct(int id) {
+	public BigDecimal getTotalPriceForBasketProduct(int id) {
 
 		return basketProductRepositoryService.getTotalPriceForBasketProduct(id);
 	}
@@ -125,18 +127,18 @@ public class ShoppingCartService {
 		return basketProductsDTO;
 	}
 
-	public float getTotalPrice() {
+	public BigDecimal getTotalPrice() {
 
 		return basketProductRepositoryService.getTotalPrice();
 	}
 
-	public float getTotalPriceForShop(String shopName) {
+	public BigDecimal getTotalPriceForShop(String shopName) {
 
 		Optional<String> shop = Optional.ofNullable(shopName);
 
 		if (shop.isPresent()) {
 			if (this.getBasketProducts(shopName).isEmpty())
-				return 0f;
+				return new BigDecimal(0);
 			else
 				return basketProductRepositoryService.getTotalPriceForShop(shopName);
 		}
@@ -144,9 +146,12 @@ public class ShoppingCartService {
 		return this.getTotalPrice();
 	}
 
-	public Map<Integer, Float> getTotalPriceForEachBasketProduct() {
+	public Map<Integer, BigDecimal> getTotalPriceForEachBasketProduct(String discountValue) {
 
-		return basketProductRepositoryService.getTotalPriceForEachBasketProduct();
+		Optional<String> discountOptional = Optional.ofNullable(discountValue);
+		int discount = 0;
+		if(discountOptional.isPresent()) discount = Integer.parseInt(discountValue);
+		return basketProductRepositoryService.getTotalPriceForEachBasketProduct(discount);
 	}
 
 	public void deleteBasketProducts() {
@@ -196,33 +201,27 @@ public class ShoppingCartService {
 		basketProductRepositoryService.insertUpdateBasketProduct(basketProduct);
 	}
 
-	public String getTotalDiscount(String shopName) {
+	public BigDecimal getTotalDiscount(String shopName) {
 
-		int discountValue = discountService.getDiscount();
-		float discount = (float) (this.getTotalPriceForShop(shopName) * ((100.0 - discountValue) / 100.0));
-		float totalDiscount = (this.getTotalPriceForShop(shopName) - discount) * (-1);
-		return ProductFormatter.formatProductPrice(totalDiscount);
+		BigDecimal discount = this.getTotalPriceForShop(shopName).multiply(getDiscountValue()).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal totalDiscount = this.getTotalPriceForShop(shopName).subtract(discount).multiply(new BigDecimal(-1));
+		return totalDiscount;
 	}
 
-	public int getDiscountValue() {
+	public BigDecimal getDiscountValue() {
 
-		return this.discountService.getDiscount();
+		BigDecimal discount = new BigDecimal((100.0 - discountService.getDiscount()) / 100.0);
+		
+		return discount;
 	}
 
-	public String getFinalPrice(String shopName) {
+	public BigDecimal getFinalPrice(String shopName) {
 
-		float price = this.getTotalPriceForShop(shopName) + Float.parseFloat(this.getTotalDiscount(shopName));
-		return ProductFormatter.formatProductPrice(price);
+		BigDecimal finalPrice = this.getTotalPriceForShop(shopName).add(this.getTotalDiscount(shopName)).setScale(2,RoundingMode.HALF_UP);
+		
+		//float price = this.getTotalPriceForShop(shopName) + Float.parseFloat(this.getTotalDiscount(shopName));
+		return finalPrice;
 	}
 
-	public String getCartURL(HttpServletRequest request) {
-
-		StringBuilder url = new StringBuilder(request.getRequestURI());
-		if (request.getQueryString() != null) {
-				url.append("?").append(request.getQueryString());
-		}
-
-		return url.toString();
-	}
 
 }

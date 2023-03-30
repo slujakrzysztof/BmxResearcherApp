@@ -1,18 +1,14 @@
 package com.bmxApp.controller;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.bmxApp.dto.discount.DiscountDTO;
+import com.bmxApp.creator.PathCreator;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.discount.DiscountService;
@@ -66,7 +62,7 @@ public class FilterController {
 		model.addAttribute("shopName", shop);
 		model.addAttribute("categoryName", category);
 		model.addAttribute("searchValue", searchValue);
-		model.addAttribute("currentUrl", (request.getRequestURI() + "?" + request.getQueryString()));
+		model.addAttribute("currentUrl", PathCreator.getCurrentUrl(request));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 

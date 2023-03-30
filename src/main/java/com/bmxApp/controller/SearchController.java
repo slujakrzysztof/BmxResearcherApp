@@ -62,7 +62,7 @@ public class SearchController {
 			discount.ifPresent(discValue -> model.addAttribute("products",
 					discountService.getProductsWithDiscount(products)));
 
-			searchService.setInitialSearchURL(PathCreator.createSearchHtml(request));
+			searchService.setInitialSearchURL(PathCreator.createSearchUri(request));
 		});
 
 		discount.ifPresent(disc -> model.addAttribute("discountValue", discountValue));
@@ -71,7 +71,7 @@ public class SearchController {
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
-		model.addAttribute("currentUrl", PathCreator.createSearchHtml(request));
+		model.addAttribute("currentUrl", PathCreator.createSearchUri(request));
 
 		return "products";
 	}

@@ -70,8 +70,8 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 																	th:action="@{/removeBasketProduct/{productId} (productId=${basketProduct.productId})}"
 																	th:method="delete">
 																	<div>
-																		<input type="hidden" name="currentURL"
-																			th:value="${currentURL}">
+																		<input type="hidden" name="currentUrl"
+																			th:value="${currentUrl}">
 																		<button class="btn">
 																			<i class="fas fa-trash icon-dark"></i>
 																		</button>
@@ -97,7 +97,8 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 															<input type="hidden" name="productId"
 																th:value="${basketProduct.productId}"> <input
 																type="hidden" th:value="-1" name="quantityValue"
-																class="minus-input"> <span>
+																class="minus-input"> <input type="hidden"
+																name="currentUrl" th:value="${currentUrl}"><span>
 																<button type="submit" value="submit"
 																	class="btn btn-info" id="minus-button">-</button>
 
@@ -109,14 +110,16 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 																th:value="${basketProduct.productId}"> <input
 																type="number" id="quantityContainer"
 																th:name="quantityContainer" min="0" max="100"
-																th:value="${basketProduct.quantity}">
+																th:value="${basketProduct.quantity}"><input
+																type="hidden" name="currentUrl" th:value="${currentUrl}">
 														</form>
 														<form th:action="@{/changeQuantity}" th:method="patch">
 
 															<input type="hidden" name="productId"
 																th:value="${basketProduct.productId}"> <input
 																type="hidden" name="quantityValue" th:value="1"
-																class="plus-input"> <span>
+																class="plus-input"> <input type="hidden"
+																name="currentUrl" th:value="${currentUrl}"><span>
 																<button type="submit" value="submit" th:value="1"
 																	th:name="btnValue" class="btn btn-info"
 																	id="plus-button">+</button>

@@ -1,5 +1,7 @@
 package com.bmxApp.service.database;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,22 +31,28 @@ public class BasketProductRepositoryService {
 	private final BasketProductRepository basketProductRepository;
 	private final BasketProductDTOMapper basketProductDTOMapper;
 
-	public float getTotalPrice() {
+	public BigDecimal getTotalPrice() {
+		
+		BigDecimal totalPrice = new BigDecimal(basketProductRepository.getTotalPrice());
+		
 		if (this.getBasketProducts().isEmpty())
-			return 0f;
-		return basketProductRepository.getTotalPrice();
+			return new BigDecimal(0);
+		
+		return totalPrice.setScale(2, RoundingMode.HALF_UP);
 	}
 
 	public ArrayList<BasketProduct> getBasketProducts() {
 		return (ArrayList<BasketProduct>) basketProductRepository.findAll();
 	}
 
-	public float getTotalPriceForShop(String shopName) {
+	public BigDecimal getTotalPriceForShop(String shopName) {
 
-		return basketProductRepository.getTotalPriceForShop(shopName);
+		BigDecimal price = new BigDecimal(basketProductRepository.getTotalPriceForShop(shopName));
+		
+		return price.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	public float getTotalPriceForBasketProduct(int id) {
+	public BigDecimal getTotalPriceForBasketProduct(int id) {
 
 		return basketProductRepository.getTotalPriceForBasketProduct(id);
 	}
@@ -80,15 +88,18 @@ public class BasketProductRepositoryService {
 		return basketProduct.get();
 	}
 
-	public Map<Integer, Float> getTotalPriceForEachBasketProduct() {
+	public Map<Integer, BigDecimal> getTotalPriceForEachBasketProduct(int discountValue) {
 
 		List<BasketProduct> basketProducts = this.getBasketProducts();
-		Map<Integer, Float> basketProductsPrices = new HashMap<>();
+		Map<Integer, BigDecimal> basketProductsPrices = new HashMap<>();
 
+		BigDecimal discount = new BigDecimal((100.0 - discountValue)/100.0);
+		
 		basketProducts.forEach(basketProduct -> {
 
 			int productId = basketProduct.getProduct().getId();
-			float totalPrice = basketProductRepository.getTotalPriceForBasketProduct(productId);
+	
+			BigDecimal totalPrice = basketProductRepository.getTotalPriceForBasketProduct(productId).multiply(discount).setScale(2, RoundingMode.HALF_UP);
 			basketProductsPrices.put(productId, totalPrice);
 		});
 
