@@ -34,11 +34,13 @@ input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-o
 					<h2>[[#{cartLabel}]]</h2>
 					<ul class="nav nav-tabs">
 						<li class="nav-item"><a class="nav-link" aria-current="page"
-							th:href="@{/cart}" th:text="#{allShops}"></a></li>
+							th:href="@{/cart} + (${discountValue} != null ? ${'?discountValue=' + discountValue} : '')"
+							th:text="#{allShops}"></a></li>
 						<th:block
 							th:each="shopModel : ${T(com.bmxApp.enums.Shop).getShops()}">
 							<li class="nav-item"><a class="nav-link" aria-current="page"
-								th:href="@{/cart/{shopName}(shopName=${shopModel.name()})}"
+								th:href="@{/cart/{shopName}(shopName=${shopModel.name()})} 
+            + (${discountValue} != null ? ${'?discountValue=' + discountValue} : '')"
 								th:value="${shopModel}" th:text="${shopModel}"></a></li>
 						</th:block>
 					</ul>
