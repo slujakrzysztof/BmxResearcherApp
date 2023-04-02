@@ -233,7 +233,16 @@ public class ShopResearcherService {
 		productRepository.saveAll((Iterable<Product>) productsList);
 	}
 	
-
+	public String getDescriptionFromPage(String uri){
+		
+		this.setConnection(uri);
+		Document doc = getDocument();
+		
+		
+		
+		return doc.select("div.tab").html().replace("<br>", "");
+	}
+	
 	public String getDescription(String className) throws NullPointerException {
 		String[] separator = className.split(",");
 		String finalS, str;

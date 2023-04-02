@@ -94,7 +94,7 @@
 							alt="${product.getImageUrl()}" class="img-fluid" width=200
 							height=200 /></td>
 						<td><form th:action="@{addProduct}" method="post"
-								th:object="${product}">
+								th:object="${compareProduct}">
 								<input type="hidden" th:attr="name='productName'"
 									th:value="${product .getProductName()}" /> <input
 									type="hidden" th:attr="name='shopName'"
@@ -107,22 +107,16 @@
 									th:value="${product.getImageUrl()}" /> <input type="hidden"
 									name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit" th:text="#{addBasket}"></button>
-							</form>
-							</br>
-						</br>
-							<form th:action="@{addProduct}" method="post"
+							</form> </br> </br>
+							<form th:action="@{/compare}" method="post"
 								th:object="${product}">
 								<input type="hidden" th:attr="name='productName'"
-									th:value="${product .getProductName()}" /> <input
+									th:value="${product.getProductName()}" /> <input
 									type="hidden" th:attr="name='shopName'"
 									th:value="${product.getShopName()}" /> <input type="hidden"
-									th:attr="name='category'" th:value="${product.getCategory()}" />
-								<input type="hidden" th:attr="name='price'"
-									th:value="${product.getPrice()}" /> <input type="hidden"
-									th:attr="name='url'" th:value="${product.getUrl()}" /> <input
-									type="hidden" th:attr="name='imageUrl'"
-									th:value="${product.getImageUrl()}" /> <input type="hidden"
-									name="currentUrl" th:value="${currentUrl}" />
+									th:attr="name='price'" th:value="${product.getPrice()}" />
+									<input type="hidden"
+									th:attr="name='uri'" th:value="${product.getUrl()}" />
 								<button type="submit" value="submit" th:text="#{compare}"></button>
 							</form></td>
 					</tr>
