@@ -21,5 +21,7 @@ public class CompareProductDTO {
 	private String description;
 	@Nullable
 	private String uri;
+	@Nullable
+	private String imageUrl;
 	
 }

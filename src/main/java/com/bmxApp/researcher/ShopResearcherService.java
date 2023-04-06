@@ -21,6 +21,7 @@ import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.exception.NotFoundException;
+import com.bmxApp.formatter.StringFormatter;
 import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.mapper.product.ProductMapper;
 import com.bmxApp.model.product.Product;
@@ -32,14 +33,13 @@ import com.bmxApp.repository.ProductRepository;
 public class ShopResearcherService {
 
 	final int MAX_TRIES = 20;
-	
+
 	private String html;
 	protected Document document;
 	private Elements div, productNameElements, productPriceElements, productUrlElements, imageUrlElements;
 	private String category;
 	private String shopName;
 
-	Document.OutputSettings outputSettings = new Document.OutputSettings();
 
 	ArrayList<Product> products = new ArrayList<>();
 	ArrayList<Product> specificProducts = new ArrayList<>();
@@ -68,7 +68,7 @@ public class ShopResearcherService {
 
 	public void setConnection(String html) {
 		int tryCounter = 0;
-		
+
 		while (tryCounter < MAX_TRIES) {
 			try {
 				document = Jsoup.connect(html).timeout(6000).userAgent(
@@ -101,25 +101,26 @@ public class ShopResearcherService {
 
 	public String findPartUrl(String category) {
 
-		String[] propertyNames = {PropertyManager.getInstance().URL_SEARCH_PAGE(), 
-									PropertyManager.getInstance().URL_SEARCH_FRAMES()};
+		String[] propertyNames = { PropertyManager.getInstance().URL_SEARCH_PAGE(),
+				PropertyManager.getInstance().URL_SEARCH_FRAMES() };
 		String categoryShop = PropertyReader.getInstance().getProperty(category.toLowerCase());
 		List<Element> partUrlList = new ArrayList<>();
 		Elements partUrls;
 
-		
-		for(int counter = 0; counter < propertyNames.length; counter++){
-			
+		for (int counter = 0; counter < propertyNames.length; counter++) {
+
 			partUrls = this.getDocument().select(propertyNames[counter]);
-			
+
 			partUrlList = partUrls.stream().filter(
 					element -> element.absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE()).contains(categoryShop))
 					.limit(1).collect(Collectors.toList());
-			
-			if(partUrlList.size() > 0) break;
-			else if(partUrlList.size() <= 0 && counter == 1) throw new NotFoundException();
+
+			if (partUrlList.size() > 0)
+				break;
+			else if (partUrlList.size() <= 0 && counter == 1)
+				throw new NotFoundException();
 		}
-			
+
 		return partUrlList.get(0).absUrl(PropertyManager.getInstance().ABS_URL_ATTRIBUTE());
 	}
 
@@ -138,16 +139,14 @@ public class ShopResearcherService {
 					.collect(Collectors.toList());
 
 			long listSize = pageUrlList.size();
-			
+
 			if (allProductsDisplay) {
 				pageUrlList = pageUrlList.stream().skip(listSize - 1).collect(Collectors.toList());
-			}
-			else if (pageUrlList.isEmpty())
+			} else if (pageUrlList.isEmpty())
 				pageUrlList.add(partUrl);
-			else if(pageUrlList.get(0).isBlank()) {
+			else if (pageUrlList.get(0).isBlank()) {
 				pageUrlList.set(0, partUrl);
-				}
-				
+			}
 
 		} catch (ValidationException ex) {
 			pageUrlList.add(partUrl);
@@ -167,9 +166,9 @@ public class ShopResearcherService {
 			imageUrlElements = this.getDocument().select(PropertyManager.getInstance().IMAGE_URL());
 		else
 			imageUrlElements = div.select(PropertyManager.getInstance().IMAGE_URL());
-		
+
 	}
-	
+
 	private void formatDataStructure(String shopName, int i) {
 
 		if (shopName.equalsIgnoreCase(Shop.MANYFESTBMX.name())) {
@@ -178,8 +177,9 @@ public class ShopResearcherService {
 			try {
 				price = Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", ""));
 			} catch (NumberFormatException ex) {
-				price = Double.parseDouble(productPriceElements.get(i)
-						.select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT()).text().replaceAll("[^\\d.]", ""));
+				price = Double.parseDouble(
+						productPriceElements.get(i).select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT())
+								.text().replaceAll("[^\\d.]", ""));
 				// PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
 			}
 		}
@@ -203,15 +203,10 @@ public class ShopResearcherService {
 			this.formatDataStructure(shopName, i);
 
 			String productName = productNameElements.get(i).text().replace("'", "");
-			
-			productList.add(ProductDTO.builder()
-					  .productName(productName)
-					  .shopName(shopName)
-					  .category(category)
-					  .price(price)
-					  .url(productURLComplete)
-					  .imageUrl(imageUrlElements.get(i).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE()))
-					  .build());
+
+			productList.add(ProductDTO.builder().productName(productName).shopName(shopName).category(category)
+					.price(price).url(productURLComplete)
+					.imageUrl(imageUrlElements.get(i).attr(PropertyManager.getInstance().IMAGE_ATTRIBUTE())).build());
 		}
 
 		return productList;
@@ -222,46 +217,41 @@ public class ShopResearcherService {
 		List<String> pagesList = this.findPagesInCategory(url);
 		List<Product> productsList = new LinkedList<>();
 		ProductMapper productMapper = new ProductMapper();
-		
+
 		pagesList.stream().forEach(page -> {
 			this.setConnection(page);
 			this.getProductsFromPage(shopName);
 			this.getFormattedDataProducts(shopName, category)
 					.forEach(productDto -> productsList.add(productMapper.apply(productDto)));
-		});		
-		
+		});
+
 		productRepository.saveAll((Iterable<Product>) productsList);
 	}
-	
-	public String getDescriptionFromPage(String uri){
+
+	public String getDescription(String uri) {
+
+		Elements desc;
 		
 		this.setConnection(uri);
 		Document doc = getDocument();
+
+		Elements page = doc.select(PropertyManager.getInstance().DESCRIPTION());
 		
+		if(page.isEmpty()) 
+			return "NULL";
+
+		Elements paragraphs = page.select("p, li, span");
+
+		desc = (paragraphs.isEmpty() ? page : paragraphs);
 		
-		
-		return doc.select("div.tab").html().replace("<br>", "");
+		return desc.html().replace("&nbsp;", " ");
+
 	}
 	
-	public String getDescription(String className) throws NullPointerException {
-		String[] separator = className.split(",");
-		String finalS, str;
-		Document jsoupDoc;
-		for (int i = 0; i < separator.length; i++) {
-			finalS = this.getDocument().select(separator[i]).html();
-			jsoupDoc = Jsoup.parse(finalS);
-			// select all <br> tags and append \n after that
-			jsoupDoc.select("br").after("\\n");
-			// select all <p> tags and prepend \n before that
-			jsoupDoc.select("p").before("\\n");
-			// get the HTML from the document, and retaining original new lines
-			System.out.println("SDHIUASHD: " + Jsoup.clean(jsoupDoc.html(), "", Safelist.none(), outputSettings));
-			str = jsoupDoc.html().replaceAll("\\\\n", "\n").replaceAll("&nbsp;", "");
-			outputSettings.prettyPrint(false);
-			if (!Jsoup.clean(str, "", Safelist.none(), outputSettings).trim().isEmpty())
-				return Jsoup.clean(str, "", Safelist.none(), outputSettings);
-		}
-		throw new NullPointerException();
+	public String getCompareDescription(String uri, int index) {
+		
+		return StringFormatter.formatCompareDescription(getDescription(uri), index);
 	}
-	
+
+
 }

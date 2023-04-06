@@ -1,22 +1,71 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Two Column Layout</title>
+<head>
+<title>Two Column Layout</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet" th:href="@{/main.css}"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous" />
+
+<link rel="stylesheet" th:href="@{/compare.css}">
     <style>
-      .column {
-        float: left;
-        width: 50%;
-      }
+        td>img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+        }
     </style>
-  </head>
-  <body>
-    <div class="column">
-      <h2>[[#{productOne}]]</h2>
-      <p>This is the content of column 1.</p>
+</head>
+<body>
+	    <h1 class="display-5 my-5 text-center">Compare Page in JS</h1>
+    <div class="container">
+        <div class="col-md-9 mx-auto">
+            <table class="table">
+                <tr class="bg-light">
+                    <th>Select Product</th>
+                    <th width="600px" style="color:white; font-size:25pt;">
+                        [[${compareProduct[1].getProductName()}]]
+                    </th>
+                    <th width="600px" style="color:white; font-size:25pt;">
+                        [[${compareProduct[2].getProductName()}]]
+                    </th>
+                </tr>
+                <br>
+                <br>
+                <tr>
+                    <th>Product Image</th>
+                    <td>
+                        <img th:src="${compareProduct[1].getImageUrl()}"
+                            id="img1" alt=" ">
+                    </td>
+                    <td>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
+                            id="img2" alt=" ">
+                    </td>
+                </tr>
+                <tr>
+                    <th>Product Price</th>
+                    <td width="600px" style="color:white; font-size:25pt;" id="price1">[[${compareProduct[1].getPrice()}]]</td>
+                    <td width="600px" style="color:white; font-size:25pt;" id="price2">[[${compareProduct[2].getPrice()}]]</td>
+                </tr>
+                <tr>
+                    <th>Product Description</th>
+                    <td width="600px" style="color:white; font-size:25pt;" id="desc1"><pre>[[${compareProduct[1].getDescription()}]]</pre></td>
+                    <td width="600px" style="color:white; font-size:25pt;" id="desc2"><pre>[[${compareProduct[2].getDescription()}]]</pre></td>
+                </tr>
+                <tr>
+                    <th>Product Brand</th>
+                    <td id="brand1">N/A</td>
+                    <td id="brand2">N/A</td>
+                </tr>
+            </table>
+
+        </div>
     </div>
-    <div class="column">
-      <h2>[[#{productTwo}]]</h2>
-      <p>This is the content of column 2.</p>
-    </div>
-  </body>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js "></script>
+</body>
 </html>

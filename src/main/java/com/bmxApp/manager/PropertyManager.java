@@ -97,6 +97,7 @@ public final class PropertyManager {
 		return PropertyReader.getInstance().getProperty("urlSearchFrames");
 	}
 	
+	
 	public static PropertyManager getInstance() {
 		return propertyManager;
 	}
