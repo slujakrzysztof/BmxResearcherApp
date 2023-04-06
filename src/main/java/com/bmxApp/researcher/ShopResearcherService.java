@@ -248,9 +248,9 @@ public class ShopResearcherService {
 
 	}
 	
-	public String getCompareDescription(String uri, int index) {
+	public String getCompareDescription(String uri) {
 		
-		return StringFormatter.formatCompareDescription(getDescription(uri), index);
+		return StringFormatter.formatCompareDescription(getDescription(uri));
 	}
 
 

@@ -33,10 +33,10 @@ public class ComparisonService {
 		compareProducts = new HashMap<>();
 	}
 	
-	private CompareProductDTO createCompareProduct(CompareProductDTO product, int index) {
+	private CompareProductDTO createCompareProduct(CompareProductDTO product) {
 		
 		CompareProductDTO compareProduct = product;
-		String description = shopResearcherService.getCompareDescription(product.getUri(),index);
+		String description = shopResearcherService.getCompareDescription(product.getUri());
 		
 		compareProduct.setDescription(description);
 		
@@ -51,12 +51,12 @@ public class ComparisonService {
 		
 		if(productOneAdded && !productTwoAdded) {
 			
-			compareProducts.put(2, this.createCompareProduct(product, 2));
+			compareProducts.put(2, this.createCompareProduct(product));
 			setProductTwoAdded(true);
 		}
 		else if (!productOneAdded && !productTwoAdded) {
 			
-			compareProducts.put(1, this.createCompareProduct(product, 1));
+			compareProducts.put(1, this.createCompareProduct(product));
 			compareProducts.put(2, CompareProductDTO.builder()
 						.productName("")
 						.shopName("")
@@ -73,7 +73,7 @@ public class ComparisonService {
 		}
 		else if(!productOneAdded && productTwoAdded) {
 			
-			compareProducts.put(1, this.createCompareProduct(product, 1));
+			compareProducts.put(1, this.createCompareProduct(product));
 			setProductOneAdded(true);
 			setProductTwoAdded(false);
 		}
