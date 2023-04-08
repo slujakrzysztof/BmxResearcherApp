@@ -1,27 +1,20 @@
 package com.bmxApp.service.discount;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
-import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
-import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.database.ProductRepositoryService;
 import com.bmxApp.service.filter.FilterService;
 import com.bmxApp.service.sort.SortService;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 public class DiscountService {
@@ -60,20 +53,16 @@ public class DiscountService {
 
 	public void applyDiscount(List<ProductDTO> products) {
 
-		products.forEach(product -> {
-
-			double price = product.getPrice() * ((100.0 - getDiscount()) / 100.0);
-			product.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(price)));
-		});
+		BigDecimal discount = new BigDecimal((100.0 - getDiscount()) / 100.0);
+		
+		products.forEach(product -> product.setPrice(product.getPrice().multiply(discount).setScale(2, RoundingMode.HALF_UP)));
 	}
 
 	public void applyBasketDiscount(List<BasketProductDTO> products) {
 
-		products.forEach(product -> {
-
-			double price = product.getPrice() * ((100.0 - getDiscount()) / 100.0);
-			product.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(price)));
-		});
+		BigDecimal discount = new BigDecimal((100.0 - getDiscount()) / 100.0);
+		
+		products.forEach(product -> product.setPrice(product.getPrice().multiply(discount).setScale(2, RoundingMode.HALF_UP)));
 	}
 
 	public List<ProductDTO> getProductsWithDiscount(String shopName, String category) {
@@ -84,8 +73,7 @@ public class DiscountService {
 		productsDTO = products.stream().map(product -> productDtoMapper.apply(product)).collect(Collectors.toList());
 
 		this.applyDiscount(productsDTO);
-		productsDTO.forEach(product -> product
-				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
+		productsDTO.forEach(product -> product.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP)));
 
 		return productsDTO;
 	}
@@ -95,8 +83,7 @@ public class DiscountService {
 		List<ProductDTO> discountProducts = products;
 
 		this.applyDiscount(discountProducts);
-		discountProducts.forEach(product -> product
-				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
+		discountProducts.forEach(product -> product.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP)));
 		return products;
 	}
 
@@ -105,8 +92,7 @@ public class DiscountService {
 		List<BasketProductDTO> discountProducts = products;
 
 		this.applyBasketDiscount(discountProducts);
-		discountProducts.forEach(product -> product
-				.setPrice(Double.parseDouble(ProductFormatter.formatProductPrice(product.getPrice()))));
+		discountProducts.forEach(product -> product.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP)));
 		return products;
 	}
 

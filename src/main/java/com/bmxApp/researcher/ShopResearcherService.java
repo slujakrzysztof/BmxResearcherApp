@@ -1,23 +1,22 @@
 package com.bmxApp.researcher;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.ValidationException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.exception.NotFoundException;
@@ -51,7 +50,7 @@ public class ShopResearcherService {
 	@Autowired
 	ProductRepository productRepository;
 
-	double price = 0;
+	BigDecimal price = new BigDecimal(0);
 	String productURLComplete;
 
 	public String getHTML() {
@@ -171,26 +170,33 @@ public class ShopResearcherService {
 
 	private void formatDataStructure(String shopName, int i) {
 
+		double priceText;
+		
 		if (shopName.equalsIgnoreCase(Shop.MANYFESTBMX.name())) {
-			price = Double.parseDouble(productPriceElements.get(i).attr("content"));
+			priceText = Double.parseDouble(productPriceElements.get(i).attr("content"));
 		} else {
 			try {
-				price = Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", ""));
+				priceText = Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", "")); //Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", ""));
 			} catch (NumberFormatException ex) {
-				price = Double.parseDouble(
+				priceText = Double.parseDouble(productPriceElements.get(i)
+							.select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT())
+							.text()
+							.replaceAll("[^\\d.]", ""));
+						
+						/*Double.parseDouble(
 						productPriceElements.get(i).select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT())
-								.text().replaceAll("[^\\d.]", ""));
+								.text().replaceAll("[^\\d.]", ""));*/
 				// PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
 			}
 		}
+		
+		price = new BigDecimal(priceText).setScale(2, RoundingMode.HALF_UP);
 
 		if (shopName.equalsIgnoreCase(Shop.AVEBMX.name())) {
 			productURLComplete = "https://avebmx.pl"
 					+ productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE());
-			// PropertyReader.getInstance().getProperty("urlAtrribute"));
 		} else {
 			productURLComplete = productUrlElements.get(i).attr(PropertyManager.getInstance().URL_ATTRIBUTE());
-			// PropertyReader.getInstance().getProperty("urlAtrribute"));
 		}
 
 	}
@@ -201,7 +207,7 @@ public class ShopResearcherService {
 
 		for (int i = 0; i < productNameElements.size(); i++) {
 			this.formatDataStructure(shopName, i);
-
+			
 			String productName = productNameElements.get(i).text().replace("'", "");
 
 			productList.add(ProductDTO.builder().productName(productName).shopName(shopName).category(category)

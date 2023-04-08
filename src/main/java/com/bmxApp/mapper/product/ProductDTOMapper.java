@@ -1,5 +1,6 @@
 package com.bmxApp.mapper.product;
 
+import java.math.RoundingMode;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
 				 .productName(product.getProductName())
 				 .shopName(product.getShopName())
 				 .category(product.getCategory())
-				 .price(product.getPrice())
+				 .price(product.getPrice().setScale(2,RoundingMode.HALF_UP))
 				 .url(product.getUrl())
 				 .imageUrl(product.getImageUrl())
 				 .build();

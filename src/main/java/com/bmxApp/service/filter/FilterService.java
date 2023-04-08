@@ -1,16 +1,14 @@
 package com.bmxApp.service.filter;
 
-import java.util.LinkedList;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.product.ProductDTO;
-import com.bmxApp.enums.FilterItem;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
 import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
@@ -38,16 +36,6 @@ public class FilterService {
 	private Integer maxPrice;
 	private String shop;
 	private String category;
-	
-/*	public FilterService(ProductRepositoryService productRepositoryService, BasketProductRepositoryService basketProductRepositoryService,
-			ProductDTOMapper productDTOMapper, BasketProductDTOMapper basketProductDTOMapper) {
-		
-		this.productRepositoryService = productRepositoryService;
-		this.basketProductRepositoryService = basketProductRepositoryService;
-		this.productDTOMapper = productDTOMapper;
-		this.basketProductDTOMapper = basketProductDTOMapper;
-		
-	}*/
 
 	public List<ProductDTO> getFilteredProducts(String searchValue) {
 
@@ -58,7 +46,7 @@ public class FilterService {
 		Optional<String> shopName = Optional.ofNullable(shop);
 		Optional<String> categoryName = Optional.ofNullable(category);
 		
-
+		
 		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
 
 		if(shopName.isPresent())
@@ -70,11 +58,12 @@ public class FilterService {
 			.collect(Collectors.toList());
 		
 		if (minimumPrice.isPresent())
-			productsDTO = productsDTO.stream().filter(product -> product.getPrice() > minimumPrice.get().intValue())
+			productsDTO = productsDTO.stream()
+					.filter(product -> product.getPrice().compareTo(new BigDecimal(minimumPrice.get().intValue())) == 1)
 					.collect(Collectors.toList());
 
 		if (maximumPrice.isPresent())
-			productsDTO = productsDTO.stream().filter(product -> product.getPrice() < maximumPrice.get().intValue())
+			productsDTO = productsDTO.stream().filter(product -> product.getPrice().compareTo(new BigDecimal(maximumPrice.get().intValue())) == -1)
 					.collect(Collectors.toList());
 
 		return productsDTO;

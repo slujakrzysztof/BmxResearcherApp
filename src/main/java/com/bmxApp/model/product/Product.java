@@ -1,6 +1,8 @@
 package com.bmxApp.model.product;
 
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +33,7 @@ public class Product {
 	@Column(name = "category", length = 255)
 	private String category;
 	@Column(name = "price", length = 255)
-	private double price;
+	private BigDecimal price;
 	@Column(name = "url", length = 255)
 	private String url;
 	@Column(name = "imageUrl", length = 255)
@@ -40,7 +42,7 @@ public class Product {
 	public Product(String productName, 
 				   String shopName, 
 				   String category, 
-				   double price, 
+				   BigDecimal price, 
 				   String url, 
 				   String imageUrl) {
 		

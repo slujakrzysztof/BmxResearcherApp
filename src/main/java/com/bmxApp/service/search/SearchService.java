@@ -1,42 +1,24 @@
 package com.bmxApp.service.search;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.expression.Lists;
 
-import com.bmxApp.creator.PathCreator;
-import com.bmxApp.dto.basketProduct.BasketProductDTO;
-import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
-import com.bmxApp.enums.SortingItem;
-import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
-import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.mapper.product.ProductDTOMapper;
-import com.bmxApp.mapper.product.ProductMapper;
-import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.researcher.ShopResearcherService;
-import com.bmxApp.service.database.BasketProductRepositoryService;
 import com.bmxApp.service.database.ProductRepositoryService;
-import com.bmxApp.service.discount.DiscountService;
 import com.bmxApp.service.sort.SortService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -47,8 +29,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class SearchService {
 
-
-	
 	private final ProductRepositoryService productRepositoryService;
 	private final ShopResearcherService shopResearcherService;
 	private final SortService sortService;

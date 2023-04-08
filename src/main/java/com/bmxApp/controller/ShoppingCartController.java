@@ -18,7 +18,6 @@ import com.bmxApp.creator.PathCreator;
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.dto.shopModel.ShopModelDTO;
-import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.service.cart.ShoppingCartService;
 import com.bmxApp.service.discount.DiscountService;
 

@@ -3,9 +3,9 @@
 - Refactor ShopResearcherService
 - Format description to compare the same attributes
 - Creating pdf from cart
-- Changing datatype for prices
 - Adding products from different categories throws exception
 - Adding the same product throws exception
 
 ....DONE....
 - Add formatter for description  - 06.04.2023
+- Changing datatype for prices 08.04.2022

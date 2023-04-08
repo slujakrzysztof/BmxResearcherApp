@@ -2,9 +2,7 @@ package com.bmxApp.service.cart;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,17 +10,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
-import com.bmxApp.formatter.product.ProductFormatter;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
-import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
-import com.bmxApp.researcher.ShopResearcherService;
 import com.bmxApp.service.database.BasketProductRepositoryService;
 import com.bmxApp.service.database.ProductRepositoryService;
 import com.bmxApp.service.discount.DiscountService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service

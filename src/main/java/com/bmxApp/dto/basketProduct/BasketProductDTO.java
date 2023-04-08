@@ -1,5 +1,7 @@
 package com.bmxApp.dto.basketProduct;
 
+import java.math.BigDecimal;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,6 +15,6 @@ public class BasketProductDTO {
 	private String url;
 	private String category;
 	private String productName;
-	private double price;
+	private BigDecimal price;
 	private String shopName;
 }

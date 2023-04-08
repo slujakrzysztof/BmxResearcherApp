@@ -1,6 +1,6 @@
 package com.bmxApp.mapper.product;
 
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
@@ -15,12 +15,11 @@ public class ProductMapper implements Function<ProductDTO, Product>{
 	public Product apply(ProductDTO productDTO) {
 
 		Product product = new Product();
-		double price = BigDecimal.valueOf(productDTO.getPrice()).setScale(2).doubleValue();
 		
 		product.setProductName(productDTO.getProductName());
 		product.setShopName(productDTO.getShopName());
 		product.setCategory(productDTO.getCategory());
-		product.setPrice(price);
+		product.setPrice(productDTO.getPrice().setScale(2, RoundingMode.HALF_UP));
 		product.setUrl(productDTO.getUrl());
 		product.setImageUrl(productDTO.getImageUrl());
 		
