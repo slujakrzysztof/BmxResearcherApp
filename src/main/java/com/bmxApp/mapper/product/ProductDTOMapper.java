@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.springframework.stereotype.Component;
 
 import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.formatter.ProductFormatter;
 import com.bmxApp.model.product.Product;
 
 @Component
@@ -18,7 +19,7 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
 				 .productName(product.getProductName())
 				 .shopName(product.getShopName())
 				 .category(product.getCategory())
-				 .price(product.getPrice().setScale(2,RoundingMode.HALF_UP))
+				 .price(ProductFormatter.format(product.getPrice()))
 				 .url(product.getUrl())
 				 .imageUrl(product.getImageUrl())
 				 .build();

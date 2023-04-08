@@ -21,14 +21,6 @@ public class ComparisonController {
 	@PostMapping("/compare")
 	public String compare(@ModelAttribute("compareProduct") CompareProductDTO product, Model model) {
 		
-		System.out.println("NAME: " + product.getProductName());
-		System.out.println("IMAGE: " + product.getImageUrl());
-		System.out.println("Shop: " + product.getShopName());
-		System.out.println("PRICE: " + product.getPrice());
-		System.out.println("DESC: " + product.getDescription());
-		
-		//comparisonControllerService.setProductOneAdded(false);
-		
 		model.addAttribute("compareProduct", comparisonControllerService.compare(product));
 		return "comparator";
 	}

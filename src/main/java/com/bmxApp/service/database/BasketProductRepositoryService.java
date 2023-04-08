@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.formatter.ProductFormatter;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
 import com.bmxApp.mapper.basketProduct.BasketProductMapper;
 import com.bmxApp.mapper.product.ProductMapper;
@@ -38,7 +39,7 @@ public class BasketProductRepositoryService {
 		if (this.getBasketProducts().isEmpty())
 			return new BigDecimal(0);
 		
-		return totalPrice.setScale(2, RoundingMode.HALF_UP);
+		return ProductFormatter.format(totalPrice);
 	}
 
 	public ArrayList<BasketProduct> getBasketProducts() {
@@ -48,8 +49,7 @@ public class BasketProductRepositoryService {
 	public BigDecimal getTotalPriceForShop(String shopName) {
 
 		BigDecimal price = new BigDecimal(basketProductRepository.getTotalPriceForShop(shopName));
-		
-		return price.setScale(2, RoundingMode.HALF_UP);
+		return ProductFormatter.format(price);
 	}
 
 	public BigDecimal getTotalPriceForBasketProduct(int id) {
@@ -99,7 +99,7 @@ public class BasketProductRepositoryService {
 
 			int productId = basketProduct.getProduct().getId();
 	
-			BigDecimal totalPrice = basketProductRepository.getTotalPriceForBasketProduct(productId).multiply(discount).setScale(2, RoundingMode.HALF_UP);
+			BigDecimal totalPrice = ProductFormatter.format(basketProductRepository.getTotalPriceForBasketProduct(productId).multiply(discount));
 			basketProductsPrices.put(productId, totalPrice);
 		});
 

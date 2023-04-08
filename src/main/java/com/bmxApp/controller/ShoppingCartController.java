@@ -46,14 +46,10 @@ public class ShoppingCartController {
 
 		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("totalPrice", shoppingCartService.getTotalPriceForShop(shopName));
-				//ProductFormatter.formatProductPrice(shoppingCartService.getTotalPriceForShop(shopName)));
 		model.addAttribute("totalPriceForBasketProduct", shoppingCartService.getTotalPriceForEachBasketProduct(discountValue));
 		model.addAttribute("totalDiscount", shoppingCartService.getTotalDiscount(shopName));
 		model.addAttribute("discountValue", discountValue);
 		model.addAttribute("finalPrice", shoppingCartService.getFinalPrice(shopName));
-		
-		System.out.println("CURRENT: " + PathCreator.getCurrentUrl(request));
-		
 		model.addAttribute("currentUrl", PathCreator.getCurrentUrl(request));
 
 		return "basket";
@@ -82,7 +78,6 @@ public class ShoppingCartController {
 
 		shoppingCartService.changeQuantity(productId, quantityContainer, quantityValue);
 		return new RedirectView(currentUrl);
-		//	return "redirect:/cart";
 	}
 
 	@DeleteMapping("/removeBasketProduct/{productId}")

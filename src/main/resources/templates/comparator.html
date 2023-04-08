@@ -74,8 +74,10 @@ td>img {
 				</tr>
 				<tr>
 					<th style="color: white;"></th>
-					<td style="color: white;" id="btn1"><button type="submit"
-							value="submit" th:text="#{delete}"></button></td>
+					<td style="color: white;" id="btn1">
+						<form th:action="@{/aaa}">
+							<button type="submit" value="submit" th:text="#{delete}"></button>
+						</form>
 					<td style="color: white;" id="btn2"><button type="submit"
 							value="submit" th:text="#{delete}"></button></td>
 				</tr>

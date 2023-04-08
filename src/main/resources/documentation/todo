@@ -5,6 +5,7 @@
 - Creating pdf from cart
 - Adding products from different categories throws exception
 - Adding the same product throws exception
+- Add other currencies
 
 ....DONE....
 - Add formatter for description  - 06.04.2023

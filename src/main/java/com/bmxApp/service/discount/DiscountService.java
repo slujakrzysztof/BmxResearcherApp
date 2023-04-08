@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
+import com.bmxApp.formatter.ProductFormatter;
 import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.service.database.ProductRepositoryService;
@@ -53,16 +54,15 @@ public class DiscountService {
 
 	public void applyDiscount(List<ProductDTO> products) {
 
-		BigDecimal discount = new BigDecimal((100.0 - getDiscount()) / 100.0);
-		
-		products.forEach(product -> product.setPrice(product.getPrice().multiply(discount).setScale(2, RoundingMode.HALF_UP)));
+		BigDecimal discount = new BigDecimal((100.0 - getDiscount()) / 100.0);		
+		products.forEach(product -> product.setPrice(ProductFormatter.format(product.getPrice().multiply(discount))));
 	}
 
 	public void applyBasketDiscount(List<BasketProductDTO> products) {
 
 		BigDecimal discount = new BigDecimal((100.0 - getDiscount()) / 100.0);
 		
-		products.forEach(product -> product.setPrice(product.getPrice().multiply(discount).setScale(2, RoundingMode.HALF_UP)));
+		products.forEach(product -> product.setPrice(ProductFormatter.format(product.getPrice().multiply(discount))));
 	}
 
 	public List<ProductDTO> getProductsWithDiscount(String shopName, String category) {
@@ -73,7 +73,7 @@ public class DiscountService {
 		productsDTO = products.stream().map(product -> productDtoMapper.apply(product)).collect(Collectors.toList());
 
 		this.applyDiscount(productsDTO);
-		productsDTO.forEach(product -> product.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP)));
+		productsDTO.forEach(product -> product.setPrice(ProductFormatter.format(product.getPrice())));
 
 		return productsDTO;
 	}
@@ -83,7 +83,7 @@ public class DiscountService {
 		List<ProductDTO> discountProducts = products;
 
 		this.applyDiscount(discountProducts);
-		discountProducts.forEach(product -> product.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP)));
+		discountProducts.forEach(product -> product.setPrice(ProductFormatter.format(product.getPrice())));
 		return products;
 	}
 
@@ -92,7 +92,7 @@ public class DiscountService {
 		List<BasketProductDTO> discountProducts = products;
 
 		this.applyBasketDiscount(discountProducts);
-		discountProducts.forEach(product -> product.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP)));
+		discountProducts.forEach(product -> product.setPrice(ProductFormatter.format(product.getPrice())));
 		return products;
 	}
 

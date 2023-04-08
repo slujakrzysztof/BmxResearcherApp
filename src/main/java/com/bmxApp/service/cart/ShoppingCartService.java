@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.bmxApp.dto.basketProduct.BasketProductDTO;
+import com.bmxApp.formatter.ProductFormatter;
 import com.bmxApp.mapper.basketProduct.BasketProductDTOMapper;
 import com.bmxApp.model.basketProduct.BasketProduct;
 import com.bmxApp.model.product.Product;
@@ -197,7 +198,7 @@ public class ShoppingCartService {
 
 	public BigDecimal getTotalDiscount(String shopName) {
 
-		BigDecimal discount = this.getTotalPriceForShop(shopName).multiply(getDiscountValue()).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal discount = ProductFormatter.format(this.getTotalPriceForShop(shopName).multiply(getDiscountValue()));
 		BigDecimal totalDiscount = this.getTotalPriceForShop(shopName).subtract(discount).multiply(new BigDecimal(-1));
 		return totalDiscount;
 	}
@@ -211,9 +212,7 @@ public class ShoppingCartService {
 
 	public BigDecimal getFinalPrice(String shopName) {
 
-		BigDecimal finalPrice = this.getTotalPriceForShop(shopName).add(this.getTotalDiscount(shopName)).setScale(2,RoundingMode.HALF_UP);
-		
-		//float price = this.getTotalPriceForShop(shopName) + Float.parseFloat(this.getTotalDiscount(shopName));
+		BigDecimal finalPrice = ProductFormatter.format(this.getTotalPriceForShop(shopName).add(this.getTotalDiscount(shopName)));
 		return finalPrice;
 	}
 

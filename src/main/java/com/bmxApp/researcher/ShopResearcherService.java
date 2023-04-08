@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.enums.Shop;
 import com.bmxApp.exception.NotFoundException;
+import com.bmxApp.formatter.ProductFormatter;
 import com.bmxApp.formatter.StringFormatter;
 import com.bmxApp.manager.PropertyManager;
 import com.bmxApp.mapper.product.ProductMapper;
@@ -190,7 +191,7 @@ public class ShopResearcherService {
 			}
 		}
 		
-		price = new BigDecimal(priceText).setScale(2, RoundingMode.HALF_UP);
+		price = ProductFormatter.format(new BigDecimal(priceText));
 
 		if (shopName.equalsIgnoreCase(Shop.AVEBMX.name())) {
 			productURLComplete = "https://avebmx.pl"
