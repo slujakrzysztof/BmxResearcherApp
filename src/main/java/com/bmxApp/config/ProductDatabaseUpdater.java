@@ -55,8 +55,7 @@ public class ProductDatabaseUpdater {
 			PropertyReader.getInstance().connectPropertyReader(shopName);
 			String html = PropertyManager.getInstance().URL();
 			
-			partList.forEach(part ->
-					{
+			partList.forEach(part -> {
 			
 				shopResearcherService.setConnection(html);
 				String category = part.name().toLowerCase();

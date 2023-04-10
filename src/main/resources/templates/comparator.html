@@ -75,11 +75,16 @@ td>img {
 				<tr>
 					<th style="color: white;"></th>
 					<td style="color: white;" id="btn1">
-						<form th:action="@{/aaa}">
+						<form th:action="@{/deleteCompareProduct/1}" th:method="delete">
+							<input type="hidden" name="currentUrl" th:value="${currentUrl}" />
 							<button type="submit" value="submit" th:text="#{delete}"></button>
 						</form>
-					<td style="color: white;" id="btn2"><button type="submit"
-							value="submit" th:text="#{delete}"></button></td>
+					<td style="color: white;" id="btn2">
+						<form th:action="@{/deleteCompareProduct/2}" th:method="delete">
+							<input type="hidden" name="currentUrl" th:value="${currentUrl}" />
+							<button type="submit" value="submit" th:text="#{delete}"></button>
+						</form>
+					</td>
 				</tr>
 			</table>
 

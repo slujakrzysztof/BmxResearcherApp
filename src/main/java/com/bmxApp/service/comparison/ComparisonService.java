@@ -19,15 +19,23 @@ import lombok.Setter;
 //@RequiredArgsConstructor
 public class ComparisonService {
 
+	private final CompareProductDTO NULL_PRODUCT;
+	
 	private boolean productOneAdded;
 	private boolean productTwoAdded;
 	private Map<Integer, CompareProductDTO> compareProducts;
 	private final ShopResearcherService shopResearcherService;
+	private String currentUrl;
 	
 	
 	public ComparisonService(ShopResearcherService shopResearcherService) {
 		
 		this.shopResearcherService = shopResearcherService;
+		NULL_PRODUCT = CompareProductDTO.builder()
+				.productName("").shopName("")
+				.price(new BigDecimal(0)).description("")
+				.uri("").imageUrl(null)
+				.build();
 		productOneAdded = false;
 		productTwoAdded = false;
 		compareProducts = new HashMap<>();
@@ -44,10 +52,7 @@ public class ComparisonService {
 		
 	}
 
-	public Map<Integer,CompareProductDTO> compare(CompareProductDTO product) {
-		
-		System.out.println("1 ADDED: " + productOneAdded);
-		System.out.println("2 ADDED: " + productTwoAdded);
+	public void compare(CompareProductDTO product) {
 		
 		if(productOneAdded && !productTwoAdded) {
 			
@@ -57,12 +62,7 @@ public class ComparisonService {
 		else if (!productOneAdded && !productTwoAdded) {
 			
 			compareProducts.put(1, this.createCompareProduct(product));
-			compareProducts.put(2, CompareProductDTO.builder()
-						.productName("")
-						.shopName("")
-						.price(new BigDecimal(0))
-						.description("")
-						.build());
+			compareProducts.put(2, NULL_PRODUCT);
 			
 			setProductOneAdded(true);
 		}
@@ -77,8 +77,11 @@ public class ComparisonService {
 			setProductOneAdded(true);
 			setProductTwoAdded(false);
 		}
+				
+	}
+	
+	public void deleteProduct(int id) {
 		
-		
-		return compareProducts;
+		compareProducts.put(id, NULL_PRODUCT);
 	}
 }
