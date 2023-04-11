@@ -22,7 +22,7 @@
 			<span class="main-button"> <a th:href="@{/main}">[[#{mainPage}]]</a></span>
 		</div>
 		<div class="main">
-			<span class="main-button"> <a th:href="@{/compare}">[[#{comparision}]]</a></span>
+			<span class="main-button"> <a th:href="@{/comparator}">[[#{comparision}]]</a></span>
 		</div>
 		<div th:replace="~{fragments/search :: dropdown-search}"></div>
 		<div th:replace="~{fragments/dropdownCart :: dropdown-shopping-cart}"></div>
@@ -117,7 +117,8 @@
 									th:value="${product.getPrice()}" /> <input type="hidden"
 									th:attr="name='uri'" th:value="${product.getUrl()}" /> <input
 									type="hidden" th:attr="name='imageUrl'"
-									th:value="${product.getImageUrl()}" />
+									th:value="${product.getImageUrl()}" /> <input type="hidden"
+									th:name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit" th:text="#{compare}"></button>
 							</form></td>
 					</tr>
