@@ -86,7 +86,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="product : ${products}">
-						<td th:text="${product.getProductName()}" />
+						<td><a th:href="@{${product.getUrl()}}">[[${product.getProductName()}]]</a></td>
 						<td th:if="${#strings.equals(shopName, 'ALLSHOPS')}"
 							th:text="${product.getShopName()}" />
 						<td th:text="${product.getPrice()}" />
