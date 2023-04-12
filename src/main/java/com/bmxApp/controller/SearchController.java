@@ -16,6 +16,7 @@ import com.bmxApp.creator.PathCreator;
 import com.bmxApp.dto.discount.DiscountDTO;
 import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.service.cart.ShoppingCartService;
+import com.bmxApp.service.comparison.ComparisonService;
 import com.bmxApp.service.discount.DiscountService;
 import com.bmxApp.service.search.SearchService;
 import com.bmxApp.service.sort.SortService;
@@ -32,6 +33,7 @@ public class SearchController {
 	private final ShoppingCartService shoppingCartService;
 	private final SortService sortService;
 	private final DiscountService discountService;
+	private final ComparisonService comparisonService;
 
 	@GetMapping(value = "/search")
 	public String searchProducts(Model model, @RequestParam("category") String category,
@@ -67,11 +69,14 @@ public class SearchController {
 
 		discount.ifPresent(disc -> model.addAttribute("discountValue", discountValue));
 		
+		System.out.println("COMPARATOR: " + comparisonService.isComparatorFull());
+		
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());
 		model.addAttribute("currentUrl", PathCreator.createSearchUri(request));
+		model.addAttribute("comparatorFull", comparisonService.isComparatorFull());
 
 		return "products";
 	}

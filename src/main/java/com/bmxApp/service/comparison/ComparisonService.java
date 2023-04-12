@@ -81,6 +81,14 @@ public class ComparisonService {
 			}
 		}
 	}
+	
+	public boolean isComparatorFull() {
+		
+		boolean full = ((productOneAdded && productTwoAdded) ? true : false);
+		
+		return !full;
+		
+	}
 
 	public void deleteProduct(int id) {
 

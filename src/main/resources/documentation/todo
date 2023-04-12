@@ -6,6 +6,8 @@
 - Adding products from different categories throws exception
 - Adding the same product throws exception
 - Add other currencies
+- Refactor controllers not to include any logic
+- Add real price (not with discount f.e.) to comparator
 
 ....DONE....
 - Add formatter for description  - 06.04.2023
