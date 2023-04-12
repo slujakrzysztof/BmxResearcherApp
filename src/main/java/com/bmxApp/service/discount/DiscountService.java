@@ -108,19 +108,18 @@ public class DiscountService {
 		return productsDTO;
 	}
 
-	public List<ProductDTO> getSortedRequestedProductsWithDiscount(String value, String sortedBy, boolean isSorted) {
+	public List<ProductDTO> getSortedRequestedProductsWithDiscount(String value, String sortedBy) {
 
 		List<ProductDTO> products = this.getRequestedProductsWithDiscount(value);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products, isSorted);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
 
 		return sortedProducts;
 	}
 
-	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy,
-			boolean isSorted) {
+	public List<ProductDTO> getSortedProductsWithDiscount(String shopName, String category, String sortedBy) {
 
 		List<ProductDTO> products = this.getProductsWithDiscount(shopName, category);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products, isSorted);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
 
 		return sortedProducts;
 	}

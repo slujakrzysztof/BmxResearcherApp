@@ -48,7 +48,7 @@ public class FilterController {
 
 		if (sortedBy != null) {
 			sortService.setSortedBy(!sortService.isSortedBy());
-			products = sortService.sortProductDTO(sortedBy, products, sortService.isSortedBy());
+			products = sortService.sortProductDTO(sortedBy, products);
 
 		}
 

@@ -27,7 +27,7 @@ public class SortService {
 	@Value("false")
 	private boolean sortedBy;
 
-	public List<ProductDTO> sortProductDTO(String sortedBy, List<ProductDTO> products, boolean isSorted) {
+	public List<ProductDTO> sortProductDTO(String sortedBy, List<ProductDTO> products) {
 
 		Comparator<ProductDTO> comparator;
 		List<ProductDTO> sortedProducts;
@@ -41,7 +41,7 @@ public class SortService {
 
 		sortedProducts = products.stream().sorted(comparator).collect(Collectors.toList());
 
-		if (!isSorted)
+		if (!isSortedBy())
 			Collections.reverse(sortedProducts);
 		
 		return sortedProducts;

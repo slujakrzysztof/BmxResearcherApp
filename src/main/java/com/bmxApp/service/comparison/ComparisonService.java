@@ -84,9 +84,9 @@ public class ComparisonService {
 	
 	public boolean isComparatorFull() {
 		
-		boolean full = ((productOneAdded && productTwoAdded) ? true : false);
+		boolean full = ((productOneAdded && productTwoAdded) ? false : true);
 		
-		return !full;
+		return full;
 		
 	}
 

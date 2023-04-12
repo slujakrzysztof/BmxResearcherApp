@@ -33,11 +33,10 @@ public class RequestService {
 		return productsDTO;
 	}
 
-	public List<ProductDTO> getSortedRequestedProducts(String value, String sortedBy,
-			boolean isSorted) {
+	public List<ProductDTO> getSortedRequestedProducts(String value, String sortedBy) {
 
 		List<ProductDTO> products = this.getRequestedProducts(value);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products,isSorted);
+		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
 
 		return sortedProducts;
 	}
