@@ -2,6 +2,7 @@ package com.bmxApp.service.search;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.bmxApp.dto.product.ProductDTO;
 import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.service.database.ProductRepositoryService;
+import com.bmxApp.service.discount.DiscountService;
 import com.bmxApp.service.sort.SortService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ public class RequestService {
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDTOMapper;
 	private final SortService sortService;
+	private final DiscountService discountService;
 	
 	public List<ProductDTO> getRequestedProducts(String value) {
 
@@ -32,13 +35,24 @@ public class RequestService {
 
 		return productsDTO;
 	}
-
-	public List<ProductDTO> getSortedRequestedProducts(String value, String sortedBy) {
-
-		List<ProductDTO> products = this.getRequestedProducts(value);
-		List<ProductDTO> sortedProducts = sortService.sortProductDTO(sortedBy, products);
-
-		return sortedProducts;
+	
+	public List<ProductDTO> getProducts(String searchValue, String sortBy,
+										String discountValue){
+		
+		Optional<String> sortedBy = Optional.ofNullable(sortBy);
+		Optional<String> discount = Optional.ofNullable(discountValue);
+		
+		List<ProductDTO> products = getRequestedProducts(searchValue);
+		
+		if(sortedBy.isPresent()) {
+			
+			sortService.setSortedBy(!sortService.isSortedBy());
+			products = sortService.sortProductDTO(sortBy, products);
+		}
+		
+		if(discount.isPresent()) products = discountService.getProductsWithDiscount(products);
+		
+		return null;
 	}
 	
 
