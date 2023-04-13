@@ -126,7 +126,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="product : ${products}">
-						<td th:text="${product.getProductName()}" />
+						<td><a th:href="@{${product.getUrl()}}">[[${product.getProductName()}]]</a></td>
 						<td th:text="${product.getShopName()}" />
 						<td th:text="${product.getPrice()}" />
 						<td class="w-25"><img th:src="${product.getImageUrl()}"
@@ -144,7 +144,7 @@
 									th:attr="name='url'" th:value="${product.getUrl()}" /> <input
 									type="hidden" th:attr="name='imageUrl'"
 									th:value="${product.getImageUrl()}" /> <input type="hidden"
-									name="currentURL" th:value="${currentUrl}" />
+									name="currentUrl" th:value="${currentUrl}" />
 								<button type="submit" value="submit" th:text="#{addBasket}"></button>
 							</form>
 							</br>

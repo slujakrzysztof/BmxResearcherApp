@@ -235,13 +235,15 @@ public class ShopResearcherService {
 		productRepository.saveAll((Iterable<Product>) productsList);
 	}
 
-	public String getDescription(String uri) {
+	public String getDescription(String uri, String shopName) {
 
 		Elements desc;
 		
+		PropertyReader.getInstance().connectPropertyReader(shopName);
+		
 		this.setConnection(uri);
 		Document doc = getDocument();
-
+		
 		Elements page = doc.select(PropertyManager.getInstance().DESCRIPTION());
 		
 		if(page.isEmpty()) 
@@ -255,9 +257,9 @@ public class ShopResearcherService {
 
 	}
 	
-	public String getCompareDescription(String uri) {
+	public String getCompareDescription(String uri, String shopName) {
 		
-		return StringFormatter.formatCompareDescription(getDescription(uri));
+		return StringFormatter.formatCompareDescription(getDescription(uri, shopName));
 	}
 
 

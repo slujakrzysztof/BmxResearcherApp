@@ -58,11 +58,13 @@ public class ComparisonService {
 	private CompareProductDTO createCompareProduct(CompareProductDTO product) {
 
 		CompareProductDTO compareProduct = product;
-		String description = shopResearcherService.getCompareDescription(product.getUri());
+		String description = shopResearcherService.getCompareDescription(product.getUri(), product.getShopName());
 
 		compareProduct.setPrice(setPrice(compareProduct));		
 		compareProduct.setDescription(description);
 
+		System.out.println("DESC: " + compareProduct.getDescription());
+		
 		return compareProduct;
 
 	}
