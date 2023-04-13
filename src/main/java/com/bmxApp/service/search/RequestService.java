@@ -52,7 +52,7 @@ public class RequestService {
 		
 		if(discount.isPresent()) products = discountService.getProductsWithDiscount(products);
 		
-		return null;
+		return products;
 	}
 	
 

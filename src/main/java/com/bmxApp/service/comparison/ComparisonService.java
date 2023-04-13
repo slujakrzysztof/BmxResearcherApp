@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.util.EnumUtils;
 
 import com.bmxApp.dto.product.CompareProductDTO;
+import com.bmxApp.repository.ProductRepository;
 import com.bmxApp.researcher.ShopResearcherService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,12 +31,17 @@ public class ComparisonService {
 	private boolean productOneAdded;
 	private boolean productTwoAdded;
 	private Map<Integer, CompareProductDTO> compareProducts;
+	
 	private final ShopResearcherService shopResearcherService;
+	private final ProductRepository productRepository;
+	
 	private String currentUrl;
 
-	public ComparisonService(ShopResearcherService shopResearcherService) {
+	public ComparisonService(ShopResearcherService shopResearcherService,
+							 ProductRepository productRepository) {
 
 		this.shopResearcherService = shopResearcherService;
+		this.productRepository = productRepository;
 		NULL_PRODUCT = CompareProductDTO.builder().productName("").shopName("").price(new BigDecimal(0)).description("")
 				.uri("").imageUrl(null).build();
 		HEADER = "productDeleted";
@@ -43,12 +49,22 @@ public class ComparisonService {
 		productTwoAdded = false;
 		compareProducts = new HashMap<>();
 	}
+	
+	private BigDecimal setPrice(CompareProductDTO product) {
+		
+		BigDecimal price = productRepository.getPrice(product.getProductName(), product.getShopName());
+		
+		System.out.println("PRIIIIIIIIIIIICE: " + price);
+		
+		return price;
+	}
 
 	private CompareProductDTO createCompareProduct(CompareProductDTO product) {
 
 		CompareProductDTO compareProduct = product;
 		String description = shopResearcherService.getCompareDescription(product.getUri());
 
+		compareProduct.setPrice(setPrice(compareProduct));		
 		compareProduct.setDescription(description);
 
 		return compareProduct;

@@ -42,7 +42,7 @@ public class FilterService {
 	private String category;
 
 	
-	public void setParameters(int minPrice, int maxPrice, String category, String shopName) {
+	public void setParameters(Integer minPrice, Integer maxPrice, String category, String shopName) {
 		
 		setMinPrice(minPrice);
 		setMaxPrice(maxPrice);
@@ -60,12 +60,11 @@ public class FilterService {
 		Optional<Integer> maximumPrice = Optional.ofNullable(maxPrice);
 		Optional<String> shopName = Optional.ofNullable(shop);
 		Optional<String> categoryName = Optional.ofNullable(category);
-		//Optional<String> discount = Optional.ofNullable(discountValue);
-		
-		
 		
 		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
 
+		System.out.println("SIZE: " + productsDTO.size() );
+		
 		if(shopName.isPresent())
 			productsDTO = productsDTO.stream().filter(product -> product.getShopName().equalsIgnoreCase(shop))
 			.collect(Collectors.toList());

@@ -24,16 +24,14 @@ public class DiscountService {
 	private final ProductRepositoryService productRepositoryService;
 	private final ProductDTOMapper productDtoMapper;
 	private final SortService sortService;
-	private final FilterService filterService;
 	private DiscountDTO discount;
 
 	public DiscountService(ProductRepositoryService productRepositoryService, ProductDTOMapper productDtoMapper,
-			SortService sortService, FilterService filterService) {
+			SortService sortService) {
 
 		this.productRepositoryService = productRepositoryService;
 		this.productDtoMapper = productDtoMapper;
 		this.sortService = sortService;
-		this.filterService = filterService;
 		this.discount = new DiscountDTO();
 	}
 

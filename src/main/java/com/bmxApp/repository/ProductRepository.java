@@ -1,5 +1,6 @@
 package com.bmxApp.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,9 +31,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	@Query(value = "SELECT p from Product p WHERE (p.productName LIKE %?1%) OR (p.shopName LIKE %?1%)")
 	List<Product> findRequestedItems(String value);
 	
-	/*@Query(value = "SELECT DISTINCT category from product_table")
-	List<Product> getAllExistingCategories();
+	@Query(value = "SELECT p.price FROM Product p WHERE (p.productName LIKE %?1%) OR (p.shopName LIKE %?1%)")
+	BigDecimal getPrice(String productName, String shopName);
 	
-	@Query(value = "SELECT DISTINCT shopName from product_table")
-	List<Product> getAllExistingShops();*/
 }
