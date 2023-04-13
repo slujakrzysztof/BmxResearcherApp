@@ -23,8 +23,6 @@ public class DiscountController {
 	@GetMapping(value = "/applyDiscount")
 	public RedirectView applyDiscount(@RequestParam("currentUrl") String currentUrl,
 			@RequestParam("discountValue") String discountValue, Model model, HttpServletRequest request) {
-
-		System.out.println("CURRENT: " + currentUrl);
 		
 		discountService.setDiscount(Integer.parseInt(discountValue));
 		

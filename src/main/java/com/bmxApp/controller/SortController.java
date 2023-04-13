@@ -22,8 +22,6 @@ public class SortController {
 	@GetMapping(value = "/sort")
 	public RedirectView sort(Model model, @RequestParam("currentUrl") String currentUrl, @RequestParam("sortedBy") String sortedBy) {
 		
-		System.out.println("CURRENT: " + currentUrl);
-		
 		return new RedirectView(PathCreator.createSortUrl(currentUrl, sortedBy));
 	}
 	

@@ -14,6 +14,8 @@ import com.bmxApp.mapper.product.ProductDTOMapper;
 import com.bmxApp.model.product.Product;
 import com.bmxApp.service.database.BasketProductRepositoryService;
 import com.bmxApp.service.database.ProductRepositoryService;
+import com.bmxApp.service.discount.DiscountService;
+import com.bmxApp.service.sort.SortService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,9 @@ public class FilterService {
 	private final BasketProductRepositoryService basketProductRepositoryService;
 	private final ProductDTOMapper productDTOMapper;
 	private final BasketProductDTOMapper basketProductDTOMapper;
-
+	private final SortService sortService;
+	private final DiscountService discountService;
+	
 	@Value("0")
 	private Integer minPrice;
 	@Value("0")
@@ -37,7 +41,18 @@ public class FilterService {
 	private String shop;
 	private String category;
 
-	public List<ProductDTO> getFilteredProducts(String searchValue) {
+	
+	public void setParameters(int minPrice, int maxPrice, String category, String shopName) {
+		
+		setMinPrice(minPrice);
+		setMaxPrice(maxPrice);
+		setCategory(category);
+		setShop(shopName);
+	}
+	
+	public List<ProductDTO> getFilteredProducts(String searchValue, 
+												String discountValue,
+												String sortBy) {
 
 		List<Product> products = productRepositoryService.getRequestedItem(searchValue);
 		List<ProductDTO> productsDTO;
@@ -45,6 +60,8 @@ public class FilterService {
 		Optional<Integer> maximumPrice = Optional.ofNullable(maxPrice);
 		Optional<String> shopName = Optional.ofNullable(shop);
 		Optional<String> categoryName = Optional.ofNullable(category);
+		//Optional<String> discount = Optional.ofNullable(discountValue);
+		
 		
 		
 		productsDTO = products.stream().map(product -> productDTOMapper.apply(product)).collect(Collectors.toList());
@@ -65,8 +82,18 @@ public class FilterService {
 		if (maximumPrice.isPresent())
 			productsDTO = productsDTO.stream().filter(product -> product.getPrice().compareTo(new BigDecimal(maximumPrice.get().intValue())) == -1)
 					.collect(Collectors.toList());
+		
+		if(sortBy != null) {
+			
+			sortService.setSortedBy(!sortService.isSortedBy());
+			productsDTO = sortService.sortProductDTO(sortBy, productsDTO);
+		}
+		
+		if(discountValue != null)
+			productsDTO = discountService.getProductsWithDiscount(productsDTO);
 
 		return productsDTO;
 	}
 
 }
+

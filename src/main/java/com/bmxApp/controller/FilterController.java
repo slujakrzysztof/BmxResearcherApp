@@ -28,7 +28,8 @@ public class FilterController {
 	private final FilterService filterService;
 	private final ShoppingCartService shoppingCartService;
 	private final DiscountService discountService;
-	private final SortService sortService;
+	
+	
 
 	@GetMapping(value = "/filter")
 	public String filter(@Nullable @RequestParam("shop") String shop,
@@ -37,25 +38,9 @@ public class FilterController {
 			@Nullable @RequestParam("sortedBy") String sortedBy,
 			@Nullable @RequestParam("discountValue") String discountValue, Model model, HttpServletRequest request) {
 
-		Optional<String> discount = Optional.ofNullable(discountValue);
+		filterService.setParameters(minPrice, maxPrice, category, shop);
 
-		filterService.setMinPrice(minPrice);
-		filterService.setMaxPrice(maxPrice);
-		filterService.setCategory(category);
-		filterService.setShop(shop);
-
-		List<ProductDTO> products = filterService.getFilteredProducts(searchValue);
-
-		if (sortedBy != null) {
-			sortService.setSortedBy(!sortService.isSortedBy());
-			products = sortService.sortProductDTO(sortedBy, products);
-
-		}
-
-		if (discount != null)
-			products = discountService.getProductsWithDiscount(products);
-
-		model.addAttribute("products", products);
+		model.addAttribute("products", filterService.getFilteredProducts(searchValue, discountValue, sortedBy));
 		model.addAttribute("discountValue", discountService.getDiscount());
 		model.addAttribute("minPrice", minPrice);
 		model.addAttribute("maxPrice", maxPrice);

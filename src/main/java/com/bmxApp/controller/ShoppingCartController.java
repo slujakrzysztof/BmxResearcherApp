@@ -30,20 +30,13 @@ import lombok.RequiredArgsConstructor;
 public class ShoppingCartController {
 
 	private final ShoppingCartService shoppingCartService;
-	private final DiscountService discountService;
 
 	@GetMapping(path = { "/cart", "/cart/{shopName}" })
 	public String showShoppingCart(@PathVariable(value = "shopName", required = false) String shopName,
 			@Nullable @RequestParam(value = "discountValue") String discountValue, Model model,
 			HttpServletRequest request) {
 
-		List<BasketProductDTO> products = shoppingCartService.getBasketProducts(shopName);
-
-		if (discountValue != null)
-			model.addAttribute("basketProducts", discountService.getBasketProductsWithDiscount(products));
-		else
-			model.addAttribute("basketProducts", products);
-
+		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(shopName, discountValue));
 		model.addAttribute("shopModel", new ShopModelDTO());
 		model.addAttribute("totalPrice", shoppingCartService.getTotalPriceForShop(shopName));
 		model.addAttribute("totalPriceForBasketProduct", shoppingCartService.getTotalPriceForEachBasketProduct(discountValue));

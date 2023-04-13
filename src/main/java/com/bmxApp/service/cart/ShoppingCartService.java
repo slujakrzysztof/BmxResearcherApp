@@ -43,50 +43,24 @@ public class ShoppingCartService {
 			basketProductsDTO = basketProducts.stream().map(product -> basketProductDTOMapper.apply(product))
 					.collect(Collectors.toList());
 		}
-
+		
 		return basketProductsDTO;
 	}
 
-	/*
-	 * public List<BasketProductDTO> getBasketProductsByShopName(String shopName) {
-	 * 
-	 * List<BasketProductDTO> basketProductsDTO = this.getBasketProducts();
-	 * List<BasketProductDTO> basketProductsDTOByShopName;
-	 * 
-	 * basketProductsDTOByShopName = basketProductsDTO.stream()
-	 * .filter(basketProduct ->
-	 * basketProduct.getShopName().equalsIgnoreCase(shopName))
-	 * .collect(Collectors.toList());
-	 * 
-	 * return basketProductsDTOByShopName;
-	 * 
-	 * }
-	 */
+	public List<BasketProductDTO> getBasketProducts(String shopName, String discountValue) {
+
+		List<BasketProductDTO> basketProductsDTO = getBasketProducts(shopName);
+
+		if (discountValue != null)
+			basketProductsDTO = discountService.getBasketProductsWithDiscount(basketProductsDTO);
+
+		return basketProductsDTO;
+	}
 
 	public void setCartDiscount(int value) {
 
 		discountService.setDiscount(value);
 	}
-
-	/*
-	 * public List<BasketProductDTO> getBasketProductsInCart(String shopName) {
-	 * 
-	 * List<BasketProduct> basketProducts =
-	 * basketProductRepositoryService.getBasketProducts(); List<BasketProductDTO>
-	 * basketProductsDTO = new ArrayList<>();
-	 * 
-	 * basketProductsDTO = basketProducts.stream().map(basketProduct ->
-	 * basketProductDTOMapper.apply(basketProduct)) .collect(Collectors.toList());
-	 * 
-	 * if (Optional.ofNullable(shopName).isPresent()) {
-	 * 
-	 * List<BasketProductDTO> basketProductsDTOByShopName =
-	 * basketProductsDTO.stream() .filter(basketProduct ->
-	 * basketProduct.getShopName().equalsIgnoreCase(shopName))
-	 * .collect(Collectors.toList());
-	 * 
-	 * return basketProductsDTOByShopName; } return basketProductsDTO; }
-	 */
 
 	public void deleteBasketProductByProductId(int productId) {
 
@@ -145,7 +119,8 @@ public class ShoppingCartService {
 
 		Optional<String> discountOptional = Optional.ofNullable(discountValue);
 		int discount = 0;
-		if(discountOptional.isPresent()) discount = Integer.parseInt(discountValue);
+		if (discountOptional.isPresent())
+			discount = Integer.parseInt(discountValue);
 		return basketProductRepositoryService.getTotalPriceForEachBasketProduct(discount);
 	}
 
@@ -206,15 +181,15 @@ public class ShoppingCartService {
 	public BigDecimal getDiscountValue() {
 
 		BigDecimal discount = new BigDecimal((100.0 - discountService.getDiscount()) / 100.0);
-		
+
 		return discount;
 	}
 
 	public BigDecimal getFinalPrice(String shopName) {
 
-		BigDecimal finalPrice = ProductFormatter.format(this.getTotalPriceForShop(shopName).add(this.getTotalDiscount(shopName)));
+		BigDecimal finalPrice = ProductFormatter
+				.format(this.getTotalPriceForShop(shopName).add(this.getTotalDiscount(shopName)));
 		return finalPrice;
 	}
-
 
 }

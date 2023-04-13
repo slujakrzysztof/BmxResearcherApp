@@ -124,13 +124,4 @@ public class DiscountService {
 		return sortedProducts;
 	}
 
-	public List<ProductDTO> getFilteredProductsWithDiscount(String searchValue) {
-
-		List<ProductDTO> filteredProducts = filterService.getFilteredProducts(searchValue);
-
-		this.applyDiscount(filteredProducts);
-
-		return filteredProducts;
-	}
-
 }
