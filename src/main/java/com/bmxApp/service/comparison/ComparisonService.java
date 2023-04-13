@@ -52,11 +52,7 @@ public class ComparisonService {
 	
 	private BigDecimal setPrice(CompareProductDTO product) {
 		
-		BigDecimal price = productRepository.getPrice(product.getProductName(), product.getShopName());
-		
-		System.out.println("PRIIIIIIIIIIIICE: " + price);
-		
-		return price;
+		return productRepository.getPrice(product.getProductName(), product.getShopName());
 	}
 
 	private CompareProductDTO createCompareProduct(CompareProductDTO product) {

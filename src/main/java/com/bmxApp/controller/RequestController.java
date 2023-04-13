@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bmxApp.creator.PathCreator;
 import com.bmxApp.service.cart.ShoppingCartService;
+import com.bmxApp.service.comparison.ComparisonService;
 import com.bmxApp.service.search.RequestService;
 
 import io.micrometer.common.lang.Nullable;
@@ -21,6 +22,7 @@ public class RequestController {
 
 	private final ShoppingCartService shoppingCartService;
 	private final RequestService requestService;
+	private final ComparisonService comparisonService;
 
 	
 	@GetMapping(value = "/requestProducts")
@@ -33,6 +35,7 @@ public class RequestController {
 		model.addAttribute("currentUrl", PathCreator.getCurrentUrl(request));
 		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
+		model.addAttribute("comparatorFull", comparisonService.isComparatorFull());
 		
 		return "searchPage";
 	}

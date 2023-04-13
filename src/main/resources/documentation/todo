@@ -6,9 +6,9 @@
 - Adding products from different categories throws exception
 - Adding the same product throws exception
 - Add other currencies
-- Add real price (not with discount f.e.) to comparator
 
 ....DONE....
 - Add formatter for description  - 06.04.2023
 - Changing datatype for prices 08.04.2022
 - Refactor controllers not to include any logic - 13.04.2023
+- Add real price (not with discount f.e.) to comparator - 13.04.2023
