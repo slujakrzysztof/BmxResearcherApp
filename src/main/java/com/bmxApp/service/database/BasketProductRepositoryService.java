@@ -42,8 +42,8 @@ public class BasketProductRepositoryService {
 		return ProductFormatter.format(totalPrice);
 	}
 
-	public ArrayList<BasketProduct> getBasketProducts() {
-		return (ArrayList<BasketProduct>) basketProductRepository.findAll();
+	public List<BasketProduct> getBasketProducts() {
+		return  basketProductRepository.findAll();
 	}
 
 	public BigDecimal getTotalPriceForShop(String shopName) {
@@ -57,8 +57,8 @@ public class BasketProductRepositoryService {
 		return basketProductRepository.getTotalPriceForBasketProduct(id);
 	}
 
-	public ArrayList<BasketProduct> getBasketProductsByShopName(String shopName) {
-		return (ArrayList<BasketProduct>) basketProductRepository.findByShopName(shopName);
+	public List<BasketProduct> getBasketProductsByShopName(String shopName) {
+		return basketProductRepository.findByShopName(shopName);
 	}
 
 	public boolean isProductInDatabase(Product product) {
@@ -134,13 +134,7 @@ public class BasketProductRepositoryService {
 
 		basketProductsDtoList = basketProductsList.stream()
 				.map(basketProduct -> basketProductDTOMapper.apply(basketProduct)).collect(Collectors.toList());
-
-		/*
-		 * basketProductsList.forEach(basketProduct -> { BasketProductDTO
-		 * dtoBasketProduct = BasketProductMapper.mapToBasketProductDTO(basketProduct);
-		 * basketProductsDtoList.add(dtoBasketProduct); });
-		 */
-
+		
 		return basketProductsDtoList;
 	}
 

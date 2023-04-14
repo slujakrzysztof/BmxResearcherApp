@@ -1,6 +1,5 @@
 ....TO DO....
 
-- Refactor ShopResearcherService
 - Format description to compare the same attributes
 - Creating pdf from cart
 - Adding products from different categories throws exception
@@ -12,3 +11,4 @@
 - Changing datatype for prices 08.04.2022
 - Refactor controllers not to include any logic - 13.04.2023
 - Add real price (not with discount f.e.) to comparator - 13.04.2023
+- Refactor ShopResearcherService - 15.04.2023

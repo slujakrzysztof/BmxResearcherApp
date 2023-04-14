@@ -56,6 +56,14 @@ public class ShoppingCartService {
 
 		return basketProductsDTO;
 	}
+	
+	public List<BasketProductDTO> getBasketProducts() {
+		
+		List<BasketProduct> basketProducts = basketProductRepositoryService.getBasketProducts();
+		
+		return basketProducts.stream().map(product -> basketProductDTOMapper.apply(product))
+				.collect(Collectors.toList());
+	}
 
 	public void setCartDiscount(int value) {
 

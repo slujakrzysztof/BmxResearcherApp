@@ -33,7 +33,7 @@ public class SearchController {
 
 		discount.ifPresent(disc -> model.addAttribute("discountValue", discountValue));
 		model.addAttribute("products", searchService.getProducts(shopName, category, sortBy, discountValue, request));
-		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts(null));
+		model.addAttribute("basketProducts", shoppingCartService.getBasketProducts());
 		model.addAttribute("basketTotalPrice", shoppingCartService.getTotalPrice());
 		model.addAttribute("shopName", shopName);
 		model.addAttribute("category", category.toLowerCase());

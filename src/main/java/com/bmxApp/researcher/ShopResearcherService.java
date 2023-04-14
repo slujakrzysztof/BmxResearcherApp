@@ -28,42 +28,33 @@ import com.bmxApp.model.product.Product;
 import com.bmxApp.properties.PropertyReader;
 import com.bmxApp.repository.ProductRepository;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Component
 @Scope("prototype")
+@Getter
+@Setter
 public class ShopResearcherService {
 
-	final int MAX_TRIES = 20;
+	private final int MAX_TRIES = 20;
 
 	private String html;
 	protected Document document;
 	private Elements div, productNameElements, productPriceElements, productUrlElements, imageUrlElements;
 	private String category;
 	private String shopName;
+	private String productURLComplete;
+	private List<Product> products;
+	private final ProductRepository productRepository;
+	private BigDecimal price;
 
-
-	ArrayList<Product> products = new ArrayList<>();
-	ArrayList<Product> specificProducts = new ArrayList<>();
-	List<String> pagesArray = new ArrayList<>();
-	ArrayList<String> pagesArrayAve = new ArrayList<>();
-
-	List<Product> existingProducts;
-
-	@Autowired
-	ProductRepository productRepository;
-
-	BigDecimal price = new BigDecimal(0);
-	String productURLComplete;
-
-	public String getHTML() {
-		return this.html;
-	}
-
-	public void setHTML(String html) {
-		this.html = html;
-	}
-
-	public Document getDocument() {
-		return this.document;
+	public ShopResearcherService(ProductRepository productRepository) {
+		
+		this.productRepository = productRepository;
+		products = new ArrayList<>();
+		price = new BigDecimal(0);
+		
 	}
 
 	public void setConnection(String html) {
@@ -81,22 +72,6 @@ public class ShopResearcherService {
 				}
 			}
 		}
-	}
-
-	public String getShopName() {
-		return this.shopName;
-	}
-
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getCategory() {
-		return this.category;
 	}
 
 	public String findPartUrl(String category) {
@@ -172,25 +147,20 @@ public class ShopResearcherService {
 	private void formatDataStructure(String shopName, int i) {
 
 		double priceText;
-		
+
 		if (shopName.equalsIgnoreCase(Shop.MANYFESTBMX.name())) {
 			priceText = Double.parseDouble(productPriceElements.get(i).attr("content"));
 		} else {
 			try {
-				priceText = Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", "")); //Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", ""));
+				priceText = Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]", "")); // Double.parseDouble(productPriceElements.get(i).text().replaceAll("[^\\d.]",
+																												// ""));
 			} catch (NumberFormatException ex) {
-				priceText = Double.parseDouble(productPriceElements.get(i)
-							.select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT())
-							.text()
-							.replaceAll("[^\\d.]", ""));
-						
-						/*Double.parseDouble(
+				priceText = Double.parseDouble(
 						productPriceElements.get(i).select(PropertyManager.getInstance().PRODUCT_PRICE_DISCOUNT())
-								.text().replaceAll("[^\\d.]", ""));*/
-				// PropertyReader.getInstance().getProperty("productDiscountPriceElement")).text()
+								.text().replaceAll("[^\\d.]", ""));
 			}
 		}
-		
+
 		price = ProductFormatter.format(new BigDecimal(priceText));
 
 		if (shopName.equalsIgnoreCase(Shop.AVEBMX.name())) {
@@ -208,7 +178,7 @@ public class ShopResearcherService {
 
 		for (int i = 0; i < productNameElements.size(); i++) {
 			this.formatDataStructure(shopName, i);
-			
+
 			String productName = productNameElements.get(i).text().replace("'", "");
 
 			productList.add(ProductDTO.builder().productName(productName).shopName(shopName).category(category)
@@ -238,29 +208,28 @@ public class ShopResearcherService {
 	public String getDescription(String uri, String shopName) {
 
 		Elements desc;
-		
+
 		PropertyReader.getInstance().connectPropertyReader(shopName);
-		
+
 		this.setConnection(uri);
 		Document doc = getDocument();
-		
+
 		Elements page = doc.select(PropertyManager.getInstance().DESCRIPTION());
-		
-		if(page.isEmpty()) 
+
+		if (page.isEmpty())
 			return "NULL";
 
 		Elements paragraphs = page.select("p, li, span");
 
 		desc = (paragraphs.isEmpty() ? page : paragraphs);
-		
+
 		return desc.html().replace("&nbsp;", " ");
 
 	}
-	
+
 	public String getCompareDescription(String uri, String shopName) {
-		
+
 		return StringFormatter.formatCompareDescription(getDescription(uri, shopName));
 	}
-
 
 }
